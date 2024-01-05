@@ -1,4 +1,5 @@
 The Steps 
+
 - make a data type for the todos
 - make a way to CRUD todos
 - make the data type for the list of todos
