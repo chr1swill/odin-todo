@@ -54,7 +54,7 @@ export class Todo {
         const isValidMonth = dueDate.month >= 1 && dueDate.month <= 12 
         const isValidYear = dueDate.year >= 1 && !isNaN(dueDate.year) 
 
-        if (isNaN(dueDate.day) || isNaN(dueDate.month) || isNaN(dueDate.year)) {
+        if (typeof dueDate.day !== 'number' || typeof dueDate.month !== 'number' || typeof dueDate.year !== 'number') {
             throw new TypeError("Expected dueDate object's value to all be of type number")
         }
         if (!isValidDay || !isValidMonth || !isValidYear) {
