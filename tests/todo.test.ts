@@ -75,3 +75,11 @@ describe('Todo class', () => {
         expect(typeof todo.getId()).toBe('number')
     })
 })
+
+describe('Todo class', () => {
+    test('setDueDate method changes dueDate property', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
+        todo.setDueDate({ day: 2, month: 2, year: 2024 })
+        expect(todo.getDueDate()).toEqual({"day": 2, "month": 2, "year": 2024})
+    })
+})
