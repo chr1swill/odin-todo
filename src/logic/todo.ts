@@ -72,6 +72,9 @@ export class Todo {
     }
 
     getNote(): string | undefined {
+        if (typeof this.note != "string") {
+            throw new ReferenceError("You are trying to access a value the has not been defined, add note before attempting to access it.")
+        }
         return this.note 
     }
 
