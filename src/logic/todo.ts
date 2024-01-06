@@ -10,13 +10,14 @@ export const enum Priority {
 export class Todo {
     private static instances: number = 0
 
-    constructor(private title: string, private id: number, private dueDate: DueDate, private priority: Priority, private note?: string) {
+    constructor(private title: string, private id: number, private dueDate: DueDate, private priority: Priority, private status: boolean = false,private note?: string) {
         Todo.instances++
         this.title = title
         this.id = id 
-        this.note = note
         this.dueDate = dueDate 
         this.priority = priority
+        this.status = status
+        this.note = note
     }
 
     static getIntances() {
@@ -83,5 +84,16 @@ export class Todo {
 
     getPriority(): Priority {
         return this.priority
+    }
+
+    setTodoStatus(status: boolean) {
+        if (typeof status !== "boolean") { 
+            throw new TypeError("Invalid status, the value of status can only be a boolean")
+        }
+        this.status = status
+    }
+
+    getStatus(): boolean {
+        return this.status
     }
 }
