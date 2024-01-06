@@ -1,13 +1,13 @@
-type DueDate = { day: number, month: number, year: number }
+export type DueDate = { day: number, month: number, year: number }
 
-const enum Priority {
+export const enum Priority {
     None = 0,
     Low,
     Medium,
     High
 }
 
-class Todo {
+export class Todo {
     private static instances: number = 0
 
     constructor(private title: string, private id: number, private dueDate: DueDate, private priority: Priority, private note?: string) {
