@@ -97,3 +97,38 @@ describe('Todo class', () => {
         expect(() => todo.setDueDate({ day: true, month: 2, year: 2024 })).toThrow("Expected dueDate object's value to all be of type number")
     })
 })
+
+describe('Todo class', () => {
+    test('setDueDate method throw type error if day value isNaN', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
+        expect(() => todo.setDueDate({ day: undefined, month: 2, year: 2024 })).toThrow("Expected dueDate object's value to all be of type number")
+    })
+})
+
+describe('Todo class', () => {
+    test('setDueDate method throw type error if day value isNaN', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
+        expect(() => todo.setDueDate({ day: null, month: 2, year: 2024 })).toThrow("Expected dueDate object's value to all be of type number")
+    })
+})
+
+describe('Todo class', () => {
+    test('setDueDate method throw range error if day value is outside of defined range', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
+        expect(() => todo.setDueDate({ day: NaN, month: 2, year: 2024 })).toThrow("Day, month, and or year Value if out of range, Date invalid")
+    })
+})
+
+describe('Todo class', () => {
+    test('setDueDate method throw range error if month value is outside of defined range', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
+        expect(() => todo.setDueDate({ day: 2, month: NaN, year: 2024 })).toThrow("Day, month, and or year Value if out of range, Date invalid")
+    })
+})
+
+describe('Todo class', () => {
+    test('setDueDate method throw range error if year value is outside of defined range', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
+        expect(() => todo.setDueDate({ day: 2, month: 2, year: NaN })).toThrow("Day, month, and or year Value if out of range, Date invalid")
+    })
+})
