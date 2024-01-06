@@ -132,3 +132,11 @@ describe('Todo class', () => {
         expect(() => todo.setDueDate({ day: 2, month: 2, year: NaN })).toThrow("Day, month, and or year Value if out of range, Date invalid")
     })
 })
+
+describe('Todo class', () => {
+    test('setNote method will change value of note', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
+        todo.setNote("Changed Note")
+        expect(todo.getNote()).toBe("Changed Note")
+    })
+})
