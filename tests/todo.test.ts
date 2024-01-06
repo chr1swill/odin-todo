@@ -90,3 +90,10 @@ describe('Todo class', () => {
         expect(() => todo.setDueDate({ day: "NaN", month: 2, year: 2024 })).toThrow("Expected dueDate object's value to all be of type number")
     })
 })
+
+describe('Todo class', () => {
+    test('setDueDate method throw type error if day value isNaN', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
+        expect(() => todo.setDueDate({ day: true, month: 2, year: 2024 })).toThrow("Expected dueDate object's value to all be of type number")
+    })
+})
