@@ -10,7 +10,7 @@ export const enum Priority {
 export class Todo {
     private static instances: number = 0
 
-    constructor(private title: string, private id: number, private dueDate: DueDate, private priority: Priority = Priority.None, private status: boolean = false,private note?: string) {
+    constructor(private title: string, private id: number, private dueDate: DueDate, private priority: Priority = Priority.None, private status: boolean = false, private note?: string) {
         Todo.instances++
         this.title = title
         this.id = id 
