@@ -33,7 +33,7 @@ describe('Todo class', () => {
 describe('Todo class', () => {
     test('setTitle method on cannot be set to a string of empty charaters ', () => {
         const todo = new Todo(testData.title, testData.id, testData.dueDate, testData.priority, testData.note)
-        expect(() => todo.setTitle(" ")).toThrow("Expect type string, value not valid")
+        expect(() => todo.setTitle(" ")).toThrow("Title cannot be an empty string")
     })
 })
 
