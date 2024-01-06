@@ -50,9 +50,9 @@ export class Todo {
     }
 
     setDueDate(dueDate: DueDate) {
-        const isValidDay = dueDate.day > 1 && dueDate.day < 31 
-        const isValidMonth = dueDate.month > 1 && dueDate.month < 12 
-        const isValidYear = dueDate.year > 2024 && dueDate.year < 9999 
+        const isValidDay = dueDate.day >= 1 && dueDate.day <= 31 
+        const isValidMonth = dueDate.month >= 1 && dueDate.month <= 12 
+        const isValidYear = dueDate.year >= 1 && !isNaN(dueDate.year) 
 
         if (isNaN(dueDate.day) || isNaN(dueDate.month) || isNaN(dueDate.year)) {
             throw new TypeError("Exexpt dueDate objects keys day, month, and year value to be of type number")
@@ -92,7 +92,7 @@ export class Todo {
     getPriority(): Priority {
         return this.priority
     }
-
+ 
     setTodoStatus(status: boolean) {
         if (typeof status !== "boolean") { 
             throw new TypeError("Invalid status, the value of status can only be a boolean")
