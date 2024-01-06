@@ -28,7 +28,7 @@ describe('Todo class', () => {
 })
 
 describe('Todo class', () => {
-    test('setTitle method should change title', () => {
+    test('getTitle method should change title', () => {
         const todo = new Todo(testData.title, testData.id, testData.dueDate, testData.priority, testData.status,testData.note)
         todo.setTitle('New Title')
         expect(todo.getTitle()).toBe('New Title')
