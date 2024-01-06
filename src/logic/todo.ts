@@ -67,7 +67,6 @@ export class Todo {
         return this.dueDate
     }
 
-
     setNote(note: string) {
        if (typeof note !== "string") {
            throw new TypeError("Expect value of note to be a string, provided type invalid")
