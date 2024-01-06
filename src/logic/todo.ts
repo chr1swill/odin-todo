@@ -9,15 +9,16 @@ export const enum Priority {
 
 export class Todo {
     private static instances: number = 0
+    private id: number | undefined = undefined
 
-    constructor(private title: string, private id: number, private dueDate: DueDate, private priority: Priority = Priority.None, private status: boolean = false, private note?: string) {
+    constructor(private title: string, private dueDate: DueDate, private priority: Priority = Priority.None, private status: boolean = false, private note?: string) {
         Todo.instances++
         this.title = title
-        this.id = id 
         this.dueDate = dueDate 
         this.priority = priority
         this.status = status
         this.note = note
+        this.id = Todo.getIntances() + 1
     }
 
     static getIntances() {
@@ -41,7 +42,10 @@ export class Todo {
         return this.title
     }
 
-    getId(): number {
+    getId(): number | undefined{
+        if (typeof this.id !== 'number') {
+            throw new TypeError("The value of error has not been defined")
+        }
         return this.id
     }
 
