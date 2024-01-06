@@ -31,6 +31,8 @@ export class Todo {
         if (typeof title !== "string") {
             throw new TypeError("Expect type string, value not valid")
         }
+        if (title.trim() === '') throw new Error("Title cannot be an empty string")
+
         this.title = title
     }
 
