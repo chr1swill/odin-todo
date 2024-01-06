@@ -9,6 +9,7 @@ const testData = {
     note: "test is my test note"
 }
 
+
 describe('Todo class', () => {
     test('getInstances should return the current number of instances', () => {
         const todo1 = new Todo(testData.title, testData.id, testData.dueDate, testData.priority, testData.status,testData.note)
@@ -16,6 +17,13 @@ describe('Todo class', () => {
         const todo3 = new Todo(testData.title, testData.id, testData.dueDate, testData.priority, testData.status,testData.note)
         const todo4 = new Todo(testData.title, testData.id, testData.dueDate, testData.priority, testData.status,testData.note)
         expect(Todo.getIntances()).toBe(4)
+    })
+})
+
+describe('Todo class', () => {
+    test('deleteInstances should deincreament number of instances', () => {
+        Todo.deletedInstance()
+        expect(Todo.getIntances()).toBe(3)
     })
 })
 
