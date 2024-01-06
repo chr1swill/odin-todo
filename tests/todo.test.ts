@@ -69,4 +69,9 @@ describe('Todo class', () => {
     })
 })
 
-
+describe('Todo class', () => {
+    test('getId method is a number', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
+        expect(typeof todo.getId()).toBe('number')
+    })
+})
