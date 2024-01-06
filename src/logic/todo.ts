@@ -18,7 +18,7 @@ export class Todo {
         this.priority = priority
         this.status = status
         this.note = note
-        this.id = Todo.getIntances() + 1
+        this.id = Date.now() + Math.random()
     }
 
     static getIntances() {
