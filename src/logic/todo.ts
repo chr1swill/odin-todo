@@ -11,13 +11,21 @@ export class Todo {
     private static instances: number = 0
     private id: number | undefined = undefined
 
-    constructor(private title: string, private dueDate: DueDate, private priority: Priority = Priority.None, private status: boolean = false, private note?: string | undefined | null) {
+    constructor(
+        private title: string, 
+        private dueDate: DueDate, 
+        private priority: Priority = Priority.None, 
+        private status: boolean = false, 
+        private note?: string | undefined | null,
+        private list?: string | undefined | null 
+    ) {
         Todo.instances++
         this.title = title
         this.dueDate = dueDate 
         this.priority = priority
         this.status = status
         this.note = note
+        this.list = list
         this.id = Date.now() + Math.random()
     }
 
@@ -98,5 +106,16 @@ export class Todo {
 
     getStatus(): boolean {
         return this.status
+    }
+
+    setList(list: string | undefined | null) {
+        if (typeof list !== "string" && typeof list !== "undefined" && list !== null) {
+            throw new TypeError("Invalid type of list, the value need to be string, undefined, or null")
+        }
+        this.list = list
+    }
+
+    getList(): string | undefined | null {
+        return this.list
     }
 }
