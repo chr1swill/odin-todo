@@ -1,4 +1,4 @@
-import { Todo } from '../src/logic/todo' 
+import { Priority, Todo } from '../src/logic/todo' 
 
 const testData = {
     title: "Test Todo", 
@@ -161,5 +161,20 @@ describe('Todo class', () => {
     test('setNote method should error if you attempt to set note to type boolean', () => {
         const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
         expect(() => todo.setNote(true)).toThrow("Expect value of note to be a string, undefined, or null. provided type invalid")
+    })
+})
+
+describe('Todo class', () => {
+    test('setPriority method should change the priority', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
+        todo.setPriority(Priority.High)
+        expect(todo.getPriority()).toBe(Priority.High)
+    })
+})
+
+describe('Todo class', () => {
+    test('setPriority method should error if assigned a value the is less then 0 or greater then 3', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
+        expect(() => todo.setPriority(4)).toThrow("Invalid value of priority must be positive number less than or equal to 3")
     })
 })
