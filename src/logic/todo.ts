@@ -50,7 +50,7 @@ export class Todo {
         Todo.allInstances = []
     }
 
-    static removeInstance(id: number) {
+    static deleteTodo(id: number) {
         if (typeof id !== "number") {
             throw new TypeError("Invalid id, needs to be of type number")
         }

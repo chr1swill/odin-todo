@@ -38,18 +38,18 @@ describe('Todo class', () => {
         expect(Todo.getAllIntances()).toContainEqual(todo1);
         expect(Todo.getAllIntances()).toContainEqual(todo2);
 
-        Todo.removeInstance(todo1.getId());
+        Todo.deleteTodo(todo1.getId());
 
         expect(Todo.getAllIntances()).not.toContainEqual(todo1);
         expect(Todo.getAllIntances()).toContainEqual(todo2);
     });
 
     it('should throw an error if no instance with the given id exists', () => {
-        expect(() => Todo.removeInstance(-1)).toThrow(Error);
+        expect(() => Todo.deleteTodo(-1)).toThrow(Error);
     });
 
     it('should throw an error if the provided id is not a number', () => {
-        expect(() => Todo.removeInstance('invalid')).toThrow(TypeError);
+        expect(() => Todo.deleteTodo('invalid')).toThrow(TypeError);
     });
 });
 
