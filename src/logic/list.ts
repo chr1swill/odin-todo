@@ -27,6 +27,10 @@ export class List {
         return this.name
     }
 
+    getTodosInList(): Todo[] {
+        return this.todosInList
+    }
+
     getListLength(): number {
         return this.todosInList.length
     }
@@ -85,5 +89,28 @@ export class List {
         this.todosInList.push(todo)
     }
 
+    removeTodo(id: number): void {
+        if (typeof id !== "number") {
+            throw new TypeError("Invalid id, needs to be of type number")
+        }
+        if (id <= 0) {
+            throw new RangeError("Id out of range, needs to be a number greater that 0")
+        } 
 
+        let tmp: boolean = true
+        const numberOfInstances: number = this.getListLength()
+        const arrOfLists: Todo[] = this.getTodosInList()
+
+        for (let i = 0; i < numberOfInstances; i++) {
+            if (arrOfLists[i].getId() === id) {
+                this.todosInList.splice(i, 1)
+                tmp = false
+                break
+            } 
+        }
+
+        if (tmp) {
+            throw new ReferenceError("Id does not correspond to a valid Todo id")
+        }
+    }
 }
