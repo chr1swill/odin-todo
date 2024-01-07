@@ -134,10 +134,32 @@ describe('Todo class', () => {
 })
 
 describe('Todo class', () => {
-    test('setNote method will change value of note', () => {
+    test('setNote method will change value of note to a string', () => {
         const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
         todo.setNote("Changed Note")
         expect(todo.getNote()).toBe("Changed Note")
     })
 })
 
+
+describe('Todo class', () => {
+    test('setNote method will change value of note to a null', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
+        todo.setNote(null)
+        expect(todo.getNote()).toBe(null)
+    })
+})
+
+describe('Todo class', () => {
+    test('setNote method should error if you attempt to set note to type number', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
+        expect(() => todo.setNote(12)).toThrow("Expect value of note to be a string, undefined, or null. provided type invalid")
+    })
+})
+
+describe('Todo class', () => {
+    test('setNote method should error if you attempt to set note to type boolean', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
+        expect(() => todo.setNote(true)).toThrow("Expect value of note to be a string, undefined, or null. provided type invalid")
+    })
+})
