@@ -23,6 +23,31 @@ export class List {
         List.allInstances = []
     }
 
+    static deleteList(id: number): void {
+        if (typeof id !== "number") {
+            throw new TypeError("Invalid id, needs to be of type number")
+        }
+        if (id <= 0) {
+            throw new RangeError("Id out of range, needs to be a number greater that 0")
+        } 
+
+        let tmp: boolean = true
+        const numberOfInstances: number = List.getNumberOfInstances()
+        const arrOfLists: List[] = List.getAllInstances()
+
+        for (let i = 0; i < numberOfInstances; i++) {
+            if (arrOfLists[i].getId() === id) {
+                List.allInstances.splice(i, 1)
+                tmp = false
+                break
+            } 
+        }
+
+        if (tmp) {
+            throw new ReferenceError("Id does not correspond to a valid Todo id")
+        }
+    }
+
     getName(): string {
         return this.name
     }
