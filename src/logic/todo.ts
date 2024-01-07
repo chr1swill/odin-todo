@@ -7,6 +7,15 @@ export const enum Priority {
     High
 }
 
+export type TodoT = {
+    title: string,
+    dueDate: DueDate, 
+    priority: Priority,
+    status: boolean,
+    note?: string | undefined | null, 
+    list?: string | undefined | null, 
+}
+
 export class Todo {
     private static instances: number = 0
     private id: number | undefined = undefined
