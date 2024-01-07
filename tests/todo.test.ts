@@ -8,23 +8,29 @@ const testData = {
     note: "test is my test note"
 }
 
-
 describe('Todo class', () => {
-    test('getInstances should return the current number of instances', () => {
-        const todo1 = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
-        const todo2 = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
-        const todo3 = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
-        const todo4 = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
-        expect(Todo.getIntances()).toBe(4)
-    })
-})
+   afterEach(() => {
+       // Clear all instances after each test
+       Todo.getAllIntances().forEach((instance) => instance.id = undefined);
+   });
 
-describe('Todo class', () => {
-    test('deleteInstances method should deincreament number of instances', () => {
-        Todo.deletedInstance()
-        expect(Todo.getIntances()).toBe(3)
-    })
-})
+   it('should add new instances to allInstances array', () => {
+       const todo1 = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+       const todo2 = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+
+       expect(Todo.getAllIntances()).toContainEqual(todo1);
+       expect(Todo.getAllIntances()).toContainEqual(todo2);
+   });
+
+   it('should correctly count the number of instances', () => {
+       const initialCount = Todo.getNumberOfInstances();
+
+       new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+       new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+
+       expect(Todo.getNumberOfInstances()).toBe(initialCount + 2);
+   });
+});
 
 describe('Todo class', () => {
     test('setTitle method should change title', () => {
