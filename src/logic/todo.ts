@@ -66,6 +66,7 @@ export class Todo {
             if (arrOfTodos[i].getId() === id) {
                 Todo.allInstances.splice(i, 1)
                 tmp = false
+                break
             } 
         }
 
