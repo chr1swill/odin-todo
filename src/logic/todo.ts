@@ -79,7 +79,7 @@ export class Todo {
     }
 
     setPriority(priority: Priority) {
-        if (priority <= 0 || priority >= 3) {
+        if (priority < 0 || priority > 3) {
             throw new TypeError("Invalid value of priority must be positive number less than or equal to 3")
         }
         this.priority = priority
