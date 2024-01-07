@@ -1,18 +1,41 @@
 import { Todo } from './todo'
 
 export class List {
+    private static allInstances: List[] = []
     private todosInList: Todo[] = []
+    private id: number
 
     constructor(private name: string) {
         this.name = name
+        List.allInstances.push(this)
+        this.id = Date.now() + Math.random()
+    }
+
+    static getAllInstances(): List[] {
+        return List.allInstances
+    }
+
+    static getNumberOfInstances(): number {
+        return List.allInstances.length
+    }
+
+    static resetInstance(): void {
+        List.allInstances = []
     }
 
     getName(): string {
         return this.name
     }
 
-    getLength(): number {
+    getListLength(): number {
         return this.todosInList.length
+    }
+
+    getId(): number {
+        if (isNaN(this.id) || this.id === undefined || this.id === null ) {
+            throw new ReferenceError("Cannot access Id that has not been defined")
+        }
+        return this.id
     }
 
     addTodo(todo: Todo): void {
