@@ -104,6 +104,14 @@ describe('Todo class', () => {
 })
 
 describe('Todo class', () => {
+    test('getId method returns correct id', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+        const arr = Todo.getAllIntances()
+        expect(arr[arr.length - 1].getId()).toBe(todo.getId())
+    })
+})
+
+describe('Todo class', () => {
     test('setDueDate method changes dueDate property', () => {
         const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
         todo.setDueDate({ day: 2, month: 2, year: 2024 })
