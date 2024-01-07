@@ -135,8 +135,9 @@ describe('Todo class', () => {
 
 describe('Todo class', () => {
     test('setNote method will change value of note', () => {
-        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status,testData.note)
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
         todo.setNote("Changed Note")
         expect(todo.getNote()).toBe("Changed Note")
     })
 })
+
