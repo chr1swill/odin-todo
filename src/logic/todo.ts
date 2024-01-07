@@ -89,7 +89,7 @@ export class Todo {
         return this.priority
     }
  
-    setTodoStatus(status: boolean) {
+    setStatus(status: boolean) {
         if (typeof status !== "boolean") { 
             throw new TypeError("Invalid status, the value of status can only be a boolean")
         }
