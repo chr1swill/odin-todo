@@ -17,7 +17,7 @@ export type TodoT = {
 }
 
 export class Todo {
-    private static instances: number = 0
+    private static allInstances: Todo[] = []
     private id: number | undefined = undefined
 
     constructor(
@@ -28,7 +28,7 @@ export class Todo {
         private note?: string | undefined | null,
         private list?: string | undefined | null 
     ) {
-        Todo.instances++
+        Todo.allInstances.push(this)
         this.title = title
         this.dueDate = dueDate 
         this.priority = priority
@@ -38,12 +38,12 @@ export class Todo {
         this.id = Date.now() + Math.random()
     }
 
-    static getIntances() {
-        return Todo.instances
+    static getAllIntances(): Todo[] {
+        return Todo.allInstances
     }
 
-    static deletedInstance() {
-        Todo.instances--
+    static getNumberOfInstances(): number {
+        return Todo.allInstances.length
     }
     
     setTitle(title: string) {
