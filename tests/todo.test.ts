@@ -178,3 +178,39 @@ describe('Todo class', () => {
         expect(() => todo.setPriority(4)).toThrow("Invalid value of priority must be positive number less than or equal to 3")
     })
 })
+
+describe('Todo class', () => {
+    test('setStatus method should change status of todo', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
+        todo.setStatus(true)
+        expect(todo.getStatus()).toBe(true)
+    })
+})
+
+describe('Todo class', () => {
+    test('setStatus method should error if passed type number', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
+        expect(() => todo.setStatus(12)).toThrow("Invalid status, the value of status can only be a boolean")
+    })
+})
+
+describe('Todo class', () => {
+    test('setStatus method should error if passed type string', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
+        expect(() => todo.setStatus("string")).toThrow("Invalid status, the value of status can only be a boolean")
+    })
+})
+
+describe('Todo class', () => {
+    test('setStatus method should error if passed type null', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
+        expect(() => todo.setStatus(null)).toThrow("Invalid status, the value of status can only be a boolean")
+    })
+})
+
+describe('Todo class', () => {
+    test('setStatus method should error if passed type undefined', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined)
+        expect(() => todo.setStatus(undefined)).toThrow("Invalid status, the value of status can only be a boolean")
+    })
+})
