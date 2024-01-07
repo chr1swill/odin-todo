@@ -63,7 +63,7 @@ export class Todo {
         const arrOfTodos: Todo[] = Todo.getAllIntances()
 
         for (let i = 0; i < numberOfInstances; i++) {
-            if (arrOfTodos[i].getId() == id) {
+            if (arrOfTodos[i].getId() === id) {
                 Todo.allInstances.splice(i, 1)
                 tmp = false
             } 
