@@ -11,6 +11,10 @@ export class List {
         return this.name
     }
 
+    getLength(): number {
+        return this.todosInList.length
+    }
+
     addTodo(todo: Todo): void {
         const isValidDay = todo.getDueDate().day >= 1 && todo.getDueDate().day <= 31 
         const isValidMonth = todo.getDueDate().month >= 1 && todo.getDueDate().month <= 12 
@@ -48,4 +52,6 @@ export class List {
 
         this.todosInList.push(todo)
     }
+
+
 }
