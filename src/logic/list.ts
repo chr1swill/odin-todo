@@ -7,6 +7,10 @@ export class List {
         this.name = name
     }
 
+    getName(): string {
+        return this.name
+    }
+
     addTodo(todo: Todo): void {
         const isValidDay = todo.getDueDate().day >= 1 && todo.getDueDate().day <= 31 
         const isValidMonth = todo.getDueDate().month >= 1 && todo.getDueDate().month <= 12 
