@@ -214,3 +214,34 @@ describe('Todo class', () => {
         expect(() => todo.setStatus(undefined)).toThrow("Invalid status, the value of status can only be a boolean")
     })
 })
+
+describe('Todo class', () => {
+    test('setList method will change value of list to a string', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+        todo.setList("New List")
+        expect(todo.getList()).toBe("New List")
+    })
+})
+
+
+describe('Todo class', () => {
+    test('setList method will change value of list to a null', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, undefined)
+        todo.setList(null)
+        expect(todo.getList()).toBe(null)
+    })
+})
+
+describe('Todo class', () => {
+    test('setList method should error if you attempt to set list to type number', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+        expect(() => todo.setList(12)).toThrow("Invalid type of list, the value need to be string, undefined, or null")
+    })
+})
+
+describe('Todo class', () => {
+    test('setList method should error if you attempt to set list to type boolean', () => {
+        const todo = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+        expect(() => todo.setList(true)).toThrow("Invalid type of list, the value need to be string, undefined, or null")
+    })
+})
