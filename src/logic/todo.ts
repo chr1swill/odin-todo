@@ -11,7 +11,7 @@ export class Todo {
     private static instances: number = 0
     private id: number | undefined = undefined
 
-    constructor(private title: string, private dueDate: DueDate, private priority: Priority = Priority.None, private status: boolean = false, private note?: string) {
+    constructor(private title: string, private dueDate: DueDate, private priority: Priority = Priority.None, private status: boolean = false, private note?: string | undefined | null) {
         Todo.instances++
         this.title = title
         this.dueDate = dueDate 
@@ -42,7 +42,7 @@ export class Todo {
         return this.title
     }
 
-    getId(): number | undefined{
+    getId(): number | undefined {
         if (typeof this.id !== 'number') {
             throw new TypeError("The value of error has not been defined")
         }
@@ -67,17 +67,14 @@ export class Todo {
         return this.dueDate
     }
 
-    setNote(note: string) {
-       if (typeof note !== "string") {
-           throw new TypeError("Expect value of note to be a string, provided type invalid")
+    setNote(note: string | undefined | null) {
+       if (typeof note !== "string" && typeof note !== "undefined" && note !== null) {
+           throw new TypeError("Expect value of note to be a string, undefined, or null. provided type invalid")
        }
        this.note = note
     }
 
-    getNote(): string | undefined {
-        if (typeof this.note != "string") {
-            throw new ReferenceError("You are trying to access a value the has not been defined, add note before attempting to access it.")
-        }
+    getNote(): string | undefined | null {
         return this.note 
     }
 
