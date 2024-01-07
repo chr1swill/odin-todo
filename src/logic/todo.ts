@@ -18,7 +18,7 @@ export type TodoT = {
 
 export class Todo {
     private static allInstances: Todo[] = []
-    private id: number | undefined = undefined
+    private id: number
 
     constructor(
         private title: string, 
@@ -45,6 +45,34 @@ export class Todo {
     static getNumberOfInstances(): number {
         return Todo.allInstances.length
     }
+
+    static resetInstance(): void {
+        Todo.allInstances = []
+    }
+
+    static removeInstance(id: number) {
+        if (typeof id !== "number") {
+            throw new TypeError("Invalid id, needs to be of type number")
+        }
+        if (id <= 0) {
+            throw new RangeError("Id out of range, needs to be a number greater that 0")
+        } 
+
+        let tmp: boolean = true
+        const numberOfInstances: number = Todo.getNumberOfInstances()
+        const arrOfTodos: Todo[] = Todo.getAllIntances()
+
+        for (let i = 0; i < numberOfInstances; i++) {
+            if (arrOfTodos[i].getId() == id) {
+                Todo.allInstances.splice(i, 1)
+                tmp = false
+            } 
+        }
+
+        if (tmp) {
+            throw new ReferenceError("Id does not correspond to a valid Todo id")
+        }
+    }
     
     setTitle(title: string) {
         if (typeof title !== "string") {
@@ -59,9 +87,9 @@ export class Todo {
         return this.title
     }
 
-    getId(): number | undefined {
-        if (typeof this.id !== 'number') {
-            throw new TypeError("The value of error has not been defined")
+    getId(): number {
+        if (this.id === undefined || this.id === null || isNaN(this.id)) {
+            throw new TypeError("The value of id has not been defined")
         }
         return this.id
     }

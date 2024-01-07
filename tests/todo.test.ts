@@ -9,27 +9,48 @@ const testData = {
 }
 
 describe('Todo class', () => {
-   afterEach(() => {
-       // Clear all instances after each test
-       Todo.getAllIntances().forEach((instance) => instance.id = undefined);
-   });
+    afterEach(() => {
+        // clear all instances after each test
+        Todo.resetInstance()
+    });
 
-   it('should add new instances to allInstances array', () => {
-       const todo1 = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
-       const todo2 = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+    it('should add new instances to allInstances array', () => {
+        const todo1 = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+        const todo2 = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
 
-       expect(Todo.getAllIntances()).toContainEqual(todo1);
-       expect(Todo.getAllIntances()).toContainEqual(todo2);
-   });
+        expect(Todo.getAllIntances()).toContainEqual(todo1);
+        expect(Todo.getAllIntances()).toContainEqual(todo2);
+    });
 
-   it('should correctly count the number of instances', () => {
-       const initialCount = Todo.getNumberOfInstances();
+    it('should correctly count the number of instances', () => {
+        const initialCount = Todo.getNumberOfInstances();
 
-       new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
-       new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+        new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+        new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
 
-       expect(Todo.getNumberOfInstances()).toBe(initialCount + 2);
-   });
+        expect(Todo.getNumberOfInstances()).toBe(initialCount + 2);
+    });
+
+    it('should remove an instance with a given id', () => {
+        const todo1 = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+        const todo2 = new Todo(testData.title, testData.dueDate, testData.priority, testData.status, undefined, null)
+
+        expect(Todo.getAllIntances()).toContainEqual(todo1);
+        expect(Todo.getAllIntances()).toContainEqual(todo2);
+
+        Todo.removeInstance(todo1.getId());
+
+        expect(Todo.getAllIntances()).not.toContainEqual(todo1);
+        expect(Todo.getAllIntances()).toContainEqual(todo2);
+    });
+
+    it('should throw an error if no instance with the given id exists', () => {
+        expect(() => Todo.removeInstance(-1)).toThrow(Error);
+    });
+
+    it('should throw an error if the provided id is not a number', () => {
+        expect(() => Todo.removeInstance('invalid')).toThrow(TypeError);
+    });
 });
 
 describe('Todo class', () => {
