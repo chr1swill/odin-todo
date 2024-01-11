@@ -31,6 +31,7 @@ class Todo {
      * handle getting item form local storage on todo properties
      *
      * @param { string } property - key you would like to access the value to on this todo object 
+     * @returns { Error | string | boolean | number }
      * */
     #handleLocalStorageGet(property) {
         const todoString = localStorage.getItem(this.#id)
@@ -70,9 +71,14 @@ class Todo {
         localStorage.setItem(this.#id, JSON.stringify(todoObj))
     }
 
-    /**@returns { string | Error }*/
+    /**@returns { string | TypeError }*/
     get title() {
-        return this.#handleLocalStorageGet('title')
+        const value = this.#handleLocalStorageGet('title').toString()
+        if (typeof value !== 'string') {
+            throw TypeError('Value accessed was note a string')
+        }
+
+        return value
     }
 
     /**@param { string } title */
@@ -80,9 +86,14 @@ class Todo {
         this.#handleLocalStorageSet('title', title, AllowedTypes.STRING)
     }
 
-    /**@returns { string | Error }*/
+    /**@returns { string | TypeError }*/
     get note() {
-        return this.#handleLocalStorageGet('note')
+        const value = this.#handleLocalStorageGet('note').toString()
+        if (typeof value !== 'string') {
+            throw TypeError('Value accessed was note a string')
+        }
+
+        return value
     }
 
     /**@param { string } note */
@@ -90,9 +101,14 @@ class Todo {
         this.#handleLocalStorageSet('note', note, AllowedTypes.STRING)
     }
 
-    /**@returns { string | Error }*/
+    /**@returns { string | TypeError }*/
     get list() {
-        return this.#handleLocalStorageGet('list')
+        const value = this.#handleLocalStorageGet('list').toString()
+        if (typeof value !== 'string') {
+            throw TypeError('Value accessed was not a string')
+        }
+
+        return value
     }
 
     /**@param { string } list */
@@ -100,9 +116,14 @@ class Todo {
         this.#handleLocalStorageSet('list', list, AllowedTypes.STRING)
     }
 
-    /**@returns { number | Error }*/
+    /**@returns { number | TypeError }*/
     get priority() {
-        return this.#handleLocalStorageGet('priority')
+        const value =  Number(this.#handleLocalStorageGet('priority'))
+        if (typeof value !== 'number') {
+            throw TypeError('Value accessed was not a number')
+        }
+
+        return value
     }
 
     /**@param { Priority } priority */
@@ -110,9 +131,14 @@ class Todo {
         this.#handleLocalStorageSet('priority', priority, AllowedTypes.NUMBER)
     }
 
-    /**@returns { boolean | Error }*/
+    /**@returns { boolean | TypeError }*/
     get complete() {
-        return this.#handleLocalStorageGet('complete')
+        const value = this.#handleLocalStorageGet('complete')
+        if (typeof value !== 'boolean') {
+            throw TypeError('Value accessed was not a boolean')
+        }
+
+        return value
     }
 
     /**@param { boolean } complete */
