@@ -1,6 +1,5 @@
 The Steps 
 
-- make something to hold on this info
-- how to move it to and from local storage
+- make server 
 - make test all this maybe(make this more reliable)
 - make ui 
