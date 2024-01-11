@@ -19,7 +19,7 @@ class Todo {
 
     constructor() {
         this.#id = (Date.now() + Math.random()).toString()
-        localStorage.setItem(this.#id, JSON.stringify(this)) 
+        localStorage.setItem(this.#id, JSON.stringify({ title: '', note: '', list: '', priority: Priority.NONE, complete: false })) 
     }
 
     /** @returns { string } todo unique id number as a string */
