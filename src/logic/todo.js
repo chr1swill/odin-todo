@@ -58,6 +58,12 @@ class Todo {
             throw new TypeError(`Value must be a ${newValueType}`)
         }
 
+        if (property === 'priority') {
+            if(newValue !== Priority.NONE && newValue !== Priority.LOW && newValue !== Priority.MEDIUM && newValue !== Priority.HIGH) {
+                throw new RangeError('Value provided for key priority is invalid')
+            }
+        }
+
         const todoString = localStorage.getItem(this.#id)
         if (todoString === null) {
             throw new ReferenceError('Not able to access value of null')
