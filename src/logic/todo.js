@@ -75,7 +75,7 @@ class Todo {
     get title() {
         const value = this.#handleLocalStorageGet('title').toString()
         if (typeof value !== 'string') {
-            throw TypeError('Value accessed was note a string')
+            throw TypeError('Value accessed was not a string')
         }
 
         return value
@@ -90,7 +90,7 @@ class Todo {
     get note() {
         const value = this.#handleLocalStorageGet('note').toString()
         if (typeof value !== 'string') {
-            throw TypeError('Value accessed was note a string')
+            throw TypeError('Value accessed was not a string')
         }
 
         return value
