@@ -14,9 +14,24 @@ class List {
         List.#allInstances.add(this.#name)
     }
 
-    /**@returns { Set<string> } - name of all the list that are active */
+    /**@returns { Set<string> } names of all the list that are active */
     static get allInstances() {
         return List.#allInstances
+    }
+
+    /**@param { string } name - which list you would like to remove*/
+    set deleteList(name) { 
+        if (typeof name !== 'string') {
+            throw TypeError('Expect value of name to be a string')
+        }
+
+        const hasName = List.#allInstances.has(name)
+        if(hasName === false) {
+            throw ReferenceError('Could not find name in list, provide valid a name in the list')
+        }
+        
+        this.#todosInList.clear()
+        List.#allInstances.delete(name)
     }
 
     /**@returns { string }*/
