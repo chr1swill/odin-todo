@@ -1,7 +1,5 @@
 The Steps 
 
-- set up tailwind 
-- set up css var and config
 - make compoents
 - set up webpack
 - make ui 
