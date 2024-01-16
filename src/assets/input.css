@@ -66,3 +66,8 @@
   opacity: 0; /* Hide the default checkbox but keep it accessible */
   position: absolute;
 }
+
+.disabled-indicator {
+  @apply bg-gray-200 border-gray-200;
+  /* Other styles for disabled state */
+}
