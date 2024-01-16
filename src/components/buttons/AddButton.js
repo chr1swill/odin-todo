@@ -5,5 +5,5 @@ import { PlusSign } from '../icons/PlusSign';
  * #returns { string }
  * */
 export function AddButton(buttonText) {
-  return `<button class="bg-primary py-2 px-3 text-text font-bold text-base">${PlusSign}${buttonText}</button>`;
+  return `<button class="flex flex-row items-center gap-1 bg-primary py-2 px-3 text-text font-bold text-base">${PlusSign}${buttonText}</button>`;
 }
