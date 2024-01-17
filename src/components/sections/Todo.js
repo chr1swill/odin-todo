@@ -15,7 +15,8 @@ function checkAllArgumentsNull() {
 	return tmp;
 }
 
-/**@param { string | null } todoId
+/**
+ * @param { string | null } todoId
  * @param { string | null } todoTitle
  * @param { string | null } todoNote
  * @param { number | null } todoPriority
@@ -69,14 +70,18 @@ export function Todo(
 			todoComplete = false;
 		}
 
-		return `<div class="flex flex-row gap-2 justify-center" data-id="${todoId === null ? "" : todoId}">
+		return `<div class="flex flex-row gap-2 justify-start items-center" data-id="${todoId === null ? "" : todoId}">
             ${CheckBox(false, todoComplete)}
-            <div>
-                <h3 class="text-text text- font-bold">${todoTitle}</h3>
-                <div class="flex flex-col gap-1 justify-center text-text font-medium text-xs">
+            <div class="flex flex-col gap-2" >
+                <h3 class="text-text text-xl font-bold">${todoTitle}</h3>
+                <div class="flex flex-row gap-1 justify-center content-between text-text font-medium text-xs">
                     <p>${todoNote === null ? "" : todoNote}</p>
-                    <p class="${todoList === null ? "" : "bg-secondary rounded-lg text-text font-semibold"}">${todoList === null ? "" : todoList}</p>
-                    <p class="${priority === "" ? "" : "text-red-500"}">${priority}</p>
+                    <div class="flex flex-row gap-2">
+                        <p class="${todoList === null ? "" : "bg-secondary rounded-lg text-text font-semibold"}">
+                            ${todoList === null ? "" : todoList}
+                        </p>
+                        <p class="${priority === "" ? "" : "text-red-500"}">${priority}</p>
+                    </div>
                 </div>
             </div>
         </div>
