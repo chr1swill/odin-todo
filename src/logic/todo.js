@@ -13,7 +13,7 @@ const AllowedTypes = {
 	BOOLEAN: "boolean",
 };
 
-class Todo {
+export class Todo {
 	/** @type { string }*/
 	#id;
 
