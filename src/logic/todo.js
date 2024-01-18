@@ -31,6 +31,29 @@ class Todo {
 		);
 	}
 
+    /**
+     * @param { string } id - id of the todo you would like to get
+     * 
+     * @returns { Object | null }
+     * */
+    static getTodo(id) {
+        try {
+        if (typeof id !== 'string') {
+            throw TypeError('Expect value of todo id to be a string')
+        }
+
+        const todoString = localStorage.getItem(id);
+        if (todoString === null) {
+            throw new ReferenceError("Not able to access value of null");
+        }
+
+        return JSON.parse(todoString);
+        } catch (error) {
+            console.error(error);
+            return null; 
+        }
+    }
+
 	/** @returns { string } todo unique id number as a string */
 	get id() {
 		return this.#id;
