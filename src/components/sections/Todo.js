@@ -1,4 +1,6 @@
 import { CheckBox } from "../inputs/CheckBox";
+import { List } from "../../logic/list";
+import { Todo as todoLogic } from "../../logic/todo";
 
 /**
  * Checks if all arguments are null.
@@ -87,4 +89,66 @@ export function Todo(
         </div>
         <hr class="border-text border-t-2 my-4">`;
 	}
+}
+
+/**
+ * @param { string | List } listName - name of the list you would like to render
+ *
+ * @example
+ * // Render List.allInstances
+ * RenderListOfTodos("") // or RenderListOfTodos()
+ *
+ * // or render a specific list
+ * const list = new List("My List");
+ * RenderListOfTodos(list)
+ *
+ * */
+export function RenderListOfTodos(listName = "") {
+	if (listName === "") {
+		// Render List.allInstances
+		const allTodos = Array.from(localStorage.keys()).map((key) => 
+			JSON.parse(key),
+		);
+		const renderedTodo = allTodos
+			.map((todo) => {
+				`${Todo(
+					todo.id,
+					todo.title,
+					todo.note,
+					todo.priority,
+					todo.complete,
+					todo.list,
+				)}`;
+			})
+			.join("");
+		return renderedTodo;
+	}
+
+	if (typeof listName === "string") {
+		if (!List.allInstances.has(listName)) {
+			console.error("List does not exist");
+			return "";
+		}
+	}
+
+	if (listName instanceof List) {
+		const allTodos = Array.from(listName.todosInList.keys());
+        allTodos.forEach((todo) => {
+            let todoToRender = todoLogic.getTodo(todo);
+            if (todoToRender === null) {
+                console.error("Todo does not exist");
+                return "";
+            }
+            return `${Todo(
+                todoToRender.id,
+                todoToRender.title,
+                todoToRender.note,
+                todoToRender.priority,
+                todoToRender.complete,
+                todoToRender.list,
+            )}`;
+        })
+	}
+
+	return "";
 }
