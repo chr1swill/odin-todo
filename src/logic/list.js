@@ -1,6 +1,6 @@
 'use strict'
 
-class List {
+export class List {
     /**@type { Set<string> }*/
     static #allInstances = new Set()
     /**@type { Set<string> }*/
