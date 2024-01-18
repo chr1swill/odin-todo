@@ -34,7 +34,7 @@ export class Todo {
     /**
      * @param { string } id - id of the todo you would like to get
      * 
-     * @returns { Object | null }
+     * @returns { Todo | null }
      * */
     static getTodo(id) {
         try {
