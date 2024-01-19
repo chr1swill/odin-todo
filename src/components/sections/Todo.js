@@ -1,4 +1,4 @@
-import { CheckBox } from "../inputs/CheckBox";
+import { CheckBoxComponent } from "../inputs/CheckBox";
 import { Priority } from "../../logic/todo";
 
 /**
@@ -43,7 +43,7 @@ export function TodoComponent(
 		)
 	) {
 		return `<div class="flex flex-row gap-2 justify-center items-center" data-id="">
-            ${CheckBox(true)}
+            ${CheckBoxComponent(true)}
             <div>
                 <h3 class="h-5"></h3>
                 <div class="h-4"></div>
@@ -72,7 +72,7 @@ export function TodoComponent(
 		}
 
 		return `<div class="flex flex-row gap-2 justify-start items-center" data-id="${todoId === null ? "" : todoId}">
-            ${CheckBox(false, todoComplete)}
+            ${CheckBoxComponent(false, todoComplete)}
             <div class="flex flex-col gap-2" >
                 <h3 class="text-text text-xl font-bold">${todoTitle}</h3>
                 <div class="flex flex-row gap-1 justify-center content-between text-text font-medium text-xs">

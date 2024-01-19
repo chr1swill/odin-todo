@@ -1,7 +1,7 @@
 /**@param { boolean } isDisabled - choose state: clickable or non-clickable checkbox
  * @param { boolean } isChecked - choose state: checked or not checked
  * */
-export function CheckBox(isDisabled, isChecked = false) {
+export function CheckBoxComponent(isDisabled, isChecked = false) {
 	return isDisabled
 		? `<label class="custom-checkbox-wrapper">
      <input class="form-checkbox" type="checkbox" disabled />
