@@ -1,5 +1,5 @@
 /** @enum { number } */
-const Priority = {
+export const Priority = {
 	NONE: 0,
 	LOW: 1,
 	MEDIUM: 2,

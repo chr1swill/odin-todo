@@ -1,6 +1,6 @@
 import { CheckBox } from "../inputs/CheckBox";
 import { List } from "../../logic/list";
-import { Todo as todoLogic } from "../../logic/todo";
+import { Todo as todoLogic, Priority } from "../../logic/todo";
 
 /**
  * Checks if all arguments are null.
