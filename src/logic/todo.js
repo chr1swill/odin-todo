@@ -41,14 +41,11 @@ export class Todo {
 				throw new ReferenceError("Not able to access value of null");
 			}
 
-            /** @type { string[] } */
-			const keys = Array.from(localStorage.keys());
-
             /** @type { Object[] } */
 			const todos = [];
 
-			for (let i = 0; i < keys.length; i++) {
-				const todoString = localStorage.getItem(keys[i]);
+			for (const todoId in localStorage) {
+				const todoString = localStorage.getItem(todoId);
 				if (todoString !== null) {
 					// Check if the item exists in localStorage
 					const todo = JSON.parse(todoString);
