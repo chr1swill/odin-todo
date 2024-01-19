@@ -63,25 +63,25 @@ export class List {
 	}
 
 	get membersFromStorage() {
-        try {
-        /** @type { Object[] } */
-        const members = [];
+		try {
+			/** @type { Object[] } */
+			const members = [];
 
-        for (const todoId of this.#todosInList) {
-            const todoString = localStorage.getItem(todoId);
-            if (todoString !== null) {
-                // Check if the item exists in localStorage
-                const todo = JSON.parse(todoString);
-                members.push(todo);
-            }
-        } 
+			for (const todoId of this.#todosInList) {
+				const todoString = localStorage.getItem(todoId);
+				if (todoString !== null) {
+					// Check if the item exists in localStorage
+					const todo = JSON.parse(todoString);
+					members.push(todo);
+				}
+			}
 
-        return members
-        } catch (error) {
-            console.error(error);
-            return null
-        }
-    }
+			return members;
+		} catch (error) {
+			console.error(error);
+			return null;
+		}
+	}
 
 	/**@param { string } id - id of the todo you would like to add to list */
 	set addTodo(id) {
