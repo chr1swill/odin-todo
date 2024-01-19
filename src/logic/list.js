@@ -10,8 +10,8 @@ export class List {
 
 	/**@param { string } name */
 	constructor(name) {
-		this.#name = name;
-		List.#allInstances.add(this.#name);
+		this.#name = name.toLowerCase().trim()
+        List.#allInstances.add(this.#name);
 	}
 
 	/**@returns { Set<string> } names of all the list that are active */
@@ -52,7 +52,7 @@ export class List {
 				throw TypeError("Expect value of name to be a string");
 			}
 
-			this.#name = name.trim();
+			this.#name = name.toLowerCase().trim();
 		} catch (error) {
 			console.error(error);
 		}
