@@ -31,28 +31,60 @@ export class Todo {
 		);
 	}
 
-    /**
-     * @param { string } id - id of the todo you would like to get
-     * 
-     * @returns { Todo | null }
-     * */
-    static getTodo(id) {
-        try {
-        if (typeof id !== 'string') {
-            throw TypeError('Expect value of todo id to be a string')
-        }
+	/**
+	 * Returns an array of all Todo instances stored in localStorage.
+	 * @returns { Object[] | null } An array of Todo objects.
+	 */
+	static get allInstances() {
+		try {
+			if (localStorage.length === 0) {
+				throw new ReferenceError("Not able to access value of null");
+			}
 
-        const todoString = localStorage.getItem(id);
-        if (todoString === null) {
-            throw new ReferenceError("Not able to access value of null");
-        }
+            /** @type { string[] } */
+			const keys = Array.from(localStorage.keys());
 
-        return JSON.parse(todoString);
-        } catch (error) {
-            console.error(error);
-            return null; 
-        }
-    }
+            /** @type { Object[] } */
+			const todos = [];
+
+			for (let i = 0; i < keys.length; i++) {
+				const todoString = localStorage.getItem(keys[i]);
+				if (todoString !== null) {
+					// Check if the item exists in localStorage
+					const todo = JSON.parse(todoString);
+					todos.push(todo);
+				}
+			}
+
+			return todos;
+		} catch (error) {
+			console.error(error);
+			return null;
+		}
+	}
+
+	/**
+	 * @param { string } id - id of the todo you would like to get
+	 *
+	 * @returns { Todo | null }
+	 * */
+	static getTodo(id) {
+		try {
+			if (typeof id !== "string") {
+				throw TypeError("Expect value of todo id to be a string");
+			}
+
+			const todoString = localStorage.getItem(id);
+			if (todoString === null) {
+				throw new ReferenceError("Not able to access value of null");
+			}
+
+			return JSON.parse(todoString);
+		} catch (error) {
+			console.error(error);
+			return null;
+		}
+	}
 
 	/** @returns { string } todo unique id number as a string */
 	get id() {
