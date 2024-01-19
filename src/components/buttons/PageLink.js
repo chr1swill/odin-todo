@@ -28,7 +28,7 @@ function changePage(htmlContent) {
 export function PageLinkComponent(title, page) {
 	const button = document.createElement("button");
 	button.className =
-		"flex flex-row items-center content-between bg-background py-2 px-3 max-w-[100%]";
+		"flex flex-row items-center content-between py-2 px-3 max-w-[100%]";
 	button.innerHTML = `<h3 class="text-text font-bold text-base">${title}</h3>${ArrowComponent()}`;
 
 	button.addEventListener("click", (event) => {
