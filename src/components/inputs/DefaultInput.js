@@ -5,7 +5,9 @@
  * @param { boolean } [required=false] - if the input is required
  * */
 export function DefaultInputComponent(placeholder, required = false) {
+    const name = placeholder.toLowerCase().trim().replace(" ", "-");
     return (
-        `<input placeholder="${placeholder}" class="bg-primary py-2 px-3 text-text font-bold text-base border-none rounded-md focus:border-accent" ${required ? "required" : ""}/>`
+        `<label for="${name}" class="hidden">${placeholder}</label>
+        <input name="${name}" placeholder="${placeholder}" class="bg-primary py-2 px-3 text-text font-bold text-base border-none rounded-md focus:border-accent" ${required ? "required" : ""}/>`
     )
 }
