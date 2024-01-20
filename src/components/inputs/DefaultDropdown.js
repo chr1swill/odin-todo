@@ -37,6 +37,7 @@ export function DefaultDropdownComponent(buttonTitle, options) {
         "absolute",
         "top-full",
         "left-0",
+        "z-10",
 		"focus:border-accent",
 		"focus:border-1",
 	);
@@ -66,6 +67,7 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		"font-bold",
 		"text-base",
         "border-0",
+        "z-0",
 	);
 	button.innerHTML = `${buttonTitle}${ArrowComponent()}`;
 
