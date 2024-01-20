@@ -26,7 +26,7 @@ export function ListModalComponet() {
 				new List(listName);
 				createBtn?.closest("dialog")?.close();
 			}
-            createBtn?.closest("dialog")?.close();
+			createBtn?.closest("dialog")?.close();
 			throw new Error("List was not created: Could not access list name");
 		} catch (error) {
 			console.error(error);
