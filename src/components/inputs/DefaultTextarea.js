@@ -4,7 +4,7 @@
  * @param { string } placeholder - the text that will appear inside an none active input
  * @param { boolean } [required=false] - if the input is required
  * */
-export function DefaultInputComponent(placeholder, required = false) {
+export function DefaultTextareaComponent(placeholder, required = false) {
     const name = placeholder.toLowerCase().trim().replace(" ", "-");
     return (
         `<label for="${name}" class="hidden">${placeholder}</label>
