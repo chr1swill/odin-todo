@@ -34,6 +34,9 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		"rounded-md",
 		"w-auto",
 		"h-auto",
+        "absolute",
+        "top-full",
+        "left-0",
 		"focus:border-accent",
 		"focus:border-1",
 	);
@@ -58,10 +61,11 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		"hover:bg-secondary",
 		"rounded-md",
 		"py-2",
-		"px-3",
+		"px-5",
 		"text-text",
 		"font-bold",
 		"text-base",
+        "border-0",
 	);
 	button.innerHTML = `${buttonTitle}${ArrowComponent()}`;
 
