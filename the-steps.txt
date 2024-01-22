@@ -1,6 +1,7 @@
 The Steps 
 
+- change components/modals + componenets/sections to return HTMLElements
 - make compoents
-- set up webpack
 - make ui 
+- set up webpack
 - test your code 
