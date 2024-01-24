@@ -1,5 +1,6 @@
 import { CheckBoxComponent } from "../inputs/CheckBox";
 import { Priority } from "../../logic/todo";
+import { HorizontalDividerComponent } from '../icons/HorizontalDivider'
 
 /**
  * Checks if all arguments are null.
@@ -37,6 +38,8 @@ export function TodoComponent(
 	const container = document.createElement("div");
 	container.className = "flex flex-row gap-2 justify-center items-center";
 
+    const hr = HorizontalDividerComponent()
+
 	if (
 		checkAllArgumentsNull(
 			todoId,
@@ -60,9 +63,6 @@ export function TodoComponent(
 
 		wrapper.appendChild(h3);
 		wrapper.appendChild(contentPlaceholder);
-
-		const hr = document.createElement("hr");
-		hr.className = "border-text border-t-2 my-4";
 
 		container.appendChild(checkBox);
 		container.appendChild(wrapper);
@@ -127,9 +127,6 @@ export function TodoComponent(
 
 		wrapper.appendChild(title);
 		wrapper.appendChild(noteAndContentWrapper);
-
-		const hr = document.createElement("hr");
-		hr.className = "border-text border-t-2 my-4";
 
 		container.appendChild(checkBox);
 		container.appendChild(wrapper);

@@ -1,4 +1,5 @@
 import { AddButtonComponent } from "../buttons/AddButton";
+import { HorizontalDividerComponent } from '../icons/HorizontalDivider'
 
 /**
  *
@@ -16,8 +17,7 @@ export function TitleBar(title, buttonText) {
 
 	const addButton = AddButtonComponent(buttonText);
 
-	const hr = document.createElement("hr");
-	hr.className = "border-text border-t-2 my-4";
+	const hr = HorizontalDividerComponent()
 
 	container.appendChild(h2);
 	container.appendChild(addButton);
