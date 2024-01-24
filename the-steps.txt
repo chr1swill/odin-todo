@@ -1,6 +1,5 @@
 The Steps 
 
-- change componenets/sections to return HTMLElements
 - make compoents
 - make ui 
 - set up webpack
