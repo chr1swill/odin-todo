@@ -1,6 +1,5 @@
 The Steps 
 
-- make compoents
-- make ui 
+- make pages
 - set up webpack
 - test your code 
