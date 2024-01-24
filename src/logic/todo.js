@@ -13,6 +13,16 @@ const AllowedTypes = {
 	BOOLEAN: "boolean",
 };
 
+/**
+ * @typedef {Object} TodoObject
+ * @property {string} id
+ * @property {string} title
+ * @property {string} note
+ * @property {string} list
+ * @property {Priority} priority
+ * @property {boolean} complete
+ */
+
 export class Todo {
 	/** @type { string }*/
 	#id;
@@ -22,6 +32,7 @@ export class Todo {
 		localStorage.setItem(
 			this.#id,
 			JSON.stringify({
+                id: this.#id,
 				title: "",
 				note: "",
 				list: "",
@@ -33,7 +44,7 @@ export class Todo {
 
 	/**
 	 * Returns an array of all Todo instances stored in localStorage.
-	 * @returns { Object[] | null } An array of Todo objects.
+	 * @returns { TodoObject[] | null } An array of Todo objects.
 	 */
 	static get allInstances() {
 		try {
@@ -41,13 +52,13 @@ export class Todo {
 				throw new ReferenceError("Not able to access value of null");
 			}
 
-            /** @type { Object[] } */
+            /** @type { TodoObject[] } */
 			const todos = [];
 
 			for (const todoId in localStorage) {
 				const todoString = localStorage.getItem(todoId);
 				if (todoString !== null) {
-					// Check if the item exists in localStorage
+                    /** @type { TodoObject } */
 					const todo = JSON.parse(todoString);
 					todos.push(todo);
 				}
