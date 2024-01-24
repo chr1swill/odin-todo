@@ -4,26 +4,31 @@ function showCreateListModal() {}
 
 function showCreateTodoModal() {}
 
+/**
+ * Create a simple Action Bar
+ * @requires { showCreateListModal, showCreateTodoModal } - which have not been build yet so the event handles will not work 
+ */
 export function ActionBarComponent() {
-    const addListBtn = document.createElement("div");
-    const addTodoBtn = document.createElement("div")
-    addListBtn.className = "flex flex-row items-center"
-    addTodoBtn.className = "flex flex-row items-center"
-    addListBtn.innerHTML = AddButtonComponent("Add List");
-    addTodoBtn.innerHTML = AddButtonComponent("Add Todo");
-    
-    
-    // TODO: Add ability to add list and todo
-    addListBtn.addEventListener("click", (e) => {
-        e.preventDefault()
-        showCreateListModal()
-    })
+	const addListBtn = AddButtonComponent("Add List");
+	addListBtn.className = "flex flex-row items-center";
 
-    addTodoBtn.addEventListener("click", (e) => {
-        e.preventDefault()
-        showCreateTodoModal()
-    })
+	const addTodoBtn = AddButtonComponent("Add Todo");
+	addTodoBtn.className = "flex flex-row items-center";
 
-    return `<div class="grid grid-cols-2 gap-2">${addListBtn}${addTodoBtn}</div>`;
+	const buttonContainer = document.createElement("div");
+	buttonContainer.className = "grid grid-cols-2 gap-3";
+	buttonContainer.append(addListBtn, addTodoBtn);
 
+	// TODO: Add ability to add list and todo
+	addListBtn.addEventListener("click", (e) => {
+		e.preventDefault();
+		showCreateListModal();
+	});
+
+	addTodoBtn.addEventListener("click", (e) => {
+		e.preventDefault();
+		showCreateTodoModal();
+	});
+
+	return buttonContainer;
 }

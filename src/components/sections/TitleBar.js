@@ -1,9 +1,27 @@
-import { AddButtonComponent } from '../buttons/AddButton'
+import { AddButtonComponent } from "../buttons/AddButton";
 
-/**@param { string } title 
- * @param { string } buttonText
- * @returns { string }
+/**
+ *
+ * @param { string } title - large h2 level text in section
+ * @param { string } buttonText - text that wil be added to the button
+ *
  * */
 export function TitleBar(title, buttonText) {
-    return `<div class="flex flex-row content-between"><h2 class="text-text font-bold text-2xl">${title}</h2>${AddButtonComponent(buttonText)}</div><hr class="border-text border-t-2 my-4">`
+	const container = document.createElement("div");
+	container.className = "flex flex-row content-between";
+
+	const h2 = document.createElement("h2");
+	h2.className = "text-text font-bold text-2xl";
+	h2.textContent = title;
+
+	const addButton = AddButtonComponent(buttonText);
+
+	const hr = document.createElement("hr");
+	hr.className = "border-text border-t-2 my-4";
+
+	container.appendChild(h2);
+	container.appendChild(addButton);
+	container.appendChild(hr);
+
+	return container;
 }

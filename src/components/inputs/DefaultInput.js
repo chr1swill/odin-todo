@@ -1,13 +1,37 @@
 /**
  *
- * Create a simple input 
- * @param { string } placeholder - the text that will appear inside an none active input
+ * Create a simple input
+ * @param { string } placeholder - description on the input person to screen readers and inside the input
  * @param { boolean } [required=false] - if the input is required
+ *
  * */
 export function DefaultInputComponent(placeholder, required = false) {
-    const name = placeholder.toLowerCase().trim().replace(" ", "-");
-    return (
-        `<label for="${name}" class="hidden">${placeholder}</label>
-        <input name="${name}" placeholder="${placeholder}" class="bg-primary py-2 px-3 text-text font-bold text-base border-none rounded-md max-w-[100%] focus:border-accent focus:border-2" ${required ? "required" : ""}/>`
-    )
+	const CREATION_TIME_FOR_ID = (Date.now() + Math.random()).toString();
+	const name = placeholder.toString().toLowerCase().trim().replace(/\s+/g, "-");
+	const uniqueId = name + "-" + CREATION_TIME_FOR_ID;
+
+	const label = document.createElement("label");
+	label.setAttribute("for", uniqueId);
+	label.className = "hidden";
+
+	const span = document.createElement("span");
+	span.className = "sr-only";
+	span.textContent = name;
+
+	const input = document.createElement("input");
+	input.type = "text";
+	input.id = uniqueId;
+	input.className =
+		"bg-primary py-2 px-3 text-text font-bold text-base border-none rounded-md max-w-[100%] focus:border-accent focus:border-2";
+	if (required) {
+		input.setAttribute("required", "");
+	}
+
+	label.appendChild(span);
+	label.appendChild(input);
+
+	return {
+		element: () => label,
+		value: () => input.value,
+	};
 }

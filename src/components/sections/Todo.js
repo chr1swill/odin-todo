@@ -6,6 +6,7 @@ import { Priority } from "../../logic/todo";
  *
  * @param {...(string|number|boolean|null)} args - The arguments to check.
  * @returns { boolean } True if all arguments are null, false otherwise.
+ *
  */
 function checkAllArgumentsNull() {
 	/**@type { boolean } */
@@ -23,6 +24,7 @@ function checkAllArgumentsNull() {
  * @param { number | null } todoPriority
  * @param { boolean | null} todoComplete
  * @param { string | null } todoList
+ *
  * */
 export function TodoComponent(
 	todoId = null,
@@ -32,6 +34,9 @@ export function TodoComponent(
 	todoComplete = null,
 	todoList = null,
 ) {
+	const container = document.createElement("div");
+	container.className = "flex flex-row gap-2 justify-center items-center";
+
 	if (
 		checkAllArgumentsNull(
 			todoId,
@@ -42,14 +47,28 @@ export function TodoComponent(
 			todoList,
 		)
 	) {
-		return `<div class="flex flex-row gap-2 justify-center items-center" data-id="">
-            ${CheckBoxComponent(true)}
-            <div>
-                <h3 class="h-5"></h3>
-                <div class="h-4"></div>
-            </div>
-        </div>
-        <hr class="border-text border-t-2 my-4">`;
+		container.setAttribute("data-todo-id", "");
+		const checkBox = CheckBoxComponent(true);
+
+		const wrapper = document.createElement("div");
+
+		const h3 = document.createElement("h3");
+		h3.className = "h-3";
+
+		const contentPlaceholder = document.createElement("div");
+		contentPlaceholder.className = "h-4";
+
+		wrapper.appendChild(h3);
+		wrapper.appendChild(contentPlaceholder);
+
+		const hr = document.createElement("hr");
+		hr.className = "border-text border-t-2 my-4";
+
+		container.appendChild(checkBox);
+		container.appendChild(wrapper);
+		container.appendChild(hr);
+
+		return container;
 	} else {
 		let priority;
 		switch (todoPriority) {
@@ -71,21 +90,51 @@ export function TodoComponent(
 			todoComplete = false;
 		}
 
-		return `<div class="flex flex-row gap-2 justify-start items-center" data-id="${todoId === null ? "" : todoId}">
-            ${CheckBoxComponent(false, todoComplete)}
-            <div class="flex flex-col gap-2" >
-                <h3 class="text-text text-xl font-bold">${todoTitle}</h3>
-                <div class="flex flex-row gap-1 justify-center content-between text-text font-medium text-xs">
-                    <p>${todoNote === null ? "" : todoNote}</p>
-                    <div class="flex flex-row gap-2">
-                        <p class="${todoList === null ? "" : "bg-secondary rounded-lg text-text font-semibold"}">
-                            ${todoList === null ? "" : todoList}
-                        </p>
-                        <p class="${priority === "" ? "" : "text-red-500"}">${priority}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr class="border-text border-t-2 my-4">`;
+		container.setAttribute("data-todo-id", `${todoId === null ? "" : todoId}`);
+
+		const checkBox = CheckBoxComponent(false, todoComplete);
+
+		const wrapper = document.createElement("div");
+		wrapper.className = "flex flex-col gap-2";
+
+		const title = document.createElement("h3");
+		title.className = "text-text text-xl font-bold";
+		title.textContent = todoTitle;
+
+		const noteAndContentWrapper = document.createElement("div");
+		noteAndContentWrapper.className =
+			"flex flex-row gap-1 justify-center content-between text-text font-medium text-xs";
+
+		const note = document.createElement("p");
+		note.textContent = `${todoNote === null ? "" : todoNote}`;
+
+		const listAndPriorityWrapper = document.createElement("div");
+		listAndPriorityWrapper.className = "flex flex-row gap-2";
+
+		const list = document.createElement("p");
+		list.className = `${todoList === null ? "" : "bg-secondary rounded-lg text-text font-semibold"}`;
+		list.textContent = `${todoList === null ? "" : todoList}`;
+
+		const displayPriority = document.createElement("p");
+		displayPriority.className = `${priority === "" ? "" : "text-red-500"}`;
+		displayPriority.textContent = priority;
+
+		listAndPriorityWrapper.appendChild(list);
+		listAndPriorityWrapper.appendChild(displayPriority);
+
+		noteAndContentWrapper.appendChild(note);
+		noteAndContentWrapper.appendChild(listAndPriorityWrapper);
+
+		wrapper.appendChild(title);
+		wrapper.appendChild(noteAndContentWrapper);
+
+		const hr = document.createElement("hr");
+		hr.className = "border-text border-t-2 my-4";
+
+		container.appendChild(checkBox);
+		container.appendChild(wrapper);
+		container.appendChild(hr);
+
+		return container;
 	}
 }

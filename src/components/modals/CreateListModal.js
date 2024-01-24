@@ -1,31 +1,35 @@
 import { DefaultInputComponent } from "../inputs/DefaultInput";
 import { DefaultButtonComponent } from "../buttons/DefaultButton";
+import { DialogComponent } from "./Dialog";
 import { List } from "../../logic/list";
 
 export function ListModalComponet() {
-	const cancelBtn = document.createElement("div");
-	const createBtn = document.createElement("div");
+	const cancelBtn = DefaultButtonComponent("Cancel");
+	const createBtn = DefaultButtonComponent("Create List", "submit", "sumbit");
 
-	cancelBtn.innerHTML = DefaultButtonComponent("Cancel");
-	createBtn.innerHTML = DefaultButtonComponent(
-		"Create List",
-		"submit",
-		"sumbit",
-	);
+	const btnContainer = document.createElement("div");
+	btnContainer.className = "grid grid-col-2 gap-3";
+	btnContainer.append(cancelBtn, createBtn);
+
+	const input = DefaultInputComponent("List Name", true);
+
+	const dialog = DialogComponent();
+	dialog.appendToForm(input.element());
+	dialog.appendToForm(btnContainer);
 
 	cancelBtn.addEventListener("click", (e) => {
 		e.preventDefault();
-		cancelBtn?.closest("dialog")?.close();
+		dialog.close();
 	});
 
 	createBtn.addEventListener("click", (e) => {
 		e.preventDefault();
 		try {
-			const listName = createBtn?.parentElement?.closest("input")?.value;
+			const listName = input.value();
 			if (listName) {
 				new List(listName);
-				createBtn?.closest("dialog")?.close();
-                return
+				dialog.close();
+				return;
 			}
 			throw new Error("List was not created: Could not access list name");
 		} catch (error) {
@@ -33,13 +37,5 @@ export function ListModalComponet() {
 		}
 	});
 
-	return `<dialog close class="bg-primary rounded-md p-5 max-w-[calc(100vw-2rem)] backdrop:bg-text/50">
-            <form method="dialog">
-                ${DefaultInputComponent("List Name", true)}
-                <div class="grid grid-col-2 gap-3">
-                    ${cancelBtn}
-                    ${createBtn}
-                </div>
-            </form>
-        </dialog>`;
+	return dialog.element();
 }
