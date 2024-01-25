@@ -49,7 +49,7 @@ export class Todo {
 	static get allInstances() {
 		try {
 			if (localStorage.length === 0) {
-				throw new ReferenceError("Not able to access all element in localStorage: Add item before attempting a get operation");
+			//	throw new ReferenceError("Not able to access all element in localStorage: Add item before attempting a get operation");
 			}
 
             /** @type { TodoObject[] } */
