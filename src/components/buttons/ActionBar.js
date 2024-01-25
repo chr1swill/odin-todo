@@ -6,17 +6,27 @@ function showCreateTodoModal() {}
 
 /**
  * Create a simple Action Bar
- * @requires { showCreateListModal, showCreateTodoModal } - which have not been build yet so the event handles will not work 
+ * @requires { showCreateListModal, showCreateTodoModal } - which have not been build yet so the event handles will not work
  */
 export function ActionBarComponent() {
-	const addListBtn = AddButtonComponent("Add List");
-	addListBtn.className = "flex flex-row items-center";
+	const CLASSES_TO_REMOVE = ["bg-primary", "hover:bg-secondary", "rounded"];
+	const CLASSES_TO_ADD = ["bg-[none]", "hover:bg-primary"];
 
+	const addListBtn = AddButtonComponent("Add List");
 	const addTodoBtn = AddButtonComponent("Add Todo");
-	addTodoBtn.className = "flex flex-row items-center";
+
+	for (let i = 0; i < CLASSES_TO_REMOVE.length; i++) {
+		addListBtn.classList.remove(CLASSES_TO_REMOVE[i]);
+		addTodoBtn.classList.remove(CLASSES_TO_REMOVE[i]);
+	}
+
+	for (let i = 0; i < CLASSES_TO_ADD.length; i++) {
+		addListBtn.classList.add(CLASSES_TO_ADD[i]);
+		addTodoBtn.classList.add(CLASSES_TO_ADD[i]);
+	}
 
 	const buttonContainer = document.createElement("div");
-	buttonContainer.className = "grid grid-cols-2 gap-3 h-4 max-w-[100%]";
+	buttonContainer.className = "grid grid-cols-2 gap-3 h-4 rounded max-w-[100%]";
 	buttonContainer.append(addListBtn, addTodoBtn);
 
 	// TODO: Add ability to add list and todo

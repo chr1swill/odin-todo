@@ -673,16 +673,36 @@ video {
   height: auto;
 }
 
-.max-h-3 {
-  max-height: 0.75rem;
+.h-12 {
+  height: 3rem;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
+.max-h-12 {
+  max-height: 3rem;
+}
+
+.max-h-10 {
+  max-height: 2.5rem;
 }
 
 .w-auto {
   width: auto;
 }
 
-.max-w-5 {
-  max-width: 1.25rem;
+.w-12 {
+  width: 3rem;
+}
+
+.w-8 {
+  width: 2rem;
+}
+
+.w-4 {
+  width: 1rem;
 }
 
 .max-w-\[100\%\] {
@@ -693,8 +713,12 @@ video {
   max-width: calc(100vw - 2rem);
 }
 
-.max-w-\[100\$\] {
-  max-width: 100$;
+.max-w-12 {
+  max-width: 3rem;
+}
+
+.max-w-10 {
+  max-width: 2.5rem;
 }
 
 .grid-cols-2 {
@@ -741,14 +765,6 @@ video {
   white-space: normal;
 }
 
-.whitespace-nowrap {
-  white-space: nowrap;
-}
-
-.whitespace-pre {
-  white-space: pre;
-}
-
 .rounded-lg {
   border-radius: 0.5rem;
 }
@@ -785,9 +801,16 @@ video {
   background-color: var(--secondary);
 }
 
-.bg-blue-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+.bg-background {
+  background-color: var(--background);
+}
+
+.bg-\[none\] {
+  background-color: none;
+}
+
+.bg-none {
+  background-image: none;
 }
 
 .stroke-text {
@@ -796,6 +819,14 @@ video {
 
 .p-4 {
   padding: 1rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-1 {
+  padding: 0.25rem;
 }
 
 .px-3 {
@@ -813,9 +844,24 @@ video {
   padding-bottom: 0.5rem;
 }
 
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.px-1\.5 {
+  padding-left: 0.375rem;
+  padding-right: 0.375rem;
 }
 
 .text-2xl {
@@ -859,9 +905,20 @@ video {
   color: var(--text);
 }
 
-.text-white {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
+.transition {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.ease-in {
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+}
+
+.ease-out {
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
 /* Custom CSS for the circular shape */
@@ -948,9 +1005,8 @@ video {
   background-color: var(--secondary);
 }
 
-.hover\:bg-blue-700:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+.hover\:bg-primary:hover {
+  background-color: var(--primary);
 }
 
 .focus\:border-2:focus {

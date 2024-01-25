@@ -6,8 +6,18 @@ import { PlusSignComponent } from "../icons/PlusSign";
 export function AddButtonComponent(buttonText) {
 	const button = document.createElement("button");
 	button.className =
-		"flex flex-row items-center gap-1 bg-primary py-2 px-3 text-text font-bold text-base whitespace-normal";
-	button.appendChild(PlusSignComponent());
-	button.appendChild(document.createTextNode(buttonText));
+		"flex flex-row items-center gap-2 bg-primary hover:bg-secondary transition ease-out duration-1 p-1 text-text font-bold text-base rounded";
+
+	const iconWrapper = document.createElement("span");
+	iconWrapper.className = "";
+	iconWrapper.appendChild(PlusSignComponent());
+
+	const textWrapper = document.createElement("span");
+	textWrapper.className = "";
+	textWrapper.textContent = buttonText;
+
+	button.appendChild(iconWrapper);
+	button.appendChild(textWrapper);
+
 	return button;
 }
