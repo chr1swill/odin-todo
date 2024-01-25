@@ -11,7 +11,7 @@ export function TodoModalComponent() {
 		const createBtn = DefaultButtonComponent("Create Todo", "submit", "sumbit");
 
 		const btnContainer = document.createElement("div");
-		btnContainer.className = "grid grid-col-2 gap-3";
+		btnContainer.className = "grid grid-cols-2 gap-3";
 		btnContainer.append(cancelBtn, createBtn);
 
 		const input = DefaultInputComponent("Title", true);
