@@ -673,8 +673,16 @@ video {
   height: auto;
 }
 
+.max-h-3 {
+  max-height: 0.75rem;
+}
+
 .w-auto {
   width: auto;
+}
+
+.max-w-5 {
+  max-width: 1.25rem;
 }
 
 .max-w-\[100\%\] {
@@ -683,6 +691,10 @@ video {
 
 .max-w-\[calc\(100vw-2rem\)\] {
   max-width: calc(100vw - 2rem);
+}
+
+.max-w-\[100\$\] {
+  max-width: 100$;
 }
 
 .grid-cols-2 {
@@ -725,12 +737,28 @@ video {
   gap: 0.75rem;
 }
 
+.whitespace-normal {
+  white-space: normal;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
+.whitespace-pre {
+  white-space: pre;
+}
+
 .rounded-lg {
   border-radius: 0.5rem;
 }
 
 .rounded-md {
   border-radius: 0.375rem;
+}
+
+.rounded {
+  border-radius: 0.25rem;
 }
 
 .border-0 {
@@ -757,6 +785,11 @@ video {
   background-color: var(--secondary);
 }
 
+.bg-blue-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
 .stroke-text {
   stroke: var(--text);
 }
@@ -778,6 +811,11 @@ video {
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .text-2xl {
@@ -819,6 +857,11 @@ video {
 
 .text-text {
   color: var(--text);
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 /* Custom CSS for the circular shape */
@@ -903,6 +946,11 @@ video {
 
 .hover\:bg-secondary:hover {
   background-color: var(--secondary);
+}
+
+.hover\:bg-blue-700:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
 }
 
 .focus\:border-2:focus {

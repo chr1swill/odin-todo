@@ -49,7 +49,7 @@ export class Todo {
 	static get allInstances() {
 		try {
 			if (localStorage.length === 0) {
-				throw new ReferenceError("Not able to access value of null");
+				throw new ReferenceError("Not able to access all element in localStorage: Add item before attempting a get operation");
 			}
 
             /** @type { TodoObject[] } */
@@ -84,7 +84,7 @@ export class Todo {
 
 			const todoString = localStorage.getItem(id);
 			if (todoString === null) {
-				throw new ReferenceError("Not able to access value of null");
+				throw new ReferenceError(`Could not access value not item of that id exist: ${id}`);
 			}
 
 			return JSON.parse(todoString);
@@ -108,7 +108,7 @@ export class Todo {
 	#handleLocalStorageGet(property) {
 		const todoString = localStorage.getItem(this.#id);
 		if (todoString === null) {
-			throw new ReferenceError("Not able to access value of null");
+			throw new ReferenceError(`Could not access value, key of ${this.#id} does not exist or has not been set`);
 		}
 
 		const todoObj = JSON.parse(todoString);
@@ -143,7 +143,7 @@ export class Todo {
 
 		const todoString = localStorage.getItem(this.#id);
 		if (todoString === null) {
-			throw new ReferenceError("Not able to access value of null");
+			throw new ReferenceError(`Could not access value, key of ${this.#id} does not exist or has not been set`);
 		}
 
 		const todoObj = JSON.parse(todoString);

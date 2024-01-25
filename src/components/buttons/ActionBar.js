@@ -16,7 +16,7 @@ export function ActionBarComponent() {
 	addTodoBtn.className = "flex flex-row items-center";
 
 	const buttonContainer = document.createElement("div");
-	buttonContainer.className = "grid grid-cols-2 gap-3";
+	buttonContainer.className = "grid grid-cols-2 gap-3 h-4 max-w-[100%]";
 	buttonContainer.append(addListBtn, addTodoBtn);
 
 	// TODO: Add ability to add list and todo
