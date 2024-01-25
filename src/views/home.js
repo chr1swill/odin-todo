@@ -45,7 +45,7 @@ export function RenderHomePage() {
 		sectionContent.appendChild(ActionBarComponent());
 		sectionContent.appendChild(ListModalComponet());
 
-		const todoModal = TodoModalComponent();
+		const todoModal = TodoModalComponent()
 		if (todoModal === undefined) {
 			throw new ReferenceError(
 				"Todo modal was not create: the value of the component is undefined",
@@ -56,6 +56,5 @@ export function RenderHomePage() {
 		return sectionContent;
 	} catch (error) {
 		console.error(error);
-		return;
 	}
 }
