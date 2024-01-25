@@ -4,12 +4,7 @@ import { DefaultDropdownComponent } from "../inputs/DefaultDropdown";
 import { DefaultButtonComponent } from "../buttons/DefaultButton";
 import { DialogComponent } from "./Dialog";
 import { Todo, Priority } from "../../logic/todo";
-/**
- *
- * code may work but it need to be refactored to make use without the DOMParser object
- * going to refactor to make component return real htmlElements
- *
- * */
+
 export function TodoModalComponent() {
 	try {
 		const cancelBtn = DefaultButtonComponent("Cancel");
@@ -29,13 +24,13 @@ export function TodoModalComponent() {
 		]);
 
 		const dialog = DialogComponent();
-        dialog.element().setAttribute("id", "todoModal")
+		dialog.element().setAttribute("id", "todoModal");
 		dialog.appendToForm(input.element());
 		dialog.appendToForm(textarea.element());
 
 		if (!dropdown) {
 			throw new ReferenceError(
-				"Error created componenet: dropdown is undefined",
+				"Error created component: dropdown was not defined",
 			);
 		}
 
@@ -87,6 +82,7 @@ export function TodoModalComponent() {
 				}
 			} catch (error) {
 				console.error(error);
+				return;
 			}
 		});
 
