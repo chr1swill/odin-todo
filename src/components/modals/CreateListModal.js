@@ -14,7 +14,7 @@ export function ListModalComponet() {
 	const input = DefaultInputComponent("List Name", true);
 
 	const dialog = DialogComponent();
-    dialog.element().setAttribute("id", "listModal")
+	dialog.element().setAttribute("id", "listModal");
 	dialog.appendToForm(input.element());
 	dialog.appendToForm(btnContainer);
 
