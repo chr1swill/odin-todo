@@ -10,6 +10,7 @@ function showCreateListModal() {
 			);
 		}
 
+        dialog.classList.remove('hidden')
 		dialog.show();
 	} catch (error) {
 		console.error(error);
@@ -26,6 +27,7 @@ function showCreateTodoModal() {
 			);
 		}
 
+        dialog.classList.remove('hidden')
 		dialog.show();
 	} catch (error) {
 		console.error(error);

@@ -37,10 +37,19 @@ export function TodoModalComponent() {
 		dialog.appendToForm(dropdown.element());
 		dialog.appendToForm(btnContainer);
 
-        cancelBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            dialog.close();
-        });
+		cancelBtn.addEventListener("click", (e) => {
+			e.preventDefault();
+
+			/**@type { HTMLDialogElement | null }*/
+			const dialog = document.querySelector("#todoModal");
+			if (!dialog) {
+				console.error('Could not find element with the id: "todoModal"');
+				return;
+			}
+
+			dialog.classList.add("hidden");
+			dialog.close();
+		});
 
 		createBtn.addEventListener("click", (e) => {
 			e.preventDefault();
@@ -80,6 +89,16 @@ export function TodoModalComponent() {
 					default:
 						todo.priority = Priority.NONE;
 				}
+
+				/**@type { HTMLDialogElement | null }*/
+				const dialog = document.querySelector("#todoModal");
+				if (!dialog) {
+					console.error('Could not find element with the id: "listModal"');
+					return;
+				}
+
+				dialog.classList.add("hidden");
+				dialog.close();
 			} catch (error) {
 				console.error(error);
 				return;

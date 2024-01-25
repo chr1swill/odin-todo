@@ -8,7 +8,7 @@ export function ListModalComponet() {
 	const createBtn = DefaultButtonComponent("Create List", "submit", "sumbit");
 
 	const btnContainer = document.createElement("div");
-	btnContainer.className = "grid grid-cols-2 gap-3";
+	btnContainer.className = "w-full grid grid-cols-2 gap-3";
 	btnContainer.append(cancelBtn, createBtn);
 
 	const input = DefaultInputComponent("List Name", true);
@@ -20,6 +20,15 @@ export function ListModalComponet() {
 
 	cancelBtn.addEventListener("click", (e) => {
 		e.preventDefault();
+
+		/**@type { HTMLDialogElement | null }*/
+		const dialog = document.querySelector("#listModal");
+		if (!dialog) {
+			console.error('Could not find element with the id: "listModal"');
+			return;
+		}
+
+		dialog.classList.add("hidden");
 		dialog.close();
 	});
 
@@ -29,6 +38,15 @@ export function ListModalComponet() {
 			const listName = input.value();
 			if (listName) {
 				new List(listName);
+
+				/**@type { HTMLDialogElement | null }*/
+				const dialog = document.querySelector("#listModal");
+				if (!dialog) {
+					console.error('Could not find element with the id: "listModal"');
+					return;
+				}
+
+				dialog.classList.add("hidden");
 				dialog.close();
 				return;
 			}

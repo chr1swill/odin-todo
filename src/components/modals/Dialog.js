@@ -22,13 +22,13 @@ export function DialogComponent() {
 		element: () => {
 			return dialog;
 		},
-		close: () => {
+		closeDialog: () => {
             dialog.classList.remove('hidden')
 			dialog.close();
 		},
-        show: () => {
+        showDialog: () => {
             dialog.classList.add('hidden')
-            dialog.showModal()
+            dialog.show()
         },
 		/**
 		 * Appends an element to the form inside the dialog.
