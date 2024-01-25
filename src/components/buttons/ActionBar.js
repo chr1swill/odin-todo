@@ -1,8 +1,36 @@
 import { AddButtonComponent } from "../buttons/AddButton";
 
-function showCreateListModal() {}
+function showCreateListModal() {
+	try {
+		/**@type{ HTMLDialogElement | null }*/
+		const dialog = document.querySelector("#listModal");
+		if (!dialog) {
+			throw new ReferenceError(
+				"Was not able to show dialog element: could not find id listModal",
+			);
+		}
 
-function showCreateTodoModal() {}
+		dialog.show();
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+function showCreateTodoModal() {
+	try {
+		/**@type{ HTMLDialogElement | null }*/
+		const dialog = document.querySelector("#todoModal");
+		if (!dialog) {
+			throw new ReferenceError(
+				"Was not able to show dialog element: could not find id todoModal",
+			);
+		}
+
+		dialog.show();
+	} catch (error) {
+		console.error(error);
+	}
+}
 
 /**
  * Create a simple Action Bar

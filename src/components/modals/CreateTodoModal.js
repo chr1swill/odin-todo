@@ -29,6 +29,7 @@ export function TodoModalComponent() {
 		]);
 
 		const dialog = DialogComponent();
+        dialog.element().setAttribute("id", "todoModal")
 		dialog.appendToForm(input.element());
 		dialog.appendToForm(textarea.element());
 
