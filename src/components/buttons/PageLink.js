@@ -29,7 +29,7 @@ function changePage(htmlContent) {
 export function PageLinkComponent(title, page) {
 	const button = document.createElement("button");
 	button.className =
-		"flex flex-row items-center content-between border-text py-2 px-3 max-w-[100%]";
+		"flex flex-row place-items-center content-between border-text py-2 px-3 max-w-[100%]";
     const h3 = document.createElement("h3");
     h3.className = "text-text font-bold text-base";
     h3.textContent = title;

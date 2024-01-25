@@ -57,7 +57,7 @@
 }
 
 /* Tailwind classes for the label to improve accessibility */
-.custome-checkbox-wrapper {
+.custom-checkbox-wrapper {
   @apply relative cursor-pointer;
 }
 
@@ -70,4 +70,8 @@
 .disabled-indicator {
   @apply bg-gray-200 border-gray-200;
   /* Other styles for disabled state */
+}
+
+.inner-margin > * {
+    @apply m-2;
 }

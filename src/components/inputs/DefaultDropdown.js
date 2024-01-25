@@ -24,7 +24,7 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		select.setAttribute("data-dropdown", CREATION_TIME_FOR_ID);
 		select.classList.add(
 			"hidden",
-			"bg-primary",
+			"bg-background",
 			"py-2",
 			"px-3",
 			"text-text",
@@ -32,8 +32,6 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 			"text-base",
 			"border-none",
 			"rounded-md",
-			"w-auto",
-			"h-auto",
 			"absolute",
 			"top-full",
 			"left-0",
@@ -53,12 +51,12 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		button.setAttribute("data-toggle-button", CREATION_TIME_FOR_ID);
 		button.classList.add(
 			"flex",
-			"flex-row",
-			"items-center",
+            "items-center",
+            "justify-center",
+            "gap-2",
+            "w-full",
 			"content-between",
-			"gap-1",
-			"bg-primary",
-			"max-w-[100%]",
+			"bg-background",
 			"hover:bg-secondary",
 			"rounded-md",
 			"py-2",
@@ -66,14 +64,13 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 			"text-text",
 			"font-bold",
 			"text-base",
-			"border-0",
 			"z-0",
 		);
 		button.textContent = buttonTitle;
 		button.appendChild(ArrowComponent());
 
 		const container = document.createElement("div");
-		container.classList.add("max-w-[100%]");
+		container.classList.add("w-full", "grid", "place-items-center");
 		container.appendChild(button);
 		container.appendChild(select);
 

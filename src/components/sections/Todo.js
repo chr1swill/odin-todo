@@ -36,7 +36,7 @@ export function TodoComponent(
 	todoList = null,
 ) {
 	const container = document.createElement("div");
-	container.className = "flex flex-row gap-2 justify-center items-center";
+	container.className = "flex flex-row gap-2 justify-center place-items-center";
 
     const hr = HorizontalDividerComponent()
 

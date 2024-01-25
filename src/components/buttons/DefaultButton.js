@@ -6,7 +6,7 @@
 export function DefaultButtonComponent(text, type = "", formName = "") {
 	const button = document.createElement("button");
 	button.className =
-		"flex flex-row items-center gap-1 bg-primary rouned-md py-2 px-3 text-text font-bold text-base";
+		"grid place-items-center gap-2 bg-primary hover:bg-secondary transition ease-out duration-1 p-1 text-text font-bold text-base rounded";
     button.textContent = text
     
     switch (type.trim().toLowerCase()) {

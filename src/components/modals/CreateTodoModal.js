@@ -11,7 +11,7 @@ export function TodoModalComponent() {
 		const createBtn = DefaultButtonComponent("Create Todo", "submit", "sumbit");
 
 		const btnContainer = document.createElement("div");
-		btnContainer.className = "grid grid-cols-2 gap-3";
+		btnContainer.className = "w-full grid grid-cols-2 gap-3";
 		btnContainer.append(cancelBtn, createBtn);
 
 		const input = DefaultInputComponent("Title", true);
@@ -37,10 +37,10 @@ export function TodoModalComponent() {
 		dialog.appendToForm(dropdown.element());
 		dialog.appendToForm(btnContainer);
 
-		cancelBtn.addEventListener("click", (e) => {
-			e.preventDefault();
-			dialog.close();
-		});
+        cancelBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            dialog.close();
+        });
 
 		createBtn.addEventListener("click", (e) => {
 			e.preventDefault();
