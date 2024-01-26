@@ -649,6 +649,16 @@ video {
   margin-bottom: 1rem;
 }
 
+.mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.mx-40 {
+  margin-left: 10rem;
+  margin-right: 10rem;
+}
+
 .flex {
   display: flex;
 }
@@ -677,12 +687,36 @@ video {
   width: 100%;
 }
 
+.w-\[calc\(100\%-3rem\)\] {
+  width: calc(100% - 3rem);
+}
+
+.w-\[calc\(100\%-10rem\)\] {
+  width: calc(100% - 10rem);
+}
+
+.w-\[calc\(100\%-1000rem\)\] {
+  width: calc(100% - 1000rem);
+}
+
+.w-\[calc\(100\%-4rem\)\] {
+  width: calc(100% - 4rem);
+}
+
 .max-w-\[100\%\] {
   max-width: 100%;
 }
 
 .max-w-\[calc\(100vw-2rem\)\] {
   max-width: calc(100vw - 2rem);
+}
+
+.max-w-\[calc\(100\%-5rem\)\] {
+  max-width: calc(100% - 5rem);
+}
+
+.max-w-\[calc\(100\%-3rem\)\] {
+  max-width: calc(100% - 3rem);
 }
 
 .grid-cols-1 {
@@ -699,6 +733,14 @@ video {
 
 .flex-col {
   flex-direction: column;
+}
+
+.place-content-center {
+  place-content: center;
+}
+
+.place-content-between {
+  place-content: space-between;
 }
 
 .place-items-center {
@@ -747,6 +789,10 @@ video {
 
 .border-4 {
   border-width: 4px;
+}
+
+.border-2 {
+  border-width: 2px;
 }
 
 .border-t-2 {
@@ -822,6 +868,11 @@ video {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .font-bold {

@@ -2,11 +2,15 @@ import './assets/styles.css'
 import { RenderHomePage } from "./views/home";
 
 function pageRouter() {
+    document.body.className = "grid grid-cols-1 place-items-center mx-40"
+
 	try {
 		const mainContent = document.querySelector("#main-content");
 		if (!mainContent || mainContent === undefined) {
 			throw new ReferenceError("Could not find with id: main-content");
 		}
+
+        mainContent.className = "w-[calc(100%-4rem)]"
 
         const homePage = RenderHomePage()
         if (homePage === undefined) { 
