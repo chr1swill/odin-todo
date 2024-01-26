@@ -6,7 +6,7 @@ import { showListModal, showTodoModal } from "../modals/Dialog";
  * @requires { showListModal, showTodoModal } - which have not been build yet so the event handles will not work
  */
 export function ActionBarComponent() {
-	const CLASSES_TO_REMOVE = ["bg-primary", "hover:bg-secondary", "rounded"];
+	const CLASSES_TO_REMOVE = ["bg-primary", "hover:bg-secondary"];
 	const CLASSES_TO_ADD = ["bg-[none]", "hover:bg-primary"];
 
 	const addListBtn = AddButtonComponent("Add List");
