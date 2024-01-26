@@ -1,3 +1,37 @@
+export function showListModal() {
+	try {
+		/**@type{ HTMLDialogElement | null }*/
+		const dialog = document.querySelector("#listModal");
+		if (!dialog) {
+			throw new ReferenceError(
+				"Was not able to show dialog element: could not find id listModal",
+			);
+		}
+
+        dialog.classList.remove('hidden')
+		dialog.show();
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+export function showTodoModal() {
+	try {
+		/**@type{ HTMLDialogElement | null }*/
+		const dialog = document.querySelector("#todoModal");
+		if (!dialog) {
+			throw new ReferenceError(
+				"Was not able to show dialog element: could not find id todoModal",
+			);
+		}
+
+        dialog.classList.remove('hidden')
+		dialog.show();
+	} catch (error) {
+		console.error(error);
+	}
+}
+
 export function DialogComponent() {
 	const dialog = document.createElement("dialog");
 	dialog.classList.add(

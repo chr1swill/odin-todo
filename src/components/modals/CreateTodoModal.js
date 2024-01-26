@@ -2,7 +2,7 @@ import { DefaultInputComponent } from "../inputs/DefaultInput";
 import { DefaultTextareaComponent } from "../inputs/DefaultTextarea";
 import { DefaultDropdownComponent } from "../inputs/DefaultDropdown";
 import { DefaultButtonComponent } from "../buttons/DefaultButton";
-import { DialogComponent } from "./Dialog";
+import { DialogComponent, showTodoModal } from "./Dialog";
 import { Todo, Priority } from "../../logic/todo";
 
 export function TodoModalComponent() {
@@ -90,15 +90,7 @@ export function TodoModalComponent() {
 						todo.priority = Priority.NONE;
 				}
 
-				/**@type { HTMLDialogElement | null }*/
-				const dialog = document.querySelector("#todoModal");
-				if (!dialog) {
-					console.error('Could not find element with the id: "listModal"');
-					return;
-				}
-
-				dialog.classList.add("hidden");
-				dialog.close();
+                showTodoModal()
 			} catch (error) {
 				console.error(error);
 				return;

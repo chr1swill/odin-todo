@@ -1,6 +1,6 @@
 import { DefaultInputComponent } from "../inputs/DefaultInput";
 import { DefaultButtonComponent } from "../buttons/DefaultButton";
-import { DialogComponent } from "./Dialog";
+import { DialogComponent, showListModal } from "./Dialog";
 import { List } from "../../logic/list";
 
 export function ListModalComponet() {
@@ -39,16 +39,7 @@ export function ListModalComponet() {
 			if (listName) {
 				new List(listName);
 
-				/**@type { HTMLDialogElement | null }*/
-				const dialog = document.querySelector("#listModal");
-				if (!dialog) {
-					console.error('Could not find element with the id: "listModal"');
-					return;
-				}
-
-				dialog.classList.add("hidden");
-				dialog.close();
-				return;
+                showListModal()
 			}
 			throw new Error("List was not created: Could not access list name");
 		} catch (error) {

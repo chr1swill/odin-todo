@@ -1,42 +1,9 @@
 import { AddButtonComponent } from "../buttons/AddButton";
-
-function showCreateListModal() {
-	try {
-		/**@type{ HTMLDialogElement | null }*/
-		const dialog = document.querySelector("#listModal");
-		if (!dialog) {
-			throw new ReferenceError(
-				"Was not able to show dialog element: could not find id listModal",
-			);
-		}
-
-        dialog.classList.remove('hidden')
-		dialog.show();
-	} catch (error) {
-		console.error(error);
-	}
-}
-
-function showCreateTodoModal() {
-	try {
-		/**@type{ HTMLDialogElement | null }*/
-		const dialog = document.querySelector("#todoModal");
-		if (!dialog) {
-			throw new ReferenceError(
-				"Was not able to show dialog element: could not find id todoModal",
-			);
-		}
-
-        dialog.classList.remove('hidden')
-		dialog.show();
-	} catch (error) {
-		console.error(error);
-	}
-}
+import { showListModal, showTodoModal } from "../modals/Dialog";
 
 /**
  * Create a simple Action Bar
- * @requires { showCreateListModal, showCreateTodoModal } - which have not been build yet so the event handles will not work
+ * @requires { showListModal, showTodoModal } - which have not been build yet so the event handles will not work
  */
 export function ActionBarComponent() {
 	const CLASSES_TO_REMOVE = ["bg-primary", "hover:bg-secondary", "rounded"];
@@ -62,12 +29,12 @@ export function ActionBarComponent() {
 	// TODO: Add ability to add list and todo
 	addListBtn.addEventListener("click", (e) => {
 		e.preventDefault();
-		showCreateListModal();
+		showListModal();
 	});
 
 	addTodoBtn.addEventListener("click", (e) => {
 		e.preventDefault();
-		showCreateTodoModal();
+		showTodoModal();
 	});
 
 	return buttonContainer;
