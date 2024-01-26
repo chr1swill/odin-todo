@@ -1,5 +1,6 @@
 import { AddButtonComponent } from "../buttons/AddButton";
 import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
+import { showTodoModal } from '../modals/Dialog'
 
 /**
  *
@@ -26,6 +27,11 @@ export function TitleBar(title, buttonText) {
 
 	titleBarWrapper.appendChild(flexRow);
 	titleBarWrapper.appendChild(hr);
+
+    addButton.addEventListener('click', (e) => {
+        e.preventDefault()
+        showTodoModal()
+    })
 
 	return titleBarWrapper;
 }
