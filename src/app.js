@@ -2,7 +2,7 @@ import './assets/styles.css'
 import { RenderHomePage } from "./views/home";
 
 function pageRouter() {
-    document.body.className = "grid grid-cols-1 place-items-center mx-40"
+    document.body.className = "grid grid-cols-1 place-items-center mx-40 my-10"
 
 	try {
 		const mainContent = document.querySelector("#main-content");
