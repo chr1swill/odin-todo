@@ -1,6 +1,6 @@
 export function HorizontalDividerComponent() {
     const hr = document.createElement('hr')
-    hr.className =  "border-text border-t-2 my-4"
+    hr.className =  "border border-text border-2 my-4 w-full"
 
     return hr.cloneNode(true)
 }

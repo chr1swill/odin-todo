@@ -1,5 +1,5 @@
 import { AddButtonComponent } from "../buttons/AddButton";
-import { HorizontalDividerComponent } from '../icons/HorizontalDivider'
+import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
 
 /**
  *
@@ -8,20 +8,24 @@ import { HorizontalDividerComponent } from '../icons/HorizontalDivider'
  *
  * */
 export function TitleBar(title, buttonText) {
-	const container = document.createElement("div");
-	container.className = "flex flex-row content-between";
+	const titleBarWrapper = document.createElement("div");
+	titleBarWrapper.className = "grid grid-cols-1 place-content-center";
+
+	const flexRow = document.createElement("div");
+	flexRow.className = "flex flex-row place-content-between";
 
 	const h2 = document.createElement("h2");
-	h2.className = "text-text font-bold text-2xl";
+	h2.className = "text-text font-bold text-4xl";
 	h2.textContent = title;
 
 	const addButton = AddButtonComponent(buttonText);
+	flexRow.appendChild(h2);
+	flexRow.appendChild(addButton);
 
-	const hr = HorizontalDividerComponent()
+	const hr = HorizontalDividerComponent();
 
-	container.appendChild(h2);
-	container.appendChild(addButton);
-	container.appendChild(hr);
+	titleBarWrapper.appendChild(flexRow);
+	titleBarWrapper.appendChild(hr);
 
-	return container;
+	return titleBarWrapper;
 }
