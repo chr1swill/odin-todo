@@ -1,5 +1,4 @@
 The Steps 
 
-- figure out why half of the ui does not work
 - make pages
 - test your code 
