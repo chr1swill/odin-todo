@@ -32,7 +32,7 @@ export class Todo {
 		localStorage.setItem(
 			this.#id,
 			JSON.stringify({
-                id: this.#id,
+				id: this.#id,
 				title: "",
 				note: "",
 				list: "",
@@ -49,16 +49,18 @@ export class Todo {
 	static get allInstances() {
 		try {
 			if (localStorage.length === 0) {
-			//	throw new ReferenceError("Not able to access all element in localStorage: Add item before attempting a get operation");
+				throw new ReferenceError(
+					"Not able to access elements inside localStorage: there are no element to return from localStroage.",
+				);
 			}
 
-            /** @type { TodoObject[] } */
+			/** @type { TodoObject[] } */
 			const todos = [];
 
 			for (const todoId in localStorage) {
 				const todoString = localStorage.getItem(todoId);
 				if (todoString !== null) {
-                    /** @type { TodoObject } */
+					/** @type { TodoObject } */
 					const todo = JSON.parse(todoString);
 					todos.push(todo);
 				}
@@ -84,7 +86,9 @@ export class Todo {
 
 			const todoString = localStorage.getItem(id);
 			if (todoString === null) {
-				throw new ReferenceError(`Could not access value not item of that id exist: ${id}`);
+				throw new ReferenceError(
+					`Could not access value not item of that id exist: ${id}`,
+				);
 			}
 
 			return JSON.parse(todoString);
@@ -108,7 +112,9 @@ export class Todo {
 	#handleLocalStorageGet(property) {
 		const todoString = localStorage.getItem(this.#id);
 		if (todoString === null) {
-			throw new ReferenceError(`Could not access value, key of ${this.#id} does not exist or has not been set`);
+			throw new ReferenceError(
+				`Could not access value, key of ${this.#id} does not exist or has not been set`,
+			);
 		}
 
 		const todoObj = JSON.parse(todoString);
@@ -143,7 +149,9 @@ export class Todo {
 
 		const todoString = localStorage.getItem(this.#id);
 		if (todoString === null) {
-			throw new ReferenceError(`Could not access value, key of ${this.#id} does not exist or has not been set`);
+			throw new ReferenceError(
+				`Could not access value, key of ${this.#id} does not exist or has not been set`,
+			);
 		}
 
 		const todoObj = JSON.parse(todoString);
