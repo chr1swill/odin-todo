@@ -50,8 +50,13 @@ export function TodoComponent(
 			todoList,
 		)
 	) {
-		container.setAttribute("data-todo-id", "");
-		const checkBox = CheckBoxComponent(true);
+        // TODO: Temp fix, made a wrapper but styles are not perfect fix but the look of the whole todo componet 
+
+        const todoWrap = document.createElement('div')
+        todoWrap.className = "w-full"
+
+		container.setAttribute("data-todo-id", "empty");
+		const checkBox = CheckBoxComponent();
 
 		const wrapper = document.createElement("div");
 
@@ -66,9 +71,11 @@ export function TodoComponent(
 
 		container.appendChild(checkBox);
 		container.appendChild(wrapper);
-		container.appendChild(hr);
 
-		return container;
+        todoWrap.appendChild(container)
+        todoWrap.appendChild(hr)
+
+		return todoWrap
 	} else {
 		let priority;
 		switch (todoPriority) {

@@ -25,7 +25,9 @@ export function CheckBoxComponent(isDisabled = false, isChecked = false) {
 
 	input.addEventListener("change", (e) => {
 		e.preventDefault();
-		span.classList.value = `${span.classList.value === "disabled-indicator" ? "custom-checkbox-indicator" : "disabled-indicator"}`;
+		//span.classList.value = `${span.classList.value === "disabled-indicator" ? "custom-checkbox-indicator" : "disabled-indicator"}`;
+        // something better needs to be dont for this, this disabled make the button unclickable is not the way => consider the user flow more 
+        console.log("CheckBox changed state TODO: go to 'CheckBox.js' to handle the event")
 	});
 
 	label.append(input, span);

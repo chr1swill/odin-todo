@@ -1,4 +1,5 @@
 The Steps 
 
+- fix todo Component , empty one and a filled one
 - make pages
 - test your code 
