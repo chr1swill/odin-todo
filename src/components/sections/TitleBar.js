@@ -23,7 +23,7 @@ export function TitleBar(title, buttonText) {
 	flexRow.appendChild(h2);
 	flexRow.appendChild(addButton);
 
-	const hr = HorizontalDividerComponent();
+	const hr = HorizontalDividerComponent(4);
 
 	titleBarWrapper.appendChild(flexRow);
 	titleBarWrapper.appendChild(hr);
