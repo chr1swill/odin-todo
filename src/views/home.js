@@ -24,7 +24,7 @@ export function RenderHomePage() {
 		sectionContent.appendChild(titleBar);
 
 		const listOfTodoWrapper = document.createElement("div");
-		for (let i = 0; i < allTodos.length - 1; i++) {
+		for (let i = 0; i < allTodos.length; i++) {
 			const todo = allTodos[i];
 			listOfTodoWrapper.appendChild(
 				TodoComponent(
