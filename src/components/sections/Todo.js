@@ -1,6 +1,6 @@
 import { CheckBoxComponent } from "../inputs/CheckBox";
 import { Priority } from "../../logic/todo";
-import { HorizontalDividerComponent } from '../icons/HorizontalDivider'
+import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
 
 /**
  * Checks if all arguments are null.
@@ -10,12 +10,14 @@ import { HorizontalDividerComponent } from '../icons/HorizontalDivider'
  *
  */
 function checkAllArgumentsNull() {
-	/**@type { boolean } */
-	let tmp = false;
-	if (Array.prototype.every.call(arguments, (arg) => arg === null)) {
-		tmp = true;
-	}
-	return tmp;
+    let i = 0
+    while (i < arguments.length) {
+        if (arguments[i] !== null) {
+            return false 
+        }
+        i++
+    }
+    return true 
 }
 
 /**
