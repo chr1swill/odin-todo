@@ -40,7 +40,7 @@ export function TodoComponent(
 	const container = document.createElement("div");
 	container.className = "flex flex-row gap-2 justify-center place-items-center";
 
-    const hr = HorizontalDividerComponent()
+	const hr = HorizontalDividerComponent();
 
 	if (
 		checkAllArgumentsNull(
@@ -52,15 +52,16 @@ export function TodoComponent(
 			todoList,
 		)
 	) {
-        // TODO: Temp fix, made a wrapper but styles are not perfect fix but the look of the whole todo componet 
+		// TODO: Temp fix, made a wrapper but styles are not perfect fix but the look of the whole todo componet
 
-        const todoWrap = document.createElement('div')
-        todoWrap.className = "w-full"
+		const todoWrap = document.createElement("div");
+		todoWrap.className = "w-full";
 
 		container.setAttribute("data-todo-id", "empty");
 		const checkBox = CheckBoxComponent();
 
 		const wrapper = document.createElement("div");
+		wrapper.className = "w-full";
 
 		const h3 = document.createElement("h3");
 		h3.className = "h-3";
@@ -74,10 +75,10 @@ export function TodoComponent(
 		container.appendChild(checkBox);
 		container.appendChild(wrapper);
 
-        todoWrap.appendChild(container)
-        todoWrap.appendChild(hr)
+		todoWrap.appendChild(container);
+		todoWrap.appendChild(hr);
 
-		return todoWrap
+		return todoWrap;
 	} else {
 		let priority;
 		switch (todoPriority) {
