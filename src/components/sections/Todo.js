@@ -1,6 +1,7 @@
 import { CheckBoxComponent } from "../inputs/CheckBox";
 import { Priority } from "../../logic/todo";
 import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
+import { Todo } from "../../logic/todo";
 
 /**
  * Checks if all arguments are null.
@@ -10,14 +11,14 @@ import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
  *
  */
 function checkAllArgumentsNull() {
-    let i = 0
-    while (i < arguments.length) {
-        if (arguments[i] !== null) {
-            return false 
-        }
-        i++
-    }
-    return true 
+	let i = 0;
+	while (i < arguments.length) {
+		if (arguments[i] !== null) {
+			return false;
+		}
+		i++;
+	}
+	return true;
 }
 
 /**
@@ -144,4 +145,31 @@ export function TodoComponent(
 
 		return container;
 	}
+}
+
+export function RenderTodosFromStorage() {
+	const allTodos = Todo.allInstances;
+	if (!allTodos || allTodos.length === 0) {
+		return TodoComponent();
+	}
+
+	const fragment = document.createDocumentFragment();
+	for (let i = 0; i < allTodos.length; i++) {
+		fragment.appendChild(
+			TodoComponent(
+				allTodos[i].id,
+				allTodos[i].title,
+				allTodos[i].note,
+				allTodos[i].priority,
+				allTodos[i].complete,
+				allTodos[i].list,
+			),
+		);
+	}
+
+	const listOfTodoWrapper = document.createElement("div");
+	listOfTodoWrapper.className = "w-full";
+	listOfTodoWrapper.appendChild(fragment);
+
+	return listOfTodoWrapper;
 }
