@@ -803,6 +803,10 @@ video {
   background-color: var(--secondary);
 }
 
+.bg-transparent {
+  background-color: transparent;
+}
+
 .stroke-text {
   stroke: var(--text);
 }
@@ -881,6 +885,10 @@ video {
 
 .ease-out {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+.\[all\:unset\] {
+  all: unset;
 }
 
 /* Custom CSS for the circular shape */
@@ -975,6 +983,10 @@ video {
   color: var(--text);
 }
 
+.hover\:border-none:hover {
+  border-style: none;
+}
+
 .hover\:bg-primary:hover {
   background-color: var(--primary);
 }
@@ -987,6 +999,23 @@ video {
   border-width: 2px;
 }
 
+.focus\:border-none:focus {
+  border-style: none;
+}
+
 .focus\:border-accent:focus {
   border-color: var(--accent);
+}
+
+.focus-visible\:border-none:focus-visible {
+  border-style: none;
+}
+
+.focus-visible\:outline-none:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.active\:border-none:active {
+  border-style: none;
 }

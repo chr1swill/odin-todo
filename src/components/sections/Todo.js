@@ -3,33 +3,48 @@ import { Priority } from "../../logic/todo";
 import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
 import { Todo } from "../../logic/todo";
 
-/**@param { string | null } todoTitle */
-function TitleComponent(todoTitle) {
-	const title = document.createElement("h3");
-	title.className = "min-h-[30px] text-text text-xl font-bold";
-	title.textContent = todoTitle === null ? "" : todoTitle;
+/**
+ * @param { string | null } inputText
+ * @param { string } todoPropertyName
+ * @param { string } [fontSizeInInput="base"]
+ * @param {boolean} [required=true] - do you want the input to be required or not
+ */
+function FakeTextInputComponent(
+	inputText,
+	todoPropertyName,
+	fontSizeInInput = "base",
+	required = true,
+) {
+	const label = document.createElement("label");
+	label.className = "min-h-[30px] w-full";
+	label.textContent = inputText === null ? "" : inputText;
 
-    return title
-}
+	const span = document.createElement("span");
+	span.className = "sr-only hidden";
+	span.textContent = `Add a text for the ${todoPropertyName} of the todo`;
 
-/**@param { string | null } todoNote */
-function NoteComponent(todoNote) {
-	const note = document.createElement("p");
-	note.className = "min-h-[24px] text-text text-base font-medium";
-	note.textContent = todoNote === null ? "" : todoNote;
+	const input = document.createElement("input");
+	if (required) {
+		input.setAttribute("required", "");
+	}
+	input.type = "text";
+	input.className = `w-full text-text text-${fontSizeInInput} font-bold bg-transparent focus-visible:outline-none`;
+	input.value = inputText || "";
 
-    return note
+	label.appendChild(span);
+	label.appendChild(input);
+
+	return label;
 }
 
 /**@param { string | null } todoList */
 function ListComponent(todoList) {
 	const list = document.createElement("p");
 	list.className =
-		todoList === null ? "" : "bg-secondary rounded-lg text-text font-semibold"
-	;
+		todoList === null ? "" : "bg-secondary rounded-lg text-text font-semibold";
 	list.textContent = todoList === null ? "" : todoList;
 
-    return list
+	return list;
 }
 
 /**@param { number | null } todoPriority */
@@ -54,7 +69,7 @@ function PriorityComponent(todoPriority) {
 	displayPriority.className = "text-base text-red-500";
 	displayPriority.textContent = priority;
 
-    return displayPriority
+	return displayPriority;
 }
 
 /**
@@ -76,16 +91,13 @@ export function TodoComponent(
 ) {
 	const container = document.createElement("div");
 	container.className = "flex flex-row gap-2 justify-center place-items-center";
-	container.setAttribute(
-		"data-todo-id",
-		todoId || "empty",
-	);
+	container.setAttribute("data-todo-id", todoId || "empty");
 
-    const checkBox = CheckBoxComponent(false, todoComplete || false);
-	const title = TitleComponent(todoTitle)
-	const note = NoteComponent(todoNote)
-	const priority = PriorityComponent(todoPriority)
-	const list = ListComponent(todoList)
+	const checkBox = CheckBoxComponent(false, todoComplete || false);
+	const title = FakeTextInputComponent(todoTitle, "title", "xl");
+	const note = FakeTextInputComponent(todoNote, "title", "base", false);
+	const priority = PriorityComponent(todoPriority);
+	const list = ListComponent(todoList);
 	const hr = HorizontalDividerComponent();
 
 	const wrapper = document.createElement("div");
@@ -104,7 +116,7 @@ export function TodoComponent(
 	noteAndContentWrapper.appendChild(listAndPriorityWrapper);
 	wrapper.appendChild(title);
 	wrapper.appendChild(noteAndContentWrapper);
-    wrapper.appendChild(hr)
+	wrapper.appendChild(hr);
 	container.appendChild(checkBox);
 	container.appendChild(wrapper);
 
