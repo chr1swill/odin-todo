@@ -679,6 +679,14 @@ video {
   height: 1rem;
 }
 
+.min-h-\[30px\] {
+  min-height: 30px;
+}
+
+.min-h-\[24px\] {
+  min-height: 24px;
+}
+
 .w-4 {
   width: 1rem;
 }
