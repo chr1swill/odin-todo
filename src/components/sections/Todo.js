@@ -3,67 +3,37 @@ import { Priority } from "../../logic/todo";
 import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
 import { Todo } from "../../logic/todo";
 
-/**
- * @param { string | null } todoId
- * @param { string | null } todoTitle
- * @param { string | null } todoNote
- * @param { number | null } todoPriority
- * @param { boolean | null} todoComplete
- * @param { string | null } todoList
- *
- * */
-export function TodoComponent(
-	todoId = null,
-	todoTitle = null,
-	todoNote = null,
-	todoPriority = null,
-	todoComplete = null,
-	todoList = null,
-) {
-	const container = document.createElement("div");
-	container.className = "flex flex-row gap-2 justify-center place-items-center";
-
-	const hr = HorizontalDividerComponent();
-
-	// TODO: Temp fix, made a wrapper but styles are not perfect fix but the look of the whole todo componet
-
-	container.setAttribute(
-		"data-todo-id",
-		`${todoId === null ? "empty" : todoId}`,
-	);
-
-	/**@type {HTMLLabelElement}*/
-	let checkBox;
-	if (!todoComplete) {
-		checkBox = CheckBoxComponent();
-	} else {
-		checkBox = CheckBoxComponent(false, todoComplete);
-	}
-
-	const wrapper = document.createElement("div");
-	wrapper.className = "w-full flex flex-col gap-2";
-
+/**@param { string | null } todoTitle */
+function TitleComponent(todoTitle) {
 	const title = document.createElement("h3");
 	title.className = "min-h-[30px] text-text text-xl font-bold";
-	title.textContent = `${todoTitle === null ? "" : todoTitle}`;
+	title.textContent = todoTitle === null ? "" : todoTitle;
 
-	const noteAndContentWrapper = document.createElement("div");
-	noteAndContentWrapper.className =
-		"flex flex-row gap-1 justify-center content-between text-text font-medium text-xs";
+    return title
+}
 
+/**@param { string | null } todoNote */
+function NoteComponent(todoNote) {
 	const note = document.createElement("p");
 	note.className = "min-h-[24px] text-text text-base font-medium";
-	note.textContent = `${todoNote === null ? "" : todoNote}`;
+	note.textContent = todoNote === null ? "" : todoNote;
 
-	const listAndPriorityWrapper = document.createElement("div");
-	listAndPriorityWrapper.className = "flex flex-row gap-2";
+    return note
+}
 
+/**@param { string | null } todoList */
+function ListComponent(todoList) {
 	const list = document.createElement("p");
-	list.className = `${
+	list.className =
 		todoList === null ? "" : "bg-secondary rounded-lg text-text font-semibold"
-	}`;
-	list.textContent = `${todoList === null ? "" : todoList}`;
+	;
+	list.textContent = todoList === null ? "" : todoList;
 
+    return list
+}
+
+/**@param { number | null } todoPriority */
+function PriorityComponent(todoPriority) {
 	/**@type { string }*/
 	let priority;
 	switch (todoPriority) {
@@ -84,16 +54,57 @@ export function TodoComponent(
 	displayPriority.className = "text-base text-red-500";
 	displayPriority.textContent = priority;
 
-	listAndPriorityWrapper.appendChild(list);
-	listAndPriorityWrapper.appendChild(displayPriority);
+    return displayPriority
+}
 
+/**
+ * @param { string | null } todoId
+ * @param { string | null } todoTitle
+ * @param { string | null } todoNote
+ * @param { number | null } todoPriority
+ * @param { boolean | null} todoComplete
+ * @param { string | null } todoList
+ *
+ * */
+export function TodoComponent(
+	todoId = null,
+	todoTitle = null,
+	todoNote = null,
+	todoPriority = null,
+	todoComplete = null,
+	todoList = null,
+) {
+	const container = document.createElement("div");
+	container.className = "flex flex-row gap-2 justify-center place-items-center";
+	container.setAttribute(
+		"data-todo-id",
+		todoId || "empty",
+	);
+
+    const checkBox = CheckBoxComponent(false, todoComplete || false);
+	const title = TitleComponent(todoTitle)
+	const note = NoteComponent(todoNote)
+	const priority = PriorityComponent(todoPriority)
+	const list = ListComponent(todoList)
+	const hr = HorizontalDividerComponent();
+
+	const wrapper = document.createElement("div");
+	wrapper.className = "w-full flex flex-col gap-2";
+
+	const noteAndContentWrapper = document.createElement("div");
+	noteAndContentWrapper.className =
+		"flex flex-row gap-1 justify-center content-between text-text font-medium text-xs";
+
+	const listAndPriorityWrapper = document.createElement("div");
+	listAndPriorityWrapper.className = "flex flex-row gap-2";
+
+	listAndPriorityWrapper.appendChild(list);
+	listAndPriorityWrapper.appendChild(priority);
 	noteAndContentWrapper.appendChild(note);
 	noteAndContentWrapper.appendChild(listAndPriorityWrapper);
-
 	wrapper.appendChild(title);
 	wrapper.appendChild(noteAndContentWrapper);
     wrapper.appendChild(hr)
-
 	container.appendChild(checkBox);
 	container.appendChild(wrapper);
 
