@@ -1,6 +1,41 @@
 import { ArrowComponent } from "../icons/Arrow";
 
 /**
+ * @param {HTMLSelectElement} select
+ * @param {string} CREATION_TIME_FOR_ID
+ */
+function toggleSelectVisibilty(select, CREATION_TIME_FOR_ID) {
+	if (!select) {
+		throw new Error(
+			"Could not find select element with id: " + CREATION_TIME_FOR_ID,
+		);
+	}
+	select.classList.toggle("hidden");
+}
+
+/**
+ * @param {HTMLButtonElement} button
+ * @param {HTMLSelectElement} select
+ * @param {string} CREATION_TIME_FOR_ID
+ */
+function setButtonTextToSelectedOption(button, select, CREATION_TIME_FOR_ID) {
+	if (!button || !select) {
+		throw new Error(
+			"Could not find button element with id: " + CREATION_TIME_FOR_ID,
+		);
+	}
+
+	const selected = select.options[select.selectedIndex].textContent;
+	if (!selected) {
+		throw new ReferenceError(
+			"Could not access the selected option as a string",
+		);
+	}
+	button.textContent = selected;
+	button.appendChild(ArrowComponent());
+}
+
+/**
  *
  * Creates a dropdown HTML element
  *
@@ -87,13 +122,7 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		button?.addEventListener("click", (e) => {
 			e.preventDefault();
 			try {
-				if (!select) {
-					throw new Error(
-						"Could not find select element with id: " + CREATION_TIME_FOR_ID,
-					);
-				}
-				select.classList.toggle("hidden");
-
+				toggleSelectVisibilty(select, CREATION_TIME_FOR_ID);
 				return;
 			} catch (error) {
 				console.error(error);
@@ -108,21 +137,7 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		select?.addEventListener("change", (e) => {
 			e.preventDefault();
 			try {
-				if (!button || !select) {
-					throw new Error(
-						"Could not find button element with id: " + CREATION_TIME_FOR_ID,
-					);
-				}
-
-				const selected = select.options[select.selectedIndex].textContent;
-				if (!selected) {
-					throw new ReferenceError(
-						"Could not access the selected option as a string",
-					);
-				}
-				button.textContent = selected;
-				button.appendChild(ArrowComponent());
-
+				setButtonTextToSelectedOption(button, select, CREATION_TIME_FOR_ID);
 				return;
 			} catch (error) {
 				console.error(error);
