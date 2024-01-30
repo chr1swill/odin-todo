@@ -11,7 +11,11 @@ export function RenderHomePage() {
 		const titleBar = TitleBar("All Todos", "Add Todos");
 
 		fragment.appendChild(titleBar);
-		fragment.appendChild(RenderTodosFromStorage());
+        const todosInLocalStorage = RenderTodosFromStorage()
+        if (!todosInLocalStorage) {
+            throw new Error("Could not render Todo from storage, an error occurs in the process")
+        }
+		fragment.appendChild(todosInLocalStorage);
 		// TODO: section to show my active list
 		fragment.appendChild(ActionBarComponent());
 		fragment.appendChild(ListModalComponet());
