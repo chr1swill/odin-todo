@@ -28,7 +28,7 @@ function FakeTextInputComponent(
 		input.setAttribute("required", "");
 	}
 	input.type = "text";
-	input.className = `w-full text-text text-${fontSizeInInput} font-bold bg-transparent focus-visible:outline-none`;
+	input.className = `w-full text-text text-${fontSizeInInput} font-meduim bg-transparent focus-visible:outline-none`;
 	input.value = inputText || "";
 
 	label.appendChild(span);
