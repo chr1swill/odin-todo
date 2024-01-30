@@ -85,7 +85,6 @@ export function FakeTextTextareaComponent(
 		}
 
 		label.className = "min-h-[30px] w-full";
-		label.textContent = textareaText === null ? "" : textareaText;
 
 		span.className = "sr-only hidden";
 		span.textContent = `Add a text for the ${todoPropertyName} of the todo`;
@@ -93,7 +92,7 @@ export function FakeTextTextareaComponent(
 		if (required) {
 			textarea.setAttribute("required", "");
 		}
-		textarea.rows = 2;
+		textarea.rows = 1;
 		textarea.className = `w-full bg-transparent focus-visible:outline-none ${TextSize[textSizeInInput]} ${FontWeight[fontWeightForInput]}`;
 		textarea.value = textareaText || "";
 

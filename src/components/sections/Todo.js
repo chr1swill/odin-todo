@@ -50,11 +50,17 @@ export function TodoComponent(
 	try {
 		const container = document.createElement("div");
 		container.className =
-			"flex flex-row gap-2 justify-center place-items-center";
+			"flex flex-row gap-2 items-start justify-center place-items-center";
 		container.setAttribute("data-todo-id", todoId || "empty");
 
 		const checkBox = CheckBoxComponent(false, todoComplete || false);
-		const title = FakeTextInputComponent(todoTitle, "title");
+		const title = FakeTextTextareaComponent(todoTitle, "title");
+        if (!title) {
+			throw new Error(
+				"Could not add todo title input: An error occured during it creation, please investivate.",
+			);
+        }
+
 		const note = FakeTextTextareaComponent(
 			todoNote,
 			"note",
@@ -64,9 +70,10 @@ export function TodoComponent(
 		);
 		if (!note) {
 			throw new Error(
-				"Could note create note: error occured will trying to create it please investigate.",
+				"Could not add note input: An error occured during it creation, please investivate.",
 			);
 		}
+
 		const priority = PriorityComponent(todoPriority);
 		const list = FakeTextInputComponent(
 			todoList,
@@ -105,37 +112,46 @@ export function TodoComponent(
 }
 
 export function RenderTodosFromStorage() {
-    try {
-	const allTodos = Todo.allInstances;
-	if (!allTodos || allTodos.length === 0) {
-		return TodoComponent();
-	}
+	try {
+		const allTodos = Todo.allInstances;
+		if (!allTodos || allTodos.length === 0) {
+			return TodoComponent();
+		}
 
-	const fragment = document.createDocumentFragment();
-	for (let i = 0; i < allTodos.length; i++) {
-		const todo = TodoComponent(
-			allTodos[i].id,
-			allTodos[i].title,
-			allTodos[i].note,
-			allTodos[i].priority,
-			allTodos[i].complete,
-			allTodos[i].list,
-		);
-		if (!todo) {
+		const fragment = document.createDocumentFragment();
+		for (let i = 0; i < allTodos.length; i++) {
+			const todo = TodoComponent(
+				allTodos[i].id,
+				allTodos[i].title,
+				allTodos[i].note,
+				allTodos[i].priority,
+				allTodos[i].complete,
+				allTodos[i].list,
+			);
+			if (!todo) {
+				throw new Error(
+					`Todo Component could not be created for list of Todos, Failed on increment: ${i}`,
+				);
+			}
+			fragment.appendChild(todo);
+		}
+
+		const emptyTodo = TodoComponent();
+		if (!emptyTodo) {
 			throw new Error(
-				`Todo Component could not be created for list of Todos, Failed on increment: ${i}`,
+				"Could not created empty todoComponent, resulted in a null value",
 			);
 		}
-		fragment.appendChild(todo);
+        // add an empty to the end of the list
+		fragment.appendChild(emptyTodo);
+
+		const listOfTodoWrapper = document.createElement("div");
+		listOfTodoWrapper.className = "w-full";
+		listOfTodoWrapper.appendChild(fragment);
+
+		return listOfTodoWrapper;
+	} catch (error) {
+		console.error;
+		return null;
 	}
-
-	const listOfTodoWrapper = document.createElement("div");
-	listOfTodoWrapper.className = "w-full";
-	listOfTodoWrapper.appendChild(fragment);
-
-	return listOfTodoWrapper;
-    } catch(error) {
-        console.error
-        return null
-    }
 }

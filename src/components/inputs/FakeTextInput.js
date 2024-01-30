@@ -47,7 +47,6 @@ export function FakeTextInputComponent(
 
 	const label = document.createElement("label");
 	label.className = "min-h-[30px] w-full";
-	label.textContent = inputText === null ? "" : inputText;
 
 	const span = document.createElement("span");
 	span.className = "sr-only hidden";
