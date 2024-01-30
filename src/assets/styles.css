@@ -628,12 +628,16 @@ video {
   position: absolute;
 }
 
-.left-0 {
-  left: 0px;
+.relative {
+  position: relative;
 }
 
-.top-full {
-  top: 100%;
+.right-3 {
+  right: 0.75rem;
+}
+
+.top-\[calc\(100\%-10px\)\] {
+  top: calc(100% - 10px);
 }
 
 .z-0 {
@@ -673,6 +677,10 @@ video {
 
 .h-4 {
   height: 1rem;
+}
+
+.h-auto {
+  height: auto;
 }
 
 .min-h-\[30px\] {

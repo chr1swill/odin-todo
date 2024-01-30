@@ -2,7 +2,7 @@ import { ArrowComponent } from "../icons/Arrow";
 
 /**
  *
- * Creates a dropdown HtML element
+ * Creates a dropdown HTML element
  *
  * @param { string } buttonTitle - initital text that will appear in the button
  * @param { string[] } options - options that will be displayed in select element
@@ -25,6 +25,7 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		select.classList.add(
 			"hidden",
 			"bg-background",
+			"hover:bg-secondary",
 			"py-2",
 			"px-3",
 			"text-text",
@@ -33,8 +34,8 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 			"border-none",
 			"rounded-md",
 			"absolute",
-			"top-full",
-			"left-0",
+			"top-[calc(100%-10px)]",
+			"right-3",
 			"z-10",
 			"focus:border-accent",
 			"focus:border-1",
@@ -51,10 +52,10 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		button.setAttribute("data-toggle-button", CREATION_TIME_FOR_ID);
 		button.classList.add(
 			"flex",
-            "items-center",
-            "justify-center",
-            "gap-2",
-            "w-full",
+			"items-center",
+			"justify-center",
+			"gap-2",
+			"w-full",
 			"content-between",
 			"bg-background",
 			"hover:bg-secondary",
@@ -69,50 +70,64 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		button.textContent = buttonTitle;
 		button.appendChild(ArrowComponent());
 
+		const buttonAndSelectWrapper = document.createElement("div");
+		buttonAndSelectWrapper.className = "w-full h-auto relative";
+		buttonAndSelectWrapper.appendChild(select);
+		buttonAndSelectWrapper.appendChild(button);
+
 		const container = document.createElement("div");
 		container.classList.add("w-full", "grid", "place-items-center");
-		container.appendChild(button);
-		container.appendChild(select);
+		container.appendChild(buttonAndSelectWrapper);
 
-		if (button) {
-			button?.addEventListener("click", (e) => {
-				e.preventDefault();
-				try {
-					if (!select) {
-						throw new Error(
-							"Could not find select element with id: " + CREATION_TIME_FOR_ID,
-						);
-					}
-					select.classList.toggle("hidden");
-
-					return;
-				} catch (error) {
-					console.error(error);
-				}
-			});
+		if (!button) {
+			throw new ReferenceError(
+				"Could not access button element inside of dropdown",
+			);
 		}
-
-		if (select) {
-			select?.addEventListener("change", (e) => {
-				e.preventDefault();
-				try {
-					if (!button || !select) {
-						throw new Error(
-							"Could not find button element with id: " + CREATION_TIME_FOR_ID,
-						);
-					}
-					const selected = select.options[select.selectedIndex].textContent;
-					if (selected) {
-						button.textContent = selected;
-						button.appendChild(ArrowComponent());
-					}
-
-					return;
-				} catch (error) {
-					console.error(error);
+		button?.addEventListener("click", (e) => {
+			e.preventDefault();
+			try {
+				if (!select) {
+					throw new Error(
+						"Could not find select element with id: " + CREATION_TIME_FOR_ID,
+					);
 				}
-			});
+				select.classList.toggle("hidden");
+
+				return;
+			} catch (error) {
+				console.error(error);
+			}
+		});
+
+		if (!select) {
+			throw new ReferenceError(
+				"Could not access select element inside of dropdown",
+			);
 		}
+		select?.addEventListener("change", (e) => {
+			e.preventDefault();
+			try {
+				if (!button || !select) {
+					throw new Error(
+						"Could not find button element with id: " + CREATION_TIME_FOR_ID,
+					);
+				}
+
+				const selected = select.options[select.selectedIndex].textContent;
+				if (!selected) {
+					throw new ReferenceError(
+						"Could not access the selected option as a string",
+					);
+				}
+				button.textContent = selected;
+				button.appendChild(ArrowComponent());
+
+				return;
+			} catch (error) {
+				console.error(error);
+			}
+		});
 
 		return {
 			element: () => container,
