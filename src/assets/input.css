@@ -1,77 +1,82 @@
 :root {
-  --font-family: "Open Sans", sans-serif;
+	--font-family: "Open Sans", sans-serif;
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
-    --text: #110802;
-    --background: #fdf7f3;
-    --primary: #e26e21;
-    --secondary: #e6ee80;
-    --accent: #bde851;
-  }
+	:root {
+		--text: #110802;
+		--background: #fdf7f3;
+		--primary: #e26e21;
+		--secondary: #e6ee80;
+		--accent: #bde851;
+	}
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --text: #fdf3ed;
-    --background: #0d0702;
-    --primary: #dd6a1d;
-    --secondary: #767e11;
-    --accent: #85b017;
-  }
+	:root {
+		--text: #fdf3ed;
+		--background: #0d0702;
+		--primary: #dd6a1d;
+		--secondary: #767e11;
+		--accent: #85b017;
+	}
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/* TODO: set up to use a custom font*/
+body > * > * {
+    @apply font-base;
+}
+
 /* Custom CSS for the circular shape */
 .form-checkbox {
-  @apply appearance-none h-6 w-6 border border-text rounded-full checked:bg-accent checked:border-transparent focus:outline-none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  opacity: 0; /* Hide the default checkbox but keep it accessible */
-  position: absolute;
+	@apply appearance-none h-6 w-6 border border-text rounded-full checked:bg-accent checked:border-transparent focus:outline-none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	opacity: 0; /* Hide the default checkbox but keep it accessible */
+	position: absolute;
 }
 
 .custom-checkbox-indicator {
-  @apply h-6 w-6 border border-text rounded-full inline-block;
-  background-position: center;
-  background-size: contain;
+	@apply h-6 w-6 border border-text rounded-full inline-block;
+	background-position: center;
+	background-size: contain;
 }
 
 .form-checkbox:checked + .custom-checkbox-indicator {
-  @apply bg-accent;
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="white"><path d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 5.707 8.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" /></svg>');
+	@apply bg-accent;
+	background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="white"><path d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 5.707 8.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l7-7a1 1 0 000-1.414z" /></svg>');
 }
 
 .form-checkbox:focus + .custom-checkbox-indicator {
-  @apply outline-none ring-2 ring-offset-2 ring-accent;
+	@apply outline-none ring-2 ring-offset-2 ring-accent;
 }
 
 /* Tailwind classes for the label to improve accessibility */
 .custom-checkbox-wrapper {
-  @apply relative cursor-pointer;
+	@apply relative cursor-pointer;
 }
 
 /* Hide the default checkbox but keep it accessible */
 .form-checkbox {
-  opacity: 0; /* Hide the default checkbox but keep it accessible */
-  position: absolute;
+	opacity: 0; /* Hide the default checkbox but keep it accessible */
+	position: absolute;
 }
 
 .disabled-indicator {
-  @apply bg-gray-200 border-gray-200;
-  /* Other styles for disabled state */
+	@apply bg-gray-200 border-gray-200;
+	/* Other styles for disabled state */
 }
 
 .inner-margin > * {
-    @apply m-2;
+	@apply m-2;
 }

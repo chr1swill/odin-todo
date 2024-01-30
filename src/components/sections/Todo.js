@@ -4,37 +4,67 @@ import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
 import { Todo } from "../../logic/todo";
 
 /**
+ * Mapping for Tailwind text sizes.
+ * @enum {string}
+ */
+const TextSize = {
+    xs: "text-xs",
+    sm: "text-sm",
+    base: "text-base",
+    lg: "text-lg",
+    xl: "text-xl",
+    twoxl: "text-2xl",
+    threexl: "text-3xl",
+};
+
+/**
+ *
+ * Mapping for Tailwind font weights.
+ * @enum {string}
+ */
+const FontWeight = {
+    light: "font-light",
+    normal: "font-normal",
+    medium: "font-medium",
+    semibold: "font-semibold",
+    bold: "font-bold",
+    extrabold: "font-extrabold",
+};
+
+/**
  * @param { string | null } inputText
  * @param { string } todoPropertyName
- * @param { string } [fontSizeInInput="base"]
- * @param {boolean} [required=true] - do you want the input to be required or not
+ * @param { TextSize } [textSizeInInput=TextSize.base] - default is TextSize.base
+ * @param { FontWeight } [fontWeightForInput=FontWeight.medium] - default is FontWeight.medium
+ * @param { boolean } [required=true] - should the input be required or not
  */
 function FakeTextInputComponent(
-	inputText,
-	todoPropertyName,
-	fontSizeInInput = "base",
-	required = true,
+    inputText,
+    todoPropertyName,
+    textSizeInInput = TextSize.base,
+    fontWeightForInput = FontWeight.medium,
+    required = true,
 ) {
-	const label = document.createElement("label");
-	label.className = "min-h-[30px] w-full";
-	label.textContent = inputText === null ? "" : inputText;
+    const label = document.createElement("label");
+    label.className = "min-h-[30px] w-full";
+    label.textContent = inputText === null ? "" : inputText;
 
-	const span = document.createElement("span");
-	span.className = "sr-only hidden";
-	span.textContent = `Add a text for the ${todoPropertyName} of the todo`;
+    const span = document.createElement("span");
+    span.className = "sr-only hidden";
+    span.textContent = `Add a text for the ${todoPropertyName} of the todo`;
 
-	const input = document.createElement("input");
-	if (required) {
-		input.setAttribute("required", "");
-	}
-	input.type = "text";
-	input.className = `w-full text-text text-${fontSizeInInput} font-meduim bg-transparent focus-visible:outline-none`;
-	input.value = inputText || "";
+    const input = document.createElement("input");
+    if (required) {
+        input.setAttribute("required", "");
+    }
+    input.type = "text";
+    input.className = `w-full bg-transparent focus-visible:outline-none ${textSizeInInput} ${fontWeightForInput}`;
+    input.value = inputText || "";
 
-	label.appendChild(span);
-	label.appendChild(input);
+    label.appendChild(span);
+    label.appendChild(input);
 
-	return label;
+    return label;
 }
 
 /**@param { string | null } todoList */
@@ -94,8 +124,8 @@ export function TodoComponent(
 	container.setAttribute("data-todo-id", todoId || "empty");
 
 	const checkBox = CheckBoxComponent(false, todoComplete || false);
-	const title = FakeTextInputComponent(todoTitle, "title", "xl");
-	const note = FakeTextInputComponent(todoNote, "title", "base", false);
+	const title = FakeTextInputComponent(todoTitle, "title");
+	const note = FakeTextInputComponent(todoNote, "title", TextSize.sm, FontWeight.light, false);
 	const priority = PriorityComponent(todoPriority);
 	const list = ListComponent(todoList);
 	const hr = HorizontalDividerComponent();
@@ -105,7 +135,7 @@ export function TodoComponent(
 
 	const noteAndContentWrapper = document.createElement("div");
 	noteAndContentWrapper.className =
-		"flex flex-row gap-1 justify-center content-between text-text font-medium text-xs";
+		"flex flex-row gap-1 justify-center content-between";
 
 	const listAndPriorityWrapper = document.createElement("div");
 	listAndPriorityWrapper.className = "flex flex-row gap-2";

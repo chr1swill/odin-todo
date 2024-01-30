@@ -671,20 +671,12 @@ video {
   display: none;
 }
 
-.h-3 {
-  height: 0.75rem;
-}
-
 .h-4 {
   height: 1rem;
 }
 
 .min-h-\[30px\] {
   min-height: 30px;
-}
-
-.min-h-\[24px\] {
-  min-height: 24px;
 }
 
 .w-4 {
@@ -834,6 +826,16 @@ video {
   padding-bottom: 0.5rem;
 }
 
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
@@ -842,6 +844,16 @@ video {
 .text-base {
   font-size: 1rem;
   line-height: 1.5rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 .text-xl {
@@ -858,8 +870,20 @@ video {
   font-weight: 700;
 }
 
+.font-extrabold {
+  font-weight: 800;
+}
+
+.font-light {
+  font-weight: 300;
+}
+
 .font-medium {
   font-weight: 500;
+}
+
+.font-normal {
+  font-weight: 400;
 }
 
 .font-semibold {
@@ -887,8 +911,10 @@ video {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
-.\[all\:unset\] {
-  all: unset;
+/* TODO: set up to use a custom font*/
+
+body > * > * {
+  font-family: var(--font-family);
 }
 
 /* Custom CSS for the circular shape */
@@ -983,10 +1009,6 @@ video {
   color: var(--text);
 }
 
-.hover\:border-none:hover {
-  border-style: none;
-}
-
 .hover\:bg-primary:hover {
   background-color: var(--primary);
 }
@@ -999,23 +1021,11 @@ video {
   border-width: 2px;
 }
 
-.focus\:border-none:focus {
-  border-style: none;
-}
-
 .focus\:border-accent:focus {
   border-color: var(--accent);
-}
-
-.focus-visible\:border-none:focus-visible {
-  border-style: none;
 }
 
 .focus-visible\:outline-none:focus-visible {
   outline: 2px solid transparent;
   outline-offset: 2px;
-}
-
-.active\:border-none:active {
-  border-style: none;
 }
