@@ -72,16 +72,6 @@ function FakeTextInputComponent(
 	return label;
 }
 
-/**@param { string | null } todoList */
-function ListComponent(todoList) {
-	const list = document.createElement("p");
-	list.className =
-		todoList === null ? "" : "bg-secondary rounded-lg text-text font-semibold";
-	list.textContent = todoList === null ? "" : todoList;
-
-	return list;
-}
-
 /**@param { number | null } todoPriority */
 function PriorityComponent(todoPriority) {
 	/**@type { string }*/
@@ -130,9 +120,15 @@ export function TodoComponent(
 
 	const checkBox = CheckBoxComponent(false, todoComplete || false);
 	const title = FakeTextInputComponent(todoTitle, "title");
-	const note = FakeTextInputComponent(todoNote, "title", "SM", "LIGHT", false);
+	const note = FakeTextInputComponent(todoNote, "note", "SM", "LIGHT", false);
 	const priority = PriorityComponent(todoPriority);
-	const list = ListComponent(todoList);
+	const list = FakeTextInputComponent(
+		todoList,
+		"list",
+		"XS",
+		"SEMIBOLD",
+		false,
+	);
 	const hr = HorizontalDividerComponent();
 
 	const wrapper = document.createElement("div");
