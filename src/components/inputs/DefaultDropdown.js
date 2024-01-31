@@ -2,37 +2,92 @@ import { ArrowComponent } from "../icons/Arrow";
 
 /**
  * @param {HTMLSelectElement} select
- * @param {string} CREATION_TIME_FOR_ID
+ * @param {string} DROPDOWN_ID
  */
-function toggleSelectVisibilty(select, CREATION_TIME_FOR_ID) {
-	if (!select) {
-		throw new Error(
-			"Could not find select element with id: " + CREATION_TIME_FOR_ID,
-		);
+function toggleSelectVisibilty(select, DROPDOWN_ID) {
+	try {
+		if (!select) {
+			throw new Error("Could not find select element with id: " + DROPDOWN_ID);
+		}
+		select.classList.toggle("hidden");
+		return;
+	} catch (error) {
+		console.error(error);
 	}
-	select.classList.toggle("hidden");
 }
 
 /**
  * @param {HTMLButtonElement} button
  * @param {HTMLSelectElement} select
- * @param {string} CREATION_TIME_FOR_ID
+ * @param {string} DROPDOWN_ID
  */
-function setButtonTextToSelectedOption(button, select, CREATION_TIME_FOR_ID) {
-	if (!button || !select) {
-		throw new Error(
-			"Could not find button element with id: " + CREATION_TIME_FOR_ID,
-		);
-	}
+function setButtonTextToSelectedOption(button, select, DROPDOWN_ID) {
+	try {
+		if (!button || !select) {
+			throw new Error("Could not find button element with id: " + DROPDOWN_ID);
+		}
 
-	const selected = select.options[select.selectedIndex].textContent;
-	if (!selected) {
-		throw new ReferenceError(
-			"Could not access the selected option as a string",
-		);
+		const selected = select.options[select.selectedIndex].textContent;
+		if (!selected) {
+			throw new ReferenceError(
+				"Could not access the selected option as a string",
+			);
+		}
+		button.textContent = selected;
+		button.appendChild(ArrowComponent());
+		return;
+	} catch (error) {
+		console.error(error);
 	}
-	button.textContent = selected;
-	button.appendChild(ArrowComponent());
+}
+
+/**
+ * @param {HTMLButtonElement} button
+ * @param {HTMLSelectElement} select
+ * @param {string} DROPDOWN_ID
+ */
+function setupButton(button, select, DROPDOWN_ID) {
+	const toggleListner = () => toggleSelectVisibilty(select, DROPDOWN_ID);
+	button?.addEventListener("click", toggleListner);
+
+	const observer = new MutationObserver((mutations) => {
+		let i = 0;
+		while (i < mutations.length) {
+			if (!document.body.contains(button)) {
+				button.removeEventListener("click", toggleListner);
+				observer.disconnect();
+				break;
+			}
+			i++;
+		}
+	});
+
+	observer.observe(document.body, { childList: true, subtree: true });
+}
+
+/**
+ * @param {HTMLButtonElement} button
+ * @param {HTMLSelectElement} select
+ * @param {string} DROPDOWN_ID
+ */
+function setupSelect(button, select, DROPDOWN_ID) {
+	const buttonUpdateListener = () =>
+		setButtonTextToSelectedOption(button, select, DROPDOWN_ID);
+	select?.addEventListener("change", buttonUpdateListener);
+
+	const observer = new MutationObserver((mutations) => {
+		let i = 0;
+		while (i < mutations.length) {
+			if (!document.body.contains(select)) {
+				select.removeEventListener("change", buttonUpdateListener);
+				observer.disconnect();
+				break;
+			}
+			i++;
+		}
+	});
+
+	observer.observe(document.body, { childList: true, subtree: true });
 }
 
 /**
@@ -52,11 +107,11 @@ function setButtonTextToSelectedOption(button, select, CREATION_TIME_FOR_ID) {
  */
 export function DefaultDropdownComponent(buttonTitle, options) {
 	try {
-		const CREATION_TIME_FOR_ID = (Date.now() + Math.random()).toString();
+		const DROPDOWN_ID = (Date.now() + Math.random()).toString();
 
 		/**@type {HTMLSelectElement}*/
 		const select = document.createElement("select");
-		select.setAttribute("data-dropdown", CREATION_TIME_FOR_ID);
+		select.setAttribute("data-dropdown", DROPDOWN_ID);
 		select.classList.add(
 			"hidden",
 			"bg-background",
@@ -84,7 +139,7 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		}
 
 		const button = document.createElement("button");
-		button.setAttribute("data-toggle-button", CREATION_TIME_FOR_ID);
+		button.setAttribute("data-toggle-button", DROPDOWN_ID);
 		button.classList.add(
 			"flex",
 			"items-center",
@@ -119,30 +174,14 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 				"Could not access button element inside of dropdown",
 			);
 		}
-		button?.addEventListener("click", (e) => {
-			e.preventDefault();
-			try {
-				toggleSelectVisibilty(select, CREATION_TIME_FOR_ID);
-				return;
-			} catch (error) {
-				console.error(error);
-			}
-		});
+		setupButton(button, select, DROPDOWN_ID);
 
 		if (!select) {
 			throw new ReferenceError(
 				"Could not access select element inside of dropdown",
 			);
 		}
-		select?.addEventListener("change", (e) => {
-			e.preventDefault();
-			try {
-				setButtonTextToSelectedOption(button, select, CREATION_TIME_FOR_ID);
-				return;
-			} catch (error) {
-				console.error(error);
-			}
-		});
+		setupSelect(button, select, DROPDOWN_ID);
 
 		return {
 			element: () => container,
