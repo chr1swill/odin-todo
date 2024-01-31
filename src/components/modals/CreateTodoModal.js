@@ -2,10 +2,12 @@ import { DefaultInputComponent } from "../inputs/DefaultInput";
 import { DefaultTextareaComponent } from "../inputs/DefaultTextarea";
 import { DefaultDropdownComponent } from "../inputs/DefaultDropdown";
 import { DefaultButtonComponent } from "../buttons/DefaultButton";
-import { DialogComponent, showTodoModal } from "./Dialog";
+import { DialogComponent } from "./Dialog";
 import { Todo, Priority } from "../../logic/todo";
+import { appendTodoFromStroageToElement } from "../sections/Todo";
 
-export function TodoModalComponent() {
+/**@param {string} elementIdToAppendTo - when the new list will be append after creating a todo sucessfully */
+export function TodoModalComponent(elementIdToAppendTo) {
 	try {
 		const cancelBtn = DefaultButtonComponent("Cancel");
 		const createBtn = DefaultButtonComponent("Create Todo", "submit", "sumbit");
@@ -90,7 +92,16 @@ export function TodoModalComponent() {
 						todo.priority = Priority.NONE;
 				}
 
-                showTodoModal()
+				appendTodoFromStroageToElement(elementIdToAppendTo);
+				/**@type { HTMLDialogElement | null }*/
+				const dialog = document.querySelector("#todoModal");
+				if (!dialog) {
+					console.error('Could not find element with the id: "todoModal"');
+					return;
+				}
+
+				dialog.classList.add("hidden");
+				dialog.close();
 			} catch (error) {
 				console.error(error);
 				return;

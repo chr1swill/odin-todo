@@ -155,3 +155,30 @@ export function RenderTodosFromStorage() {
 		return null;
 	}
 }
+
+/**@param {string} elementId - id the corrisponse to the element you would like to select*/
+export function appendTodoFromStroageToElement(elementId) {
+	try {
+		const todosInLocalStorage = RenderTodosFromStorage();
+		if (!todosInLocalStorage) {
+			throw new Error(
+				"Could not render Todo from storage, an error occurs in the process",
+			);
+		}
+
+		const listElement = document.getElementById(elementId);
+		if (!listElement) {
+			throw new ReferenceError(
+				`Could not access wrapper for list of todo, element with id: ${elementId} is not currently in the DOM`,
+			);
+		}
+
+        while (listElement.firstChild) {
+            listElement.removeChild(listElement.firstChild)
+        }
+
+		listElement.appendChild(todosInLocalStorage);
+	} catch (error) {
+		console.log(error);
+	}
+}

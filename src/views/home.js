@@ -15,12 +15,17 @@ export function RenderHomePage() {
         if (!todosInLocalStorage) {
             throw new Error("Could not render Todo from storage, an error occurs in the process")
         }
-		fragment.appendChild(todosInLocalStorage);
+
+        const todoContainer = document.createElement('div')
+        todoContainer.setAttribute('id', 'homePageTodoListContainer')
+        todoContainer.appendChild(todosInLocalStorage)
+
+		fragment.appendChild(todoContainer);
 		// TODO: section to show my active list
 		fragment.appendChild(ActionBarComponent());
 		fragment.appendChild(ListModalComponet());
 
-		const todoModal = TodoModalComponent();
+		const todoModal = TodoModalComponent(todoContainer.id);
 		if (!todoModal) {
 			throw new ReferenceError(
 				"Todo modal was not create: the value of the component is undefined",
