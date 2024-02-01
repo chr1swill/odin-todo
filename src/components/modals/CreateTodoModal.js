@@ -39,8 +39,7 @@ export function TodoModalComponent(elementIdToAppendTo) {
 		dialog.appendToForm(dropdown.element());
 		dialog.appendToForm(btnContainer);
 
-		cancelBtn.addEventListener("click", (e) => {
-			e.preventDefault();
+		cancelBtn.addEventListener("click", () => {
 
 			/**@type { HTMLDialogElement | null }*/
 			const dialog = document.querySelector("#todoModal");
@@ -53,8 +52,7 @@ export function TodoModalComponent(elementIdToAppendTo) {
 			dialog.close();
 		});
 
-		createBtn.addEventListener("click", (e) => {
-			e.preventDefault();
+		createBtn.addEventListener("click", () => {
 			try {
 				const todoName = input.value();
 				const todoNote = textarea.value();
