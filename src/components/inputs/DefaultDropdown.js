@@ -96,6 +96,7 @@ function setupSelect(button, select, DROPDOWN_ID) {
  *
  * @param { string } buttonTitle - initital text that will appear in the button
  * @param { string[] } options - options that will be displayed in select element
+ * @returns {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement } | null} The dropdown component with methods to access its HTML elements.
  *
  * @example
  * const dropdown = DefaultDropdownComponent("Select an option", ["Option 1", "Option 2", "Option 3"]);
@@ -189,5 +190,6 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		};
 	} catch (error) {
 		console.error(error);
+        return null
 	}
 }

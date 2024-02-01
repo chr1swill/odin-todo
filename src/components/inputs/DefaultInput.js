@@ -3,6 +3,7 @@
  * Create a simple input
  * @param { string } placeholder - description on the input person to screen readers and inside the input
  * @param { boolean } [required=false] - if the input is required
+ * @returns {{ element: () => HTMLLabelElement, value: () => string }} An object containing a method to get the input container element and a method to get the value of the input
  *
  * */
 export function DefaultInputComponent(placeholder, required = false) {
