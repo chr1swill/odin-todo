@@ -57,11 +57,11 @@ export function DialogComponent() {
 			return dialog;
 		},
 		closeDialog: () => {
-            dialog.classList.remove('hidden')
+            dialog.classList.add('hidden')
 			dialog.close();
 		},
         showDialog: () => {
-            dialog.classList.add('hidden')
+            dialog.classList.remove('hidden')
             dialog.show()
         },
 		/**
