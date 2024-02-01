@@ -8,7 +8,7 @@ export function showListModal() {
 			);
 		}
 
-        dialog.classList.remove('hidden')
+		dialog.classList.remove("hidden");
 		dialog.show();
 	} catch (error) {
 		console.error(error);
@@ -25,29 +25,57 @@ export function showTodoModal() {
 			);
 		}
 
-        dialog.classList.remove('hidden')
+		dialog.classList.remove("hidden");
 		dialog.show();
 	} catch (error) {
 		console.error(error);
 	}
 }
 
+/**
+ * @param {string} idOfDialogElement
+ * @returns {null|void}
+ */
+export function closeDialog(idOfDialogElement) {
+	try {
+		/**@type { HTMLElement | null }*/
+		const dialog = document.getElementById(idOfDialogElement);
+		if (!dialog) {
+			throw new ReferenceError(
+				`Could not find element with the id: ${idOfDialogElement}`,
+			);
+		}
+
+		if (!(dialog instanceof HTMLDialogElement)) {
+			throw new TypeError(
+				`The element with the id: ${idOfDialogElement} is not a dialog element`,
+			);
+		}
+
+		dialog.classList.add("hidden");
+		dialog.close();
+	} catch (error) {
+		console.error(error);
+		return null;
+	}
+}
+
 export function DialogComponent() {
 	const dialog = document.createElement("dialog");
 	dialog.classList.add(
-        "hidden",
+		"hidden",
 		"grid",
 		"place-items-center",
 		"bg-backgroud",
-        "border",
-        "border-4",
-        "border-text",
+		"border",
+		"border-4",
+		"border-text",
 		"rounded-md",
 		"p-4",
 		"max-w-[calc(100vw-2rem)]",
 	);
 	const form = document.createElement("form");
-    form.className = "grid grid-cols-1 gap-3 place-items-center"
+	form.className = "grid grid-cols-1 gap-3 place-items-center";
 	form.setAttribute("method", "dialog");
 	form.setAttribute("autofocus", "");
 	dialog.append(form);
@@ -57,13 +85,13 @@ export function DialogComponent() {
 			return dialog;
 		},
 		closeDialog: () => {
-            dialog.classList.add('hidden')
+			dialog.classList.add("hidden");
 			dialog.close();
 		},
-        showDialog: () => {
-            dialog.classList.remove('hidden')
-            dialog.show()
-        },
+		showDialog: () => {
+			dialog.classList.remove("hidden");
+			dialog.show();
+		},
 		/**
 		 * Appends an element to the form inside the dialog.
 		 * @param {HTMLElement} element - The element to append to the form.
