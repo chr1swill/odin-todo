@@ -47,11 +47,11 @@ export function CheckBoxComponent(isDisabled = false, isChecked = false) {
 	input.type = "checkbox";
 
 	const span = document.createElement("span");
-    span.className = "custom-checkbox-indicator";
+	span.className = "custom-checkbox-indicator";
 
 	if (isDisabled) {
 		input.setAttribute("disabled", "");
-	} 
+	}
 
 	if (isChecked) {
 		input.setAttribute("checked", "");
