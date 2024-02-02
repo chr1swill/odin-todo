@@ -54,6 +54,84 @@ function createTodoFromChosenValue(input, textarea, dropdown) {
 	}
 }
 
+/**
+ *  @param {string} elementIdToAppendTo
+ *  @param {{ element: () => HTMLLabelElement, value: () => string }} input
+ *  @param {{ element: () => HTMLLabelElement, value: () => string }} textarea
+ *  @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement } | null} dropdown
+ *  @returns {null|void}
+ */
+function handleClickOnCreateBtn(
+	elementIdToAppendTo,
+	input,
+	textarea,
+	dropdown,
+) {
+	try {
+		createTodoFromChosenValue(input, textarea, dropdown);
+		appendTodoFromStroageToElement(elementIdToAppendTo);
+		closeDialog("todoModal");
+	} catch (error) {
+		console.error(error);
+		return null;
+	}
+}
+
+/**
+ *  @param {HTMLButtonElement} createBtn
+ *  @param {string} elementIdToAppendTo
+ *  @param {{ element: () => HTMLLabelElement, value: () => string }} input
+ *  @param {{ element: () => HTMLLabelElement, value: () => string }} textarea
+ *  @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement } | null} dropdown
+ *  @returns {null|void}
+ */
+function setUpCreateBtn(
+	createBtn,
+	elementIdToAppendTo,
+	input,
+	textarea,
+	dropdown,
+) {
+	/**@returns{null|void}*/
+	const handleClick = () =>
+		handleClickOnCreateBtn(elementIdToAppendTo, input, textarea, dropdown);
+	createBtn?.addEventListener("click", handleClick);
+
+	const observer = new MutationObserver((mutation) => {
+		let i = 0;
+		while (i < mutation.length) {
+			if (!document.body.contains(createBtn)) {
+				createBtn.removeEventListener("click", handleClick);
+				observer.disconnect();
+				break;
+			}
+			i++;
+		}
+	});
+
+	observer.observe(document.body, { childList: true, subtree: true });
+}
+
+/**@param {HTMLButtonElement} cancelBtn */
+function setUpCancelBtn(cancelBtn) {
+	const closeTodoModal = () => closeDialog("todoModal");
+	cancelBtn?.addEventListener("click", closeTodoModal);
+
+	const observer = new MutationObserver((mutation) => {
+		let i = 0;
+		while (i < mutation.length) {
+			if (!document.body.contains(cancelBtn)) {
+				cancelBtn.removeEventListener("click", closeTodoModal);
+				observer.disconnect();
+				break;
+			}
+			i++;
+		}
+	});
+
+	observer.observe(document.body, { childList: true, subtree: true });
+}
+
 /**@param {string} elementIdToAppendTo - when the new list will be append after creating a todo sucessfully */
 export function TodoModalComponent(elementIdToAppendTo) {
 	try {
@@ -87,20 +165,8 @@ export function TodoModalComponent(elementIdToAppendTo) {
 		dialog.appendToForm(dropdown.element());
 		dialog.appendToForm(btnContainer);
 
-		cancelBtn.addEventListener("click", () => {
-			closeDialog("todoModal");
-		});
-
-		createBtn.addEventListener("click", () => {
-			try {
-				createTodoFromChosenValue(input, textarea, dropdown);
-				appendTodoFromStroageToElement(elementIdToAppendTo);
-				closeDialog("todoModal");
-			} catch (error) {
-				console.error(error);
-				return null;
-			}
-		});
+		setUpCancelBtn(cancelBtn);
+		setUpCreateBtn(createBtn, elementIdToAppendTo, input, textarea, dropdown);
 
 		return dialog.element();
 	} catch (error) {
