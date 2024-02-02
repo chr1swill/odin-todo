@@ -61,5 +61,8 @@ export function CheckBoxComponent(isDisabled = false, isChecked = false) {
 
 	label.append(input, span);
 
-	return label;
+	return {
+        element: label,
+        input: input,
+    }
 }
