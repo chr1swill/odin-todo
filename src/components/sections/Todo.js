@@ -53,7 +53,8 @@ export function TodoComponent(
 			"flex flex-row gap-2 items-start justify-center place-items-center";
 		container.setAttribute("data-todo-id", todoId || "empty");
 
-		const checkBox = CheckBoxComponent(false, todoComplete || false);
+        const isDisabled = arguments.length === 0 ? true : false
+		const checkBox = CheckBoxComponent(isDisabled, todoComplete || false);
 		const title = FakeTextTextareaComponent(todoTitle, "title");
         if (!title) {
 			throw new Error(

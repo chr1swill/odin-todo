@@ -1,6 +1,27 @@
 import { AddButtonComponent } from "../buttons/AddButton";
 import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
-import { showTodoModal } from '../modals/Dialog'
+import { showModal } from "../modals/Dialog";
+
+/**
+ * @param {HTMLButtonElement} addButton
+ */
+function setupAddButton(addButton) {
+	const showTodoModal = () => showModal("todoModal");
+	addButton?.addEventListener("click", showTodoModal);
+
+	const observer = new MutationObserver((mutation) => {
+		let i = 0;
+		while (i < mutation.length) {
+			if (!document.body.contains(addButton)) {
+				addButton.removeEventListener("click", showTodoModal);
+				observer.disconnect();
+				break;
+			}
+			i++;
+		}
+	});
+	observer.observe(document.body, { childList: true, subtree: true });
+}
 
 /**
  *
@@ -28,10 +49,7 @@ export function TitleBar(title, buttonText) {
 	titleBarWrapper.appendChild(flexRow);
 	titleBarWrapper.appendChild(hr);
 
-    addButton.addEventListener('click', (e) => {
-        e.preventDefault()
-        showTodoModal()
-    })
+	setupAddButton(addButton);
 
 	return titleBarWrapper;
 }

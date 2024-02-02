@@ -1,6 +1,42 @@
 /**
+ * TODO:
+ * Setup the this function to do something like:
+ * change state in localStorage,
+ * if complete remove from storage,
+ * then reRender list of todo
+ *
+ * this show happen in time out to change sure it was not just checked accidentally
+ */
+function handleInputStateChange() {
+	console.log(
+		"CheckBox input state changed TODO: set upt logic to handle input being checked",
+	);
+}
+
+/**
+ * @param {HTMLInputElement} input
+ */
+function setupInput(input) {
+	const handleStateChange = () => handleInputStateChange();
+	input?.addEventListener("change", handleStateChange);
+
+	const observer = new MutationObserver((mutation) => {
+		let i = 0;
+		while (i < mutation.length) {
+			if (!document.body.contains(input)) {
+				input.removeEventListener("change", handleStateChange);
+				observer.disconnect();
+				break;
+			}
+			i++;
+		}
+	});
+	observer.observe(document.body, { childList: true, subtree: true });
+}
+
+/**
  * @param { boolean } [isDisabled=false] - choose state: clickable or non-clickable checkbox
- * @param { boolean } [isChecked=false] - choose state: checked or not checked
+ * @param { boolean } [isChecked=false] - choose state: pre-added check indicator(checked) or empty checkbox(unchecked)
  * */
 export function CheckBoxComponent(isDisabled = false, isChecked = false) {
 	const label = document.createElement("label");
@@ -11,24 +47,17 @@ export function CheckBoxComponent(isDisabled = false, isChecked = false) {
 	input.type = "checkbox";
 
 	const span = document.createElement("span");
+    span.className = "custom-checkbox-indicator";
 
 	if (isDisabled) {
 		input.setAttribute("disabled", "");
-		span.className = "disabled-indicator";
-	} else {
-		span.className = "custom-checkbox-indicator";
-	}
+	} 
 
 	if (isChecked) {
 		input.setAttribute("checked", "");
 	}
 
-	input.addEventListener("change", (e) => {
-		e.preventDefault();
-		//span.classList.value = `${span.classList.value === "disabled-indicator" ? "custom-checkbox-indicator" : "disabled-indicator"}`;
-        // something better needs to be dont for this, this disabled make the button unclickable is not the way => consider the user flow more 
-        console.log("CheckBox changed state TODO: go to 'CheckBox.js' to handle the event")
-	});
+	setupInput(input);
 
 	label.append(input, span);
 

@@ -1,27 +1,21 @@
-export function showListModal() {
+
+/**
+ * @param {string} idOfDialogElement
+ * @returns {null|void}
+ */
+export function showModal(idOfDialogElement) {
 	try {
-		/**@type{ HTMLDialogElement | null }*/
-		const dialog = document.querySelector("#listModal");
+		/**@type{ HTMLElement | null }*/
+		const dialog = document.getElementById(`${idOfDialogElement}`);
 		if (!dialog) {
 			throw new ReferenceError(
-				"Was not able to show dialog element: could not find id listModal",
+				`Could not find element with id given id in the Dom, id: ${idOfDialogElement}`,
 			);
 		}
 
-		dialog.classList.remove("hidden");
-		dialog.show();
-	} catch (error) {
-		console.error(error);
-	}
-}
-
-export function showTodoModal() {
-	try {
-		/**@type{ HTMLDialogElement | null }*/
-		const dialog = document.querySelector("#todoModal");
-		if (!dialog) {
-			throw new ReferenceError(
-				"Was not able to show dialog element: could not find id todoModal",
+		if (!(dialog instanceof HTMLDialogElement)) {
+			throw new TypeError(
+				`The provide id does not corrisponde to an element in the DOM that is of type HTMLDialogElement: id ${idOfDialogElement}`,
 			);
 		}
 
@@ -42,13 +36,13 @@ export function closeDialog(idOfDialogElement) {
 		const dialog = document.getElementById(idOfDialogElement);
 		if (!dialog) {
 			throw new ReferenceError(
-				`Could not find element with the id: ${idOfDialogElement}`,
+				`Could not find element with id given id in the Dom, id: ${idOfDialogElement}`,
 			);
 		}
 
 		if (!(dialog instanceof HTMLDialogElement)) {
 			throw new TypeError(
-				`The element with the id: ${idOfDialogElement} is not a dialog element`,
+				`The provide id does not corrisponde to an element in the DOM that is of type HTMLDialogElement: id ${idOfDialogElement}`,
 			);
 		}
 

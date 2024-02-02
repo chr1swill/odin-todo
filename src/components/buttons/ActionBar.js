@@ -1,9 +1,47 @@
 import { AddButtonComponent } from "../buttons/AddButton";
-import { showListModal, showTodoModal } from "../modals/Dialog";
+import { showModal } from "../modals/Dialog";
+
+/**@param {HTMLButtonElement} addListBtn */
+function setUpAddListBtn(addListBtn) {
+    const showListModal = () => showModal("listModal");
+    addListBtn?.addEventListener('click', showListModal)
+
+    const observer = new MutationObserver((mutation) => {
+        let i = 0;
+        while (i < mutation.length) {
+            if (!document.body.contains(addListBtn)) {
+                addListBtn.removeEventListener('click', showListModal)
+                observer.disconnect()
+                break;
+            }
+            i++
+        }
+    })
+    observer.observe(document.body, { childList: true, subtree: true })
+}
+
+/**@param {HTMLButtonElement} addTodoBtn */
+function setUpAddTodoBtn(addTodoBtn) {
+    const showTodoModal = () => showModal("todoModal");
+    addTodoBtn?.addEventListener('click', showTodoModal)
+
+    const observer = new MutationObserver((mutation) => {
+        let i = 0;
+        while (i < mutation.length) {
+            if (!document.body.contains(addTodoBtn)) {
+                addTodoBtn.removeEventListener('click', showTodoModal)
+                observer.disconnect()
+                break;
+            }
+            i++
+        }
+    })
+    observer.observe(document.body, { childList: true, subtree: true })
+}
 
 /**
  * Create a simple Action Bar
- * @requires { showListModal, showTodoModal } - which have not been build yet so the event handles will not work
+ * @requires { showModal } 
  */
 export function ActionBarComponent() {
 	const CLASSES_TO_REMOVE = ["bg-primary", "hover:bg-secondary"];
@@ -26,16 +64,10 @@ export function ActionBarComponent() {
 	buttonContainer.className = "grid grid-cols-2 gap-3 h-4 rounded max-w-[100%]";
 	buttonContainer.append(addListBtn, addTodoBtn);
 
-	// TODO: Add ability to add list and todo
-	addListBtn.addEventListener("click", (e) => {
-		e.preventDefault();
-		showListModal();
-	});
+	// TODO: Add ability to add list
+    setUpAddListBtn(addListBtn)
 
-	addTodoBtn.addEventListener("click", (e) => {
-		e.preventDefault();
-		showTodoModal();
-	});
+    setUpAddTodoBtn(addTodoBtn)
 
 	return buttonContainer;
 }
