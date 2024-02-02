@@ -61,7 +61,7 @@ export function ActionBarComponent() {
 	}
 
 	const buttonContainer = document.createElement("div");
-	buttonContainer.className = "grid grid-cols-2 gap-3 h-4 rounded max-w-[100%]";
+	buttonContainer.className = "fixed bottom-20 left-0 right-0 mx-auto w-full z-50 grid grid-cols-2 gap-3 h-4 rounded";
 	buttonContainer.append(addListBtn, addTodoBtn);
 
 	// TODO: Add ability to add list
