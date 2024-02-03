@@ -270,9 +270,6 @@ export function RenderTodosFromStorage() {
 		// add an empty to the end of the list
 		fragment.appendChild(emptyTodo);
 
-		const listOfTodoWrapper = document.createElement("div");
-		listOfTodoWrapper.className = "w-full";
-
 		return fragment;
 	} catch (error) {
 		console.error;
