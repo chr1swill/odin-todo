@@ -1,123 +1,209 @@
-"use strict";
+export class ListContainer {
+	/**
+	 * @typedef {Object<string, Float64Array>} AllLists
+	 */
 
-export class List {
-	/**@type { Set<string> }*/
-	static #allInstances = new Set();
-	/**@type { Set<string> }*/
-	#todosInList = new Set();
-	/**@type { string }*/
-	#name;
+	/**@type {AllLists} */
+	#allLists = {};
 
-	/**@param { string } name */
-	constructor(name) {
-		this.#name = name.toLowerCase().trim()
-        List.#allInstances.add(this.#name);
-	}
-
-	/**@returns { Set<string> } names of all the list that are active */
-	static get allInstances() {
-		return List.#allInstances;
-	}
-
-	/**@param { string } name - which list you would like to remove*/
-	set deleteList(name) {
+	/**
+	 * @param {string} listName
+	 * @returns{void|null}
+	 */
+	createList(listName) {
 		try {
-			if (typeof name !== "string") {
-				throw TypeError("Expect value of name to be a string");
-			}
-
-			const hasName = List.#allInstances.has(name);
-			if (hasName === false) {
-				throw ReferenceError(
-					"Could not find name in list, provide valid a name in the list",
+			if (listName in this.#allLists) {
+				throw new Error(
+					`Provide list name is already in use, please select a list name that is not currently being used: ${listName}`,
 				);
 			}
 
-			this.#todosInList.clear();
-			List.#allInstances.delete(name);
+			const arr = new Float64Array(3);
+			arr.fill(0);
+
+			this.#allLists[listName] = arr;
 		} catch (error) {
-			console.error(error);
+			console.log(error);
+			return null;
 		}
 	}
 
-	/**@returns { string }*/
-	get name() {
-		return this.#name;
-	}
-
-	/**@type { string }*/
-	set name(name) {
+	/**
+	 * @param {string} listName
+	 * @param {number|string} idToAppend
+	 * @returns {void|null}
+	 */
+	addToList(listName, idToAppend) {
 		try {
-			if (typeof name !== "string") {
-				throw TypeError("Expect value of name to be a string");
+			if (typeof listName !== "string") {
+				throw new TypeError(
+					"Invalid type was provide for a list name, expected type string",
+				);
 			}
 
-			this.#name = name.toLowerCase().trim();
-		} catch (error) {
-			console.error(error);
-		}
-	}
+			if (typeof idToAppend !== "number" && typeof idToAppend !== "string") {
+				throw new TypeError(
+					"Invalid type was provide for an list value id, expected type string or number",
+				);
+			}
 
-	get todosInList() {
-		return this.#todosInList;
-	}
+			if (!(listName in this.#allLists)) {
+				this.createList(listName);
+			}
 
-	get membersFromStorage() {
-		try {
-			/** @type { Object[] } */
-			const members = [];
+			if (typeof idToAppend === "string") {
+				idToAppend = parseFloat(idToAppend);
+			}
 
-			for (const todoId of this.#todosInList) {
-				const todoString = localStorage.getItem(todoId);
-				if (todoString !== null) {
-					// Check if the item exists in localStorage
-					const todo = JSON.parse(todoString);
-					members.push(todo);
+			const listArray = this.#allLists[listName];
+			const listArrayLength = listArray.length;
+			if (listArray[listArrayLength - 1] === 0) {
+				const newArray = this.#resizeArray(listArray);
+				if (!newArray) {
+					throw new Error(
+						"Unable to append id to list, your array ran out of space and could not be resized",
+					);
 				}
+				newArray[listArrayLength] = idToAppend;
+				this.#allLists[listName] = newArray;
+				return;
 			}
 
-			return members;
+			let i = 0;
+			while (i < listArrayLength) {
+				if (listArray[i] === 0) {
+					listArray[i] = idToAppend;
+					break;
+				}
+				i++;
+			}
+		} catch (error) {
+			console.log(error);
+			return null;
+		}
+	}
+
+	/**
+	 * @param {Float64Array} oldArray
+	 * @returns {Float64Array|null}
+	 */
+	#resizeArray(oldArray) {
+		try {
+			const SIZE_OF_NEW_ARRAY = oldArray.length + 4;
+			const newArray = new Float64Array(SIZE_OF_NEW_ARRAY);
+			newArray.fill(0);
+			let i = 0;
+			while (i < oldArray.length) {
+				newArray[i] = oldArray[i];
+				i++;
+			}
+			return newArray;
 		} catch (error) {
 			console.error(error);
 			return null;
 		}
 	}
 
-	/**@param { string } id - id of the todo you would like to add to list */
-	set addTodo(id) {
+	/**
+	 * @param {string} listName
+	 */
+	deleteList(listName) {
 		try {
-			if (typeof id !== "string") {
-				throw TypeError("Expect value of todo id to be a string");
-			}
-
-			const todo = localStorage.getItem(id);
-			if (todo === null) {
-				throw ReferenceError(
-					"Could not find id in local storage, provide valid id",
+			delete this.#allLists[listName];
+			if (listName in this.#allLists) {
+				throw new Error(
+					`An error occur while trying to delete a List, list name: ${listName} was not deleted`,
 				);
 			}
-
-			this.#todosInList.add(id);
 		} catch (error) {
 			console.error(error);
+			return null;
 		}
 	}
 
-	/**@param { string } id - id of the todo you would like to remove to list */
-	set removeTodo(id) {
+	/**
+	 * @param {string} listName
+	 * @param {string|number} idOfTodo
+	 */
+	deleteTodoFromList(listName, idOfTodo) {
 		try {
-			if (typeof id !== "string") {
-				throw TypeError("Expect value of todo id to be a string");
+			if (typeof listName !== "string") {
+				throw new TypeError(
+					"Could not access List name provide, expect type string but a string was not provided",
+				);
 			}
 
-			const hasId = this.#todosInList.has(id);
-			if (hasId === false) {
-				throw ReferenceError("Could not find id in list, provide valid id");
+			if (!(listName in this.#allLists)) {
+				throw new ReferenceError(
+					`Could not access list name, it is not an active list. List name: ${listName}`,
+				);
 			}
 
-			this.#todosInList.delete(id);
+			if (typeof idOfTodo !== "string" && typeof idOfTodo !== "number") {
+				throw new TypeError(
+					"Invald type was provided, expected type to be string or number",
+				);
+			}
+
+			if (typeof idOfTodo === "string") {
+				idOfTodo = parseFloat(idOfTodo);
+			}
+
+			const list = this.#allLists[listName];
+			if (list.length === 0) {
+				throw new ReferenceError(
+					"Could not delete todo id from list, list provided has no element inside",
+				);
+			}
+
+			let i = 0;
+			while (i < list.length) {
+				if (list[i] === idOfTodo) {
+					list[i] = 0;
+					break;
+				}
+				if (i === list.length - 1) {
+					throw new ReferenceError(
+						`There is no todo Id in this list matching the id you have provided, todo id: ${idOfTodo}`,
+					);
+				}
+				i++;
+			}
 		} catch (error) {
 			console.error(error);
+			return null;
+		}
+	}
+
+	getListNames() {
+		return Object.keys(this.#allLists);
+	}
+
+	getAllLists() {
+		return this.#allLists;
+	}
+
+	/**
+	 * @param {string} listName
+	 */
+	getList(listName) {
+		try {
+			if (typeof listName !== "string") {
+				throw new TypeError(
+					`Could not look up key ${listName} in all list the type ${typeof listName} was provided instead of a string`,
+				);
+			}
+
+			if (!this.getListNames().includes(listName)) {
+				throw new ReferenceError(
+					`Could not access list, provided value is not a key in the allList object: ${listName}`,
+				);
+			}
+
+			return this.#allLists[listName];
+		} catch (error) {
+			console.error(error);
+			return null;
 		}
 	}
 }
