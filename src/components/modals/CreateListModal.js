@@ -1,23 +1,29 @@
 import { DefaultInputComponent } from "../inputs/DefaultInput";
 import { DefaultButtonComponent } from "../buttons/DefaultButton";
 import { DialogComponent, closeDialog } from "./Dialog";
-import { List } from "../../logic/list";
+import { ListContainer } from "../../logic/list";
 
 /**
  * @param {{element: () => HTMLLabelElement, value: () => string}} input
+ * @returns {void|null}
  */
 function createNewList(input) {
 	try {
 		const listName = input.value();
 		if (!listName) {
-			throw new ReferenceError("List was not created: Could not access access the value from inside the input");
+			throw new ReferenceError(
+				"List was not created: Could not access access the value from inside the input",
+			);
 		}
 
-        if (listName.trim() === "") {
-            throw Error("Invalid list name was provided, an attempt was made to create an list named an empty string")
-        }
+		if (listName.trim() === "") {
+			throw Error(
+				"Invalid list name was provided, an attempt was made to create an list named an empty string",
+			);
+		}
 
-		new List(listName);
+		const listContainer = new ListContainer();
+		listContainer.createList(listName);
 		closeDialog("listModal");
 	} catch (error) {
 		console.error(error);
@@ -26,26 +32,26 @@ function createNewList(input) {
 }
 
 /**
- * @param {HTMLButtonElement} createBtn 
+ * @param {HTMLButtonElement} createBtn
  * @param {{element: () => HTMLLabelElement, value: () => string}} input
  */
 function setUpCreateBtn(createBtn, input) {
-    const handleCreateNewList = () => createNewList(input)
-    createBtn?.addEventListener('click', handleCreateNewList)
+	const handleCreateNewList = () => createNewList(input);
+	createBtn?.addEventListener("click", handleCreateNewList);
 
-    const observer = new MutationObserver((mutation) => {
-        let i = 0 
-        while (i < mutation.length) {
-            if (!document.body.contains(createBtn)) {
-                createBtn.removeEventListener('click', handleCreateNewList)
-                observer.disconnect()
-                break
-            }
-            i++
-        }
-    })
+	const observer = new MutationObserver((mutation) => {
+		let i = 0;
+		while (i < mutation.length) {
+			if (!document.body.contains(createBtn)) {
+				createBtn.removeEventListener("click", handleCreateNewList);
+				observer.disconnect();
+				break;
+			}
+			i++;
+		}
+	});
 
-    observer.observe(document.body, { childList: true, subtree: true })
+	observer.observe(document.body, { childList: true, subtree: true });
 }
 
 /**@param {HTMLButtonElement} cancelBtn */
@@ -84,7 +90,7 @@ export function ListModalComponet() {
 	dialog.appendToForm(btnContainer);
 
 	setUpCancelBtn(cancelBtn);
-    setUpCreateBtn(createBtn, input)
+	setUpCreateBtn(createBtn, input);
 
 	return dialog.element();
 }
