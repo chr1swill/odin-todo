@@ -32,6 +32,128 @@ function PriorityComponent(todoPriority) {
 }
 
 /**
+ * TODO: Add logic to handle changing the prioity, then add case to change for real
+ *
+ * @param {Event} e
+ * @param {Todo} todo
+ * @param {{element: HTMLLabelElement, input: HTMLInputElement}} checkBox
+ * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} title
+ * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} note
+ * @param {{element: HTMLLabelElement, input: HTMLInputElement}} list
+ */
+function checkWhichElementEventWasOn(e, todo, checkBox, title, note, list) {
+	switch (e.target) {
+		case checkBox.input:
+			console.log("CHECKBOX input value: ", checkBox.input.checked);
+			todo.complete = checkBox.input.checked;
+			break;
+		case title.textarea:
+			console.log("TITLE input value: ", title.textarea.value);
+			todo.title = title.textarea.value.trim();
+			break;
+		case note.textarea:
+			console.log("NOTE input: ", note.textarea.value);
+			todo.note = note.textarea.value.trim();
+			break;
+		case list.input:
+			try {
+				const List = new ListController();
+				const createdListOrErr = List.createList(list.input.value);
+				if (createdListOrErr === null) {
+					throw new Error(
+						`An Error occured while attempting to a created a list named: ${list.input.value}`,
+					);
+				}
+				todo.list = list.input.value;
+				console.log("Successfully created List and updated todo List property");
+			} catch (error) {
+				console.error(error);
+				return null;
+			}
+			break;
+		default:
+			console.warn(
+				"Event target has not been regester, no logic to handle change to element: ",
+				e.target,
+			);
+	}
+}
+
+/**
+ * @param {HTMLDivElement} container
+ * @param {Event} e
+ * @param {{element: HTMLLabelElement, input: HTMLInputElement}} checkBox
+ * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} title
+ * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} note
+ * @param {{element: HTMLLabelElement, input: HTMLInputElement}} list
+ */
+function handleChangeEventOnTodoContainer(
+	container,
+	e,
+	checkBox,
+	title,
+	note,
+	list,
+) {
+	const todoId = container.getAttribute("data-todo-id");
+	if (!todoId) {
+		throw new ReferenceError(
+			`There is no "data-todo-id" attribute on element: ${container}`,
+		);
+	}
+
+	if (todoId === "empty") {
+		const todoClass = new Todo();
+		checkWhichElementEventWasOn(e, todoClass, checkBox, title, note, list);
+		const renderedTodoListWrapper = container?.parentElement;
+		if (!renderedTodoListWrapper) {
+			throw new ReferenceError(
+				"Could not access parent element of the todo, an attempt to access it resulted in a null value",
+			);
+		}
+
+		appendTodoFromStroageToElement(renderedTodoListWrapper);
+		return;
+	}
+
+	const todoMatchingId = Todo.getTodo(todoId);
+	if (!todoMatchingId) {
+		throw new ReferenceError(
+			`There are no object in local storage with the id: ${todoId}`,
+		);
+	}
+
+	checkWhichElementEventWasOn(e, todoMatchingId, checkBox, title, note, list);
+	localStorage.setItem(todoId, JSON.stringify(todoMatchingId));
+}
+
+/**
+ * @param {HTMLDivElement} container
+ * @param {{element: HTMLLabelElement, input: HTMLInputElement}} checkBox
+ * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} title
+ * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} note
+ * @param {{element: HTMLLabelElement, input: HTMLInputElement}} list
+ */
+function setupTodoContainer(container, checkBox, title, note, list) {
+    /**@param {Event} e*/
+    const changeEventHandler = (e) => handleChangeEventOnTodoContainer(container, e, checkBox, title, note, list)
+    container?.addEventListener('change', changeEventHandler)
+
+    const observer = new MutationObserver((mutation) => {
+        let i = 0 
+        while (i < mutation.length) {
+            if (!document.body.contains(container)) {
+                container.removeEventListener('change', changeEventHandler)
+                observer.disconnect()
+                break;
+            }
+            i++
+        }
+    })
+    observer.observe(document.body, { childList: true, subtree: true })
+}
+
+/**
  * @param { string | null } todoId
  * @param { string | null } todoTitle
  * @param { string | null } todoNote
@@ -106,115 +228,7 @@ export function TodoComponent(
 		container.appendChild(checkBox.element);
 		container.appendChild(wrapper);
 
-		// TODO: make check on all element in todo and then us the todo obj to set the updates to the local storage
-		// see if this can be dont in a way that will be drive by the todo api make more stuff on it to drive the state through that keep the logic as close to there as possibel
-		container.addEventListener("change", (e) => {
-			const todoId = container.getAttribute("data-todo-id");
-			if (!todoId) {
-				throw new ReferenceError(
-					`There is no "data-todo-id" attribute on element: ${container}`,
-				);
-			}
-
-			if (todoId === "empty") {
-				// create new todo
-				const todoClass = new Todo();
-				switch (e.target) {
-					case checkBox.input:
-						console.log("CHECKBOX input value: ", checkBox.input.checked);
-						todoClass.complete = checkBox.input.checked;
-						break;
-					case title.textarea:
-						console.log("TITLE input value: ", title.textarea.value);
-						todoClass.title = title.textarea.value.trim();
-						break;
-					case note.textarea:
-						console.log("NOTE input: ", note.textarea.value);
-						todoClass.note = note.textarea.value.trim();
-						break;
-					case list.input:
-						try {
-							const List = new ListController();
-							const createdListOrErr = List.createList(list.input.value);
-							if (createdListOrErr === null) {
-								throw new Error(
-									`An Error occured while attempting to a created a list named: ${list.input.value}`,
-								);
-							}
-							todoClass.list = list.input.value;
-							console.log(
-								"Successfully created List and updated todo List property",
-							);
-						} catch (error) {
-							console.error(error);
-							return null;
-						}
-						break;
-					default:
-						console.warn(
-							"Event target has not been regester, no logic to handle change to element: ",
-							e.target,
-						);
-				}
-				//Render out list for on the element with id
-				const parentWithId = container.parentElement?.parentElement;
-				if (!parentWithId) {
-					throw new ReferenceError(
-						"Could not access parent element of the todo, an attempt to access it resulted in a null value",
-					);
-				}
-				appendTodoFromStroageToElement(parentWithId);
-				return;
-			}
-
-			const todoMatchingId = Todo.getTodo(todoId);
-			if (!todoMatchingId) {
-				throw new ReferenceError(
-					`There are no object in local storage with the id: ${todoId}`,
-				);
-			}
-
-			switch (e.target) {
-				case checkBox.input:
-					console.log("CHECKBOX input value: ", checkBox.input.checked);
-					todoMatchingId.complete = checkBox.input.checked;
-					break;
-				case title.textarea:
-					console.log("TITLE input value: ", title.textarea.value);
-					todoMatchingId.title = title.textarea.value.trim();
-					break;
-				case note.textarea:
-					console.log("NOTE input: ", note.textarea.value);
-					todoMatchingId.note = note.textarea.value.trim();
-					break;
-				case list.input:
-					try {
-						const List = new ListController();
-						const createdListOrErr = List.createList(list.input.value);
-						if (createdListOrErr === null) {
-							throw new Error(
-								`An Error occured while attempting to a created a list named: ${list.input.value}`,
-							);
-						}
-						todoMatchingId.list = list.input.value;
-						console.log(
-							"Successfully created List and updated todo List property",
-						);
-					} catch (error) {
-						console.error(error);
-						return null;
-					}
-					break;
-				default:
-					console.warn(
-						"Event target has not been regester, no logic to handle change to element: ",
-						e.target,
-					);
-			}
-			// Add logic to handle changing the prioity, then add case to change for real
-			localStorage.setItem(todoId, JSON.stringify(todoMatchingId));
-		});
-
+        setupTodoContainer(container, checkBox, title, note, list)
 		return container;
 	} catch (error) {
 		console.error(error);
@@ -258,9 +272,8 @@ export function RenderTodosFromStorage() {
 
 		const listOfTodoWrapper = document.createElement("div");
 		listOfTodoWrapper.className = "w-full";
-		listOfTodoWrapper.appendChild(fragment);
 
-		return listOfTodoWrapper;
+		return fragment;
 	} catch (error) {
 		console.error;
 		return null;
