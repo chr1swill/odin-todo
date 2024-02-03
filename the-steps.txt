@@ -1,5 +1,6 @@
 The Steps 
 
+- make ui and logic to change the priority on todo element > maybe use you dropdown or rework the dropdown the use case
 - clean up event listner to all be removed when not being used
 - fix todo Component , empty one and a filled one
 - make pages
