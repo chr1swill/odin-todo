@@ -1,4 +1,4 @@
-export class ListContainer {
+export class ListController {
 	/**
 	 * @typedef {Object<string, Float64Array>} AllLists
 	 */

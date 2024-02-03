@@ -4,7 +4,7 @@ import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
 import { FakeTextInputComponent } from "../inputs/FakeTextInput";
 import { FakeTextTextareaComponent } from "../inputs/FakeTextTextarea";
 import { Todo } from "../../logic/todo";
-import { ListContainer } from "../../logic/list";
+import { ListController } from "../../logic/list";
 
 /**@param { number | null } todoPriority */
 function PriorityComponent(todoPriority) {
@@ -134,7 +134,7 @@ export function TodoComponent(
 						break;
 					case list.input:
 						try {
-							const List = new ListContainer();
+							const List = new ListController();
 							const createdListOrErr = List.createList(list.input.value);
 							if (createdListOrErr === null) {
 								throw new Error(
@@ -189,7 +189,7 @@ export function TodoComponent(
 					break;
 				case list.input:
 					try {
-						const List = new ListContainer();
+						const List = new ListController();
 						const createdListOrErr = List.createList(list.input.value);
 						if (createdListOrErr === null) {
 							throw new Error(

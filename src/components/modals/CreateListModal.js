@@ -1,7 +1,7 @@
 import { DefaultInputComponent } from "../inputs/DefaultInput";
 import { DefaultButtonComponent } from "../buttons/DefaultButton";
 import { DialogComponent, closeDialog } from "./Dialog";
-import { ListContainer } from "../../logic/list";
+import { ListController } from "../../logic/list";
 
 /**
  * @param {{element: () => HTMLLabelElement, value: () => string}} input
@@ -22,7 +22,7 @@ function createNewList(input) {
 			);
 		}
 
-		const listContainer = new ListContainer();
+		const listContainer = new ListController();
 		listContainer.createList(listName);
 		closeDialog("listModal");
 	} catch (error) {
