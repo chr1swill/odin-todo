@@ -63,5 +63,8 @@ export function FakeTextInputComponent(
 	label.appendChild(span);
 	label.appendChild(input);
 
-	return label;
+	return {
+        element: label,
+        input: input,
+    }
 }

@@ -101,7 +101,10 @@ export function FakeTextTextareaComponent(
 		label.appendChild(span);
 		label.appendChild(textarea);
 
-		return label;
+		return {
+            element: label, 
+            textarea: textarea,
+        }
 	} catch (error) {
 		console.error(error);
 		return null;
