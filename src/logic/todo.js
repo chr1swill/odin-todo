@@ -118,10 +118,10 @@ export class Todo {
 		}
 
 		const todoObj = JSON.parse(todoString);
-		if (todoObj[property] !== undefined) {
-			return todoObj[property];
+		if (!todoObj[property]) {
+			throw new ReferenceError("Not able to access undefined property");
 		}
-		throw new ReferenceError("Not able to access undefined property");
+		return todoObj[property];
 	}
 
 	/**
@@ -130,36 +130,42 @@ export class Todo {
 	 * @param { string } property - key of the value to you would like to modify
 	 * @param { number | string | boolean } newValue - new value you would like to set the key
 	 * @param { AllowedTypes } newValueType - type of the newValue, need to be boolean, number, or string
+	 * @returns {void|null}
 	 * */
 	#handleLocalStorageSet(property, newValue, newValueType) {
-		if (typeof newValue !== newValueType) {
-			throw new TypeError(`Value must be a ${newValueType}`);
-		}
-
-		if (property === "priority") {
-			if (
-				newValue !== Priority.NONE &&
-				newValue !== Priority.LOW &&
-				newValue !== Priority.MEDIUM &&
-				newValue !== Priority.HIGH
-			) {
-				throw new RangeError("Value provided for key priority is invalid");
+		try {
+			if (typeof newValue !== newValueType) {
+				throw new TypeError(`Value must be a ${newValueType}`);
 			}
-		}
 
-		const todoString = localStorage.getItem(this.#id);
-		if (todoString === null) {
-			throw new ReferenceError(
-				`Could not access value, key of ${this.#id} does not exist or has not been set`,
-			);
-		}
+			if (property === "priority") {
+				if (
+					newValue !== Priority.NONE &&
+					newValue !== Priority.LOW &&
+					newValue !== Priority.MEDIUM &&
+					newValue !== Priority.HIGH
+				) {
+					throw new RangeError("Value provided for key priority is invalid");
+				}
+			}
 
-		const todoObj = JSON.parse(todoString);
-		if (typeof property !== "string") {
-			throw new TypeError("Value must be string");
+			const todoString = localStorage.getItem(this.#id);
+			if (todoString === null) {
+				throw new ReferenceError(
+					`Could not access value, key of ${this.#id} does not exist or has not been set`,
+				);
+			}
+
+			const todoObj = JSON.parse(todoString);
+			if (typeof property !== "string") {
+				throw new TypeError("Value must be string");
+			}
+			todoObj[property] = newValue;
+			localStorage.setItem(this.#id, JSON.stringify(todoObj));
+		} catch (error) {
+			console.error(error);
+			return null;
 		}
-		todoObj[property] = newValue;
-		localStorage.setItem(this.#id, JSON.stringify(todoObj));
 	}
 
 	/**@returns { string | null }*/
