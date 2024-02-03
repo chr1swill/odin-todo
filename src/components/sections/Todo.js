@@ -4,6 +4,7 @@ import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
 import { FakeTextInputComponent } from "../inputs/FakeTextInput";
 import { FakeTextTextareaComponent } from "../inputs/FakeTextTextarea";
 import { Todo } from "../../logic/todo";
+import { ListContainer } from "../../logic/list";
 
 /**@param { number | null } todoPriority */
 function PriorityComponent(todoPriority) {
@@ -53,14 +54,14 @@ export function TodoComponent(
 			"flex flex-row gap-2 items-start justify-center place-items-center";
 		container.setAttribute("data-todo-id", todoId || "empty");
 
-        const isDisabled = arguments.length === 0 ? true : false
+		const isDisabled = arguments.length === 0 ? true : false;
 		const checkBox = CheckBoxComponent(isDisabled, todoComplete || false);
 		const title = FakeTextTextareaComponent(todoTitle, "title");
-        if (!title) {
+		if (!title) {
 			throw new Error(
 				"Could not add todo title input: An error occured during it creation, please investivate.",
 			);
-        }
+		}
 
 		const note = FakeTextTextareaComponent(
 			todoNote,
@@ -95,15 +96,124 @@ export function TodoComponent(
 		const listAndPriorityWrapper = document.createElement("div");
 		listAndPriorityWrapper.className = "flex flex-row items-end gap-2";
 
-		listAndPriorityWrapper.appendChild(list);
+		listAndPriorityWrapper.appendChild(list.element);
 		listAndPriorityWrapper.appendChild(priority);
-		noteAndContentWrapper.appendChild(note);
+		noteAndContentWrapper.appendChild(note.element);
 		noteAndContentWrapper.appendChild(listAndPriorityWrapper);
-		wrapper.appendChild(title);
+		wrapper.appendChild(title.element);
 		wrapper.appendChild(noteAndContentWrapper);
 		wrapper.appendChild(hr);
-		container.appendChild(checkBox);
+		container.appendChild(checkBox.element);
 		container.appendChild(wrapper);
+
+		// TODO: make check on all element in todo and then us the todo obj to set the updates to the local storage
+		// see if this can be dont in a way that will be drive by the todo api make more stuff on it to drive the state through that keep the logic as close to there as possibel
+		container.addEventListener("change", (e) => {
+			const todoId = container.getAttribute("data-todo-id");
+			if (!todoId) {
+				throw new ReferenceError(
+					`There is no "data-todo-id" attribute on element: ${container}`,
+				);
+			}
+
+			if (todoId === "empty") {
+				// create new todo
+				const todoClass = new Todo();
+				switch (e.target) {
+					case checkBox.input:
+						console.log("CHECKBOX input value: ", checkBox.input.checked);
+						todoClass.complete = checkBox.input.checked;
+						break;
+					case title.textarea:
+						console.log("TITLE input value: ", title.textarea.value);
+						todoClass.title = title.textarea.value.trim();
+						break;
+					case note.textarea:
+						console.log("NOTE input: ", note.textarea.value);
+						todoClass.note = note.textarea.value.trim();
+						break;
+					case list.input:
+						try {
+							const List = new ListContainer();
+							const createdListOrErr = List.createList(list.input.value);
+							if (createdListOrErr === null) {
+								throw new Error(
+									`An Error occured while attempting to a created a list named: ${list.input.value}`,
+								);
+							}
+							todoClass.list = list.input.value;
+							console.log(
+								"Successfully created List and updated todo List property",
+							);
+						} catch (error) {
+							console.error(error);
+							return null;
+						}
+						break;
+					default:
+						console.warn(
+							"Event target has not been regester, no logic to handle change to element: ",
+							e.target,
+						);
+				}
+				//Render out list for on the element with id
+				const parentWithId = container.parentElement?.parentElement;
+				if (!parentWithId) {
+					throw new ReferenceError(
+						"Could not access parent element of the todo, an attempt to access it resulted in a null value",
+					);
+				}
+				appendTodoFromStroageToElement(parentWithId);
+				return;
+			}
+
+			const todoMatchingId = Todo.getTodo(todoId);
+			if (!todoMatchingId) {
+				throw new ReferenceError(
+					`There are no object in local storage with the id: ${todoId}`,
+				);
+			}
+
+			switch (e.target) {
+				case checkBox.input:
+					console.log("CHECKBOX input value: ", checkBox.input.checked);
+					todoMatchingId.complete = checkBox.input.checked;
+					break;
+				case title.textarea:
+					console.log("TITLE input value: ", title.textarea.value);
+					todoMatchingId.title = title.textarea.value.trim();
+					break;
+				case note.textarea:
+					console.log("NOTE input: ", note.textarea.value);
+					todoMatchingId.note = note.textarea.value.trim();
+					break;
+				case list.input:
+					try {
+						const List = new ListContainer();
+						const createdListOrErr = List.createList(list.input.value);
+						if (createdListOrErr === null) {
+							throw new Error(
+								`An Error occured while attempting to a created a list named: ${list.input.value}`,
+							);
+						}
+						todoMatchingId.list = list.input.value;
+						console.log(
+							"Successfully created List and updated todo List property",
+						);
+					} catch (error) {
+						console.error(error);
+						return null;
+					}
+					break;
+				default:
+					console.warn(
+						"Event target has not been regester, no logic to handle change to element: ",
+						e.target,
+					);
+			}
+			// Add logic to handle changing the prioity, then add case to change for real
+			localStorage.setItem(todoId, JSON.stringify(todoMatchingId));
+		});
 
 		return container;
 	} catch (error) {
@@ -143,7 +253,7 @@ export function RenderTodosFromStorage() {
 				"Could not created empty todoComponent, resulted in a null value",
 			);
 		}
-        // add an empty to the end of the list
+		// add an empty to the end of the list
 		fragment.appendChild(emptyTodo);
 
 		const listOfTodoWrapper = document.createElement("div");
@@ -157,7 +267,7 @@ export function RenderTodosFromStorage() {
 	}
 }
 
-/**@param {string} elementId - id the corrisponse to the element you would like to select*/
+/**@param {string|HTMLElement|Node} elementId - id the corrisponse to the element you would like to select*/
 export function appendTodoFromStroageToElement(elementId) {
 	try {
 		const todosInLocalStorage = RenderTodosFromStorage();
@@ -167,16 +277,39 @@ export function appendTodoFromStroageToElement(elementId) {
 			);
 		}
 
-		const listElement = document.getElementById(elementId);
+		if (
+			typeof elementId !== "string" &&
+			!(elementId instanceof HTMLElement) &&
+			!(elementId instanceof Node)
+		) {
+			throw new TypeError(
+				"elementId must be of type string, HTMLElement, or Node",
+			);
+		}
+
+		/**@type{string|HTMLElement|Node|null}*/
+		let listElement;
+		// Handling different types of elementId
+		if (typeof elementId === "string") {
+			listElement = document.getElementById(elementId);
+		} else if (elementId instanceof HTMLElement || elementId instanceof Node) {
+			// HTMLElement is technically also an instance of Node
+			listElement = elementId;
+		} else {
+			throw new TypeError(
+				"elementId must be of type string, HTMLElement, or Node",
+			);
+		}
+
 		if (!listElement) {
 			throw new ReferenceError(
 				`Could not access wrapper for list of todo, element with id: ${elementId} is not currently in the DOM`,
 			);
 		}
 
-        while (listElement.firstChild) {
-            listElement.removeChild(listElement.firstChild)
-        }
+		while (listElement.firstChild) {
+			listElement.removeChild(listElement.firstChild);
+		}
 
 		listElement.appendChild(todosInLocalStorage);
 	} catch (error) {
