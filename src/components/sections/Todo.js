@@ -32,6 +32,20 @@ function PriorityComponent(todoPriority) {
 }
 
 /**
+ * @param {HTMLDivElement} container
+ */
+function rerenderTodoList(container) {
+    const renderedTodoListWrapper = container?.parentElement;
+    if (!renderedTodoListWrapper) {
+        throw new ReferenceError(
+            "Could not access parent element of the todo, an attempt to access it resulted in a null value",
+        );
+    }
+
+    appendTodoFromStroageToElement(renderedTodoListWrapper);
+}
+
+/**
  * TODO: Add logic to handle changing the prioity, then add case to change for real
  *
  * @param {Event} e
@@ -40,12 +54,15 @@ function PriorityComponent(todoPriority) {
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} title
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} note
  * @param {{element: HTMLLabelElement, input: HTMLInputElement}} list
+ * @param {HTMLDivElement} container
  */
-function checkWhichElementEventWasOn(e, todo, checkBox, title, note, list) {
+function checkWhichElementEventWasOn(e, todo, checkBox, title, note, list, container) {
 	switch (e.target) {
 		case checkBox.input:
 			console.log("CHECKBOX input value: ", checkBox.input.checked);
 			todo.complete = checkBox.input.checked;
+            rerenderTodoList(container)
+            window.location.reload()
 			break;
 		case title.textarea:
 			console.log("TITLE input value: ", title.textarea.value);
@@ -104,7 +121,7 @@ function handleChangeEventOnTodoContainer(
 
 	if (todoId === "empty") {
 		const todoClass = new Todo();
-		checkWhichElementEventWasOn(e, todoClass, checkBox, title, note, list);
+		checkWhichElementEventWasOn(e, todoClass, checkBox, title, note, list, container);
 		const renderedTodoListWrapper = container?.parentElement;
 		if (!renderedTodoListWrapper) {
 			throw new ReferenceError(
@@ -123,7 +140,7 @@ function handleChangeEventOnTodoContainer(
 		);
 	}
 
-	checkWhichElementEventWasOn(e, todoMatchingId, checkBox, title, note, list);
+	checkWhichElementEventWasOn(e, todoMatchingId, checkBox, title, note, list, container);
 	localStorage.setItem(todoId, JSON.stringify(todoMatchingId));
 }
 
@@ -243,6 +260,8 @@ export function RenderTodosFromStorage() {
 			return TodoComponent();
 		}
 
+        //sort data so complete element are at end
+
 		const fragment = document.createDocumentFragment();
 		for (let i = 0; i < allTodos.length; i++) {
 			const todo = TodoComponent(
@@ -258,7 +277,11 @@ export function RenderTodosFromStorage() {
 					`Todo Component could not be created for list of Todos, Failed on increment: ${i}`,
 				);
 			}
-			fragment.appendChild(todo);
+            if (allTodos[i].complete === false) {
+                fragment.prepend(todo)
+            } else {
+                fragment.appendChild(todo);
+            }
 		}
 
 		const emptyTodo = TodoComponent();
