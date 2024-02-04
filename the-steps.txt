@@ -1,6 +1,5 @@
 The Steps 
 
-- fix logic on ListController so when list are deleted they set the list values of all the todos in them to match that 
 - make ui and logic to change the priority on todo element > maybe use you dropdown or rework the dropdown the use case
 - fix tab ordering on dropdown 
 - clean up event listner to all be removed when not being used

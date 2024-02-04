@@ -1,3 +1,5 @@
+import { Todo } from "./todo";
+
 export class ListController {
 	/**
 	 * @typedef {Object<string, Float64Array>} AllLists
@@ -105,10 +107,40 @@ export class ListController {
 	}
 
 	/**
+	 * @param {Float64Array} list
+	 * @param {number} index
+	 */
+	#cleanUpListAfterDelete(list, index) {
+		const todo = Todo.getTodo(list[index].toString());
+		if (!todo) {
+			throw new ReferenceError(
+				"Could not access todo from local storage, no key matching id",
+			);
+		}
+
+		todo.list = "";
+		localStorage.setItem(list[index].toString(), JSON.stringify(todo));
+		list[index] = 0;
+	}
+
+	/**
 	 * @param {string} listName
 	 */
 	deleteList(listName) {
 		try {
+			const todoInList = this.#allLists[listName];
+			if (!todoInList) {
+				throw new ReferenceError(
+					"List does not exist, an attempt to access it resulted in null value",
+				);
+			}
+
+			let i = 0;
+			while (i < todoInList.length) {
+				this.#cleanUpListAfterDelete(todoInList, i);
+				i++;
+			}
+
 			delete this.#allLists[listName];
 			if (listName in this.#allLists) {
 				throw new Error(
@@ -159,7 +191,7 @@ export class ListController {
 			let i = 0;
 			while (i < list.length) {
 				if (list[i] === idOfTodo) {
-					list[i] = 0;
+					this.#cleanUpListAfterDelete(list, i);
 					break;
 				}
 				if (i === list.length - 1) {
