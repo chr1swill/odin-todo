@@ -1,6 +1,6 @@
 The Steps 
 
-- make ui and logic to change the priority on todo element > maybe use you dropdown or rework the dropdown the use case
+- fix bug when click on the same element does not close the dropdown
 - fix tab ordering on dropdown 
 - clean up event listner to all be removed when not being used
 - make pages

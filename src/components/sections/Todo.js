@@ -5,30 +5,23 @@ import { FakeTextInputComponent } from "../inputs/FakeTextInput";
 import { FakeTextTextareaComponent } from "../inputs/FakeTextTextarea";
 import { Todo } from "../../logic/todo";
 import { ListController } from "../../logic/list";
+import { DefaultDropdownComponent } from "../inputs/DefaultDropdown";
 
-/**@param { number | null } todoPriority */
-function PriorityComponent(todoPriority) {
-	/**@type { string }*/
-	let priority;
-	switch (todoPriority) {
-		case Priority.HIGH:
-			priority = "!!!";
-			break;
-		case Priority.MEDIUM:
-			priority = "!!";
-			break;
-		case Priority.LOW:
-			priority = "!";
-			break;
+/**
+ * @param {string} buttonTextContent
+ * @returns {number}
+ */
+function decideWhichPriorityToAsignTodo(buttonTextContent) {
+	switch (buttonTextContent.trim()) {
+		case "!!!":
+			return Priority.HIGH;
+		case "!!":
+			return Priority.MEDIUM;
+		case "!":
+			return Priority.LOW;
 		default:
-			priority = "";
-			break;
+			return Priority.NONE;
 	}
-	const displayPriority = document.createElement("p");
-	displayPriority.className = "text-base text-red-500";
-	displayPriority.textContent = priority;
-
-	return displayPriority;
 }
 
 /**
@@ -45,7 +38,6 @@ function rerenderTodoList(container) {
 }
 
 /**
- * TODO: Add logic to handle changing the prioity, then add case to change for real
  *
  * @param {Event} e
  * @param {Todo} todo
@@ -53,8 +45,17 @@ function rerenderTodoList(container) {
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} title
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} note
  * @param {{element: HTMLLabelElement, input: HTMLInputElement}} list
+ * @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement, buttonElement: () => HTMLButtonElement}} priority
  */
-function checkWhichElementEventWasOn(e, todo, checkBox, title, note, list) {
+function checkWhichElementEventWasOn(
+	e,
+	todo,
+	checkBox,
+	title,
+	note,
+	list,
+	priority,
+) {
 	switch (e.target) {
 		case checkBox.input:
 			todo.complete = checkBox.input.checked;
@@ -80,6 +81,15 @@ function checkWhichElementEventWasOn(e, todo, checkBox, title, note, list) {
 				return null;
 			}
 			break;
+		case priority.selectElement():
+			const textContent = priority.buttonElement().textContent;
+			if (!textContent) {
+				throw new ReferenceError(
+					"An attempt made to access the text content of the button inside the dropdown resulted in a null value",
+				);
+			}
+			todo.priority = decideWhichPriorityToAsignTodo(textContent);
+			break;
 		default:
 			console.warn(
 				"Event target has not been regester, no logic to handle change to element: ",
@@ -95,6 +105,7 @@ function checkWhichElementEventWasOn(e, todo, checkBox, title, note, list) {
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} title
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} note
  * @param {{element: HTMLLabelElement, input: HTMLInputElement}} list
+ * @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement, buttonElement: () => HTMLButtonElement}} priority
  */
 function handleChangeEventOnTodoContainer(
 	container,
@@ -103,6 +114,7 @@ function handleChangeEventOnTodoContainer(
 	title,
 	note,
 	list,
+	priority,
 ) {
 	const todoId = container.getAttribute("data-todo-id");
 	if (!todoId) {
@@ -113,7 +125,7 @@ function handleChangeEventOnTodoContainer(
 
 	if (todoId === "empty") {
 		const todoClass = new Todo();
-		checkWhichElementEventWasOn(e, todoClass, checkBox, title, note, list);
+		checkWhichElementEventWasOn(e, todoClass, checkBox, title, note, list, priority)
 		const renderedTodoListWrapper = container?.parentElement;
 		if (!renderedTodoListWrapper) {
 			throw new ReferenceError(
@@ -132,7 +144,7 @@ function handleChangeEventOnTodoContainer(
 		);
 	}
 
-	checkWhichElementEventWasOn(e, todoMatchingId, checkBox, title, note, list);
+	checkWhichElementEventWasOn(e, todoMatchingId, checkBox, title, note, list, priority);
 	localStorage.setItem(todoId, JSON.stringify(todoMatchingId));
 	if (e.target === checkBox.input) {
 		rerenderTodoList(container);
@@ -145,11 +157,12 @@ function handleChangeEventOnTodoContainer(
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} title
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} note
  * @param {{element: HTMLLabelElement, input: HTMLInputElement}} list
+ * @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement, buttonElement: () => HTMLButtonElement}} priority
  */
-function setupTodoContainer(container, checkBox, title, note, list) {
+function setupTodoContainer(container, checkBox, title, note, list, priority) {
 	/**@param {Event} e*/
 	const changeEventHandler = (e) =>
-		handleChangeEventOnTodoContainer(container, e, checkBox, title, note, list);
+		handleChangeEventOnTodoContainer(container, e, checkBox, title, note, list, priority);
 	container?.addEventListener("change", changeEventHandler);
 
 	const observer = new MutationObserver((mutation) => {
@@ -211,7 +224,34 @@ export function TodoComponent(
 			);
 		}
 
-		const priority = PriorityComponent(todoPriority);
+        let priorityText
+        switch (todoPriority) {
+            case Priority.HIGH: 
+                priorityText = '!!!'
+                break
+            case Priority.MEDIUM:
+                priorityText = '!!'
+                break
+            case Priority.LOW: 
+                priorityText = '!'
+                break
+            default: 
+                priorityText = 'NONE'
+        }
+		const priority = DefaultDropdownComponent(priorityText, [
+			"NONE",
+			"!",
+			"!!",
+			"!!!",
+		]);
+		if (!priority) {
+			throw new Error(
+				"Could not add priority dropdown: An error occured during it creation, please investivate.",
+			);
+		}
+		priority.buttonElement().classList.remove();
+		priority.buttonElement().classList.add();
+
 		const list = FakeTextInputComponent(
 			todoList,
 			"list",
@@ -232,7 +272,7 @@ export function TodoComponent(
 		listAndPriorityWrapper.className = "flex flex-row items-end gap-2";
 
 		listAndPriorityWrapper.appendChild(list.element);
-		listAndPriorityWrapper.appendChild(priority);
+		listAndPriorityWrapper.appendChild(priority.element());
 		noteAndContentWrapper.appendChild(note.element);
 		noteAndContentWrapper.appendChild(listAndPriorityWrapper);
 		wrapper.appendChild(title.element);
@@ -241,7 +281,7 @@ export function TodoComponent(
 		container.appendChild(checkBox.element);
 		container.appendChild(wrapper);
 
-		setupTodoContainer(container, checkBox, title, note, list);
+		setupTodoContainer(container, checkBox, title, note, list, priority);
 		return container;
 	} catch (error) {
 		console.error(error);

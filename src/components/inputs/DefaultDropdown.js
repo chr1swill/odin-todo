@@ -13,6 +13,7 @@ function toggleSelectVisibilty(select, DROPDOWN_ID) {
 		return;
 	} catch (error) {
 		console.error(error);
+		return null;
 	}
 }
 
@@ -35,9 +36,11 @@ function setButtonTextToSelectedOption(button, select, DROPDOWN_ID) {
 		}
 		button.textContent = selected;
 		button.appendChild(ArrowComponent());
+		select.classList.toggle("hidden");
 		return;
 	} catch (error) {
 		console.error(error);
+		return null;
 	}
 }
 
@@ -96,7 +99,7 @@ function setupSelect(button, select, DROPDOWN_ID) {
  *
  * @param { string } buttonTitle - initital text that will appear in the button
  * @param { string[] } options - options that will be displayed in select element
- * @returns {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement } | null} The dropdown component with methods to access its HTML elements.
+ * @returns {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement, buttonElement: () => HTMLButtonElement} | null} The dropdown component with methods to access its HTML elements.
  *
  * @example
  * const dropdown = DefaultDropdownComponent("Select an option", ["Option 1", "Option 2", "Option 3"]);
@@ -187,9 +190,10 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		return {
 			element: () => container,
 			selectElement: () => select,
+			buttonElement: () => button,
 		};
 	} catch (error) {
 		console.error(error);
-        return null
+		return null;
 	}
 }
