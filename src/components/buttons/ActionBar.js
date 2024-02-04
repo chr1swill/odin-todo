@@ -39,6 +39,31 @@ function setUpAddTodoBtn(addTodoBtn) {
     observer.observe(document.body, { childList: true, subtree: true })
 }
 
+/**@param {HTMLDivElement} buttonContainer */
+function matchWidthToBody(buttonContainer) {
+    const bodyWidth = document.body.getBoundingClientRect().width
+    buttonContainer.style.width = `${bodyWidth}px`
+}
+
+/**@param {HTMLDivElement} buttonContainer */
+function setUpButtonContainer(buttonContainer) {
+    const handleResizeEvent = () => matchWidthToBody(buttonContainer)
+    window.addEventListener('resize', handleResizeEvent)
+
+    const observer = new MutationObserver((mutation) => {
+        let i = 0
+        while (i < mutation.length) {
+            if (!document.body.contains(buttonContainer)) {
+                window.removeEventListener('resize', handleResizeEvent)
+                observer.disconnect()
+                break
+            }
+            i++
+        }
+    })
+    observer.observe(document.body, { childList: true, subtree: true })
+}
+
 /**
  * Create a simple Action Bar
  * @requires { showModal } 
@@ -61,11 +86,13 @@ export function ActionBarComponent() {
 	}
 
 	const buttonContainer = document.createElement("div");
-	buttonContainer.className = "fixed bottom-20 right-0 left-0 mx-auto px-40 w-[calc(100%-4rem)] z-50 grid grid-cols-2 gap-10 h-4 rounded";
+	buttonContainer.className = "fixed bottom-20  left-1/2 tranform -translate-x-1/2 p-[2rem] z-50 grid grid-cols-2 gap-10 h-4 rounded";
 	buttonContainer.append(addListBtn, addTodoBtn);
 
     setUpAddListBtn(addListBtn)
     setUpAddTodoBtn(addTodoBtn)
+    matchWidthToBody(buttonContainer)
+    setUpButtonContainer(buttonContainer)
 
 	return buttonContainer;
 }

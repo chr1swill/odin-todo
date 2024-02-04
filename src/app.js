@@ -2,7 +2,7 @@ import './assets/styles.css'
 import { RenderHomePage } from "./views/home";
 
 function pageRouter() {
-    document.body.className = "grid grid-cols-1 place-items-center mx-40 my-10"
+    document.body.className = "max-w-[1200px] grid grid-cols-1 mx-auto my-10 p-[2rem]"
 
 	try {
 		const mainContent = document.querySelector("#main-content");
@@ -10,7 +10,7 @@ function pageRouter() {
 			throw new ReferenceError("Could not find with id: main-content");
 		}
 
-        mainContent.className = "w-[calc(100%-4rem)]"
+        mainContent.className = "w-full"
 
         const homePage = RenderHomePage()
         if (homePage === undefined) { 
