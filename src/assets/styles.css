@@ -636,6 +636,10 @@ video {
   position: relative;
 }
 
+.bottom-1\/2 {
+  bottom: 50%;
+}
+
 .bottom-20 {
   bottom: 5rem;
 }
@@ -650,6 +654,10 @@ video {
 
 .right-3 {
   right: 0.75rem;
+}
+
+.top-1\/2 {
+  top: 50%;
 }
 
 .top-\[calc\(100\%-10px\)\] {
@@ -726,10 +734,6 @@ video {
 
 .max-w-\[100\%\] {
   max-width: 100%;
-}
-
-.max-w-\[calc\(100vw-2rem\)\] {
-  max-width: calc(100vw - 2rem);
 }
 
 .grid-cols-1 {

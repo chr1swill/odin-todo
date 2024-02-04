@@ -1,4 +1,3 @@
-
 /**
  * @param {string} idOfDialogElement
  * @returns {null|void}
@@ -58,6 +57,9 @@ export function DialogComponent() {
 	const dialog = document.createElement("dialog");
 	dialog.classList.add(
 		"hidden",
+		"fixed",
+		"top-1/2",
+        "bottom-1/2",
 		"grid",
 		"place-items-center",
 		"bg-backgroud",
@@ -66,7 +68,6 @@ export function DialogComponent() {
 		"border-text",
 		"rounded-md",
 		"p-4",
-		"max-w-[calc(100vw-2rem)]",
 	);
 	const form = document.createElement("form");
 	form.className = "grid grid-cols-1 gap-3 place-items-center";
