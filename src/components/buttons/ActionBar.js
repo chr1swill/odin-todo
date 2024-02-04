@@ -61,12 +61,10 @@ export function ActionBarComponent() {
 	}
 
 	const buttonContainer = document.createElement("div");
-	buttonContainer.className = "fixed bottom-20 left-0 right-0 mx-auto w-full z-50 grid grid-cols-2 gap-3 h-4 rounded";
+	buttonContainer.className = "fixed bottom-20 right-0 left-0 mx-auto px-40 w-[calc(100%-4rem)] z-50 grid grid-cols-2 gap-10 h-4 rounded";
 	buttonContainer.append(addListBtn, addTodoBtn);
 
-	// TODO: Add ability to add list
     setUpAddListBtn(addListBtn)
-
     setUpAddTodoBtn(addTodoBtn)
 
 	return buttonContainer;
