@@ -1,7 +1,7 @@
 The Steps 
 
 - fix bug when click on the same element does not close the dropdown 
-- fix tab ordering on dropdown 
+*** not really a bug just cork of using a div as a button to open a select instead of just have only a select***
 - clean up event listner to all be removed when not being used
 - make pages
 - test your code 
