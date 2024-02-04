@@ -1,6 +1,7 @@
 The Steps 
 
 - make it so that check items are placed at the bottom of the list 
+- make it do the modale appear in the center of the screen
 - fix logic on ListController so when list are deleted they set the list values of all the todos in them to match that 
 - make ui and logic to change the priority on todo element > maybe use you dropdown or rework the dropdown the use case
 - fix tab ordering on dropdown 
