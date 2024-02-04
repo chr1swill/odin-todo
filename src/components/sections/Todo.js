@@ -35,14 +35,13 @@ function PriorityComponent(todoPriority) {
  * @param {HTMLDivElement} container
  */
 function rerenderTodoList(container) {
-    const renderedTodoListWrapper = container?.parentElement;
-    if (!renderedTodoListWrapper) {
-        throw new ReferenceError(
-            "Could not access parent element of the todo, an attempt to access it resulted in a null value",
-        );
-    }
-
-    appendTodoFromStroageToElement(renderedTodoListWrapper);
+	const renderedTodoListWrapper = container?.parentElement;
+	if (!renderedTodoListWrapper) {
+		throw new ReferenceError(
+			"Could not access parent element of the todo, an attempt to access it resulted in a null value",
+		);
+	}
+	appendTodoFromStroageToElement(renderedTodoListWrapper);
 }
 
 /**
@@ -54,22 +53,16 @@ function rerenderTodoList(container) {
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} title
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} note
  * @param {{element: HTMLLabelElement, input: HTMLInputElement}} list
- * @param {HTMLDivElement} container
  */
-function checkWhichElementEventWasOn(e, todo, checkBox, title, note, list, container) {
+function checkWhichElementEventWasOn(e, todo, checkBox, title, note, list) {
 	switch (e.target) {
 		case checkBox.input:
-			console.log("CHECKBOX input value: ", checkBox.input.checked);
 			todo.complete = checkBox.input.checked;
-            rerenderTodoList(container)
-            window.location.reload()
 			break;
 		case title.textarea:
-			console.log("TITLE input value: ", title.textarea.value);
 			todo.title = title.textarea.value.trim();
 			break;
 		case note.textarea:
-			console.log("NOTE input: ", note.textarea.value);
 			todo.note = note.textarea.value.trim();
 			break;
 		case list.input:
@@ -82,7 +75,6 @@ function checkWhichElementEventWasOn(e, todo, checkBox, title, note, list, conta
 					);
 				}
 				todo.list = list.input.value;
-				console.log("Successfully created List and updated todo List property");
 			} catch (error) {
 				console.error(error);
 				return null;
@@ -121,7 +113,7 @@ function handleChangeEventOnTodoContainer(
 
 	if (todoId === "empty") {
 		const todoClass = new Todo();
-		checkWhichElementEventWasOn(e, todoClass, checkBox, title, note, list, container);
+		checkWhichElementEventWasOn(e, todoClass, checkBox, title, note, list);
 		const renderedTodoListWrapper = container?.parentElement;
 		if (!renderedTodoListWrapper) {
 			throw new ReferenceError(
@@ -140,8 +132,11 @@ function handleChangeEventOnTodoContainer(
 		);
 	}
 
-	checkWhichElementEventWasOn(e, todoMatchingId, checkBox, title, note, list, container);
+	checkWhichElementEventWasOn(e, todoMatchingId, checkBox, title, note, list);
 	localStorage.setItem(todoId, JSON.stringify(todoMatchingId));
+	if (e.target === checkBox.input) {
+		rerenderTodoList(container);
+	}
 }
 
 /**
@@ -152,22 +147,23 @@ function handleChangeEventOnTodoContainer(
  * @param {{element: HTMLLabelElement, input: HTMLInputElement}} list
  */
 function setupTodoContainer(container, checkBox, title, note, list) {
-    /**@param {Event} e*/
-    const changeEventHandler = (e) => handleChangeEventOnTodoContainer(container, e, checkBox, title, note, list)
-    container?.addEventListener('change', changeEventHandler)
+	/**@param {Event} e*/
+	const changeEventHandler = (e) =>
+		handleChangeEventOnTodoContainer(container, e, checkBox, title, note, list);
+	container?.addEventListener("change", changeEventHandler);
 
-    const observer = new MutationObserver((mutation) => {
-        let i = 0 
-        while (i < mutation.length) {
-            if (!document.body.contains(container)) {
-                container.removeEventListener('change', changeEventHandler)
-                observer.disconnect()
-                break;
-            }
-            i++
-        }
-    })
-    observer.observe(document.body, { childList: true, subtree: true })
+	const observer = new MutationObserver((mutation) => {
+		let i = 0;
+		while (i < mutation.length) {
+			if (!document.body.contains(container)) {
+				container.removeEventListener("change", changeEventHandler);
+				observer.disconnect();
+				break;
+			}
+			i++;
+		}
+	});
+	observer.observe(document.body, { childList: true, subtree: true });
 }
 
 /**
@@ -245,7 +241,7 @@ export function TodoComponent(
 		container.appendChild(checkBox.element);
 		container.appendChild(wrapper);
 
-        setupTodoContainer(container, checkBox, title, note, list)
+		setupTodoContainer(container, checkBox, title, note, list);
 		return container;
 	} catch (error) {
 		console.error(error);
@@ -259,8 +255,6 @@ export function RenderTodosFromStorage() {
 		if (!allTodos || allTodos.length === 0) {
 			return TodoComponent();
 		}
-
-        //sort data so complete element are at end
 
 		const fragment = document.createDocumentFragment();
 		for (let i = 0; i < allTodos.length; i++) {
@@ -277,11 +271,11 @@ export function RenderTodosFromStorage() {
 					`Todo Component could not be created for list of Todos, Failed on increment: ${i}`,
 				);
 			}
-            if (allTodos[i].complete === false) {
-                fragment.prepend(todo)
-            } else {
-                fragment.appendChild(todo);
-            }
+			if (allTodos[i].complete === false) {
+				fragment.prepend(todo);
+			} else {
+				fragment.appendChild(todo);
+			}
 		}
 
 		const emptyTodo = TodoComponent();
@@ -290,7 +284,6 @@ export function RenderTodosFromStorage() {
 				"Could not created empty todoComponent, resulted in a null value",
 			);
 		}
-		// add an empty to the end of the list
 		fragment.appendChild(emptyTodo);
 
 		return fragment;
@@ -322,11 +315,9 @@ export function appendTodoFromStroageToElement(elementId) {
 
 		/**@type{string|HTMLElement|Node|null}*/
 		let listElement;
-		// Handling different types of elementId
 		if (typeof elementId === "string") {
 			listElement = document.getElementById(elementId);
 		} else if (elementId instanceof HTMLElement || elementId instanceof Node) {
-			// HTMLElement is technically also an instance of Node
 			listElement = elementId;
 		} else {
 			throw new TypeError(
@@ -346,6 +337,6 @@ export function appendTodoFromStroageToElement(elementId) {
 
 		listElement.appendChild(todosInLocalStorage);
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 }
