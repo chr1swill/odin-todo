@@ -1,6 +1,6 @@
 The Steps 
 
-- fix bug when click on the same element does not close the dropdown
+- fix bug when click on the same element does not close the dropdown 
 - fix tab ordering on dropdown 
 - clean up event listner to all be removed when not being used
 - make pages
