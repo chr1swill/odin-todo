@@ -10,6 +10,9 @@ function toggleSelectVisibilty(select, DROPDOWN_ID) {
 			throw new Error("Could not find select element with id: " + DROPDOWN_ID);
 		}
 		select.classList.toggle("hidden");
+		if (!select.classList.contains("hidden")) {
+			select.focus();
+		}
 		return;
 	} catch (error) {
 		console.error(error);
@@ -37,6 +40,9 @@ function setButtonTextToSelectedOption(button, select, DROPDOWN_ID) {
 		button.textContent = selected;
 		button.appendChild(ArrowComponent());
 		select.classList.toggle("hidden");
+		if (!select.classList.contains("hidden")) {
+			select.focus();
+		}
 		return;
 	} catch (error) {
 		console.error(error);
@@ -116,6 +122,7 @@ export function DefaultDropdownComponent(buttonTitle, options) {
 		/**@type {HTMLSelectElement}*/
 		const select = document.createElement("select");
 		select.setAttribute("data-dropdown", DROPDOWN_ID);
+		select.setAttribute("tabindex", "-1");
 		select.classList.add(
 			"hidden",
 			"bg-background",
