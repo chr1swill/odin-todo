@@ -14,8 +14,8 @@ export class ListController {
 	 */
 	createList(listName) {
 		try {
-            const nameOfList = listName.trim().toLowerCase().replace(/\s+/g, "-");
-            if (nameOfList in this.#allLists) {
+			const nameOfList = listName.trim().toLowerCase().replace(/\s+/g, "-");
+			if (nameOfList in this.#allLists) {
 				throw new Error(
 					`Provide list name is already in use, please select a list name that is not currently being used: ${listName}`,
 				);
