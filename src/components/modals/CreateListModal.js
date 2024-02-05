@@ -23,7 +23,7 @@ function createNewList(input) {
 		}
 
 		const listContainer = new ListController();
-		listContainer.createList(listName);
+		listContainer.createList(listName.trim());
 		closeDialog("listModal");
 	} catch (error) {
 		console.error(error);
