@@ -14,7 +14,8 @@ export class ListController {
 	 */
 	createList(listName) {
 		try {
-			if (listName in this.#allLists) {
+            const nameOfList = listName.trim().toLowerCase().replace(/\s+/g, "-");
+            if (nameOfList in this.#allLists) {
 				throw new Error(
 					`Provide list name is already in use, please select a list name that is not currently being used: ${listName}`,
 				);
@@ -23,7 +24,7 @@ export class ListController {
 			const arr = new Float64Array(3);
 			arr.fill(0);
 
-			this.#allLists[listName] = arr;
+			this.#allLists[nameOfList] = arr;
 		} catch (error) {
 			console.log(error);
 			return null;
