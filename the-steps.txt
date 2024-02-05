@@ -1,7 +1,7 @@
 The Steps 
 
-- fix bug when click on the same element does not close the dropdown 
-*** not really a bug just cork of using a div as a button to open a select instead of just have only a select***
-
+- make page link buttons > RIGHT NOW YOU ARE RENDERING LISTS
+- make new nave bar title bar thing
 - make pages
 - test your code 
+- make it so that for every list of todo there is only one singlar event listener on it
