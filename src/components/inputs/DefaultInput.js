@@ -8,7 +8,7 @@
  * */
 export function DefaultInputComponent(placeholder, required = false) {
 	const CREATION_TIME_FOR_ID = (Date.now() + Math.random()).toString();
-	const name = placeholder.toString().trim().replace(/\s+/g, "-");
+	const name = placeholder.toString().trim()
 	const uniqueId = name.toLowerCase() + "-" + CREATION_TIME_FOR_ID;
 
 	const label = document.createElement("label");
