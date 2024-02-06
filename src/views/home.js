@@ -8,8 +8,10 @@ export function RenderHomePage() {
 	try {
 		const fragment = document.createDocumentFragment();
 
-		const titleBar = TitleBar("All Todos", "Add Todos");
-
+		const titleBar = TitleBar("All Todos");
+        if (!titleBar) {
+            throw new Error('Could not create a title for page, creation of element return a null')
+        }
 		fragment.appendChild(titleBar);
         const todosInLocalStorage = RenderTodosFromStorage()
         if (!todosInLocalStorage) {

@@ -4,7 +4,7 @@ import { DialogComponent, closeDialog } from "./Dialog";
 import { ListController } from "../../logic/list";
 
 /**
- * @param {{element: () => HTMLLabelElement, value: () => string}} input
+ * @param {{element: () => HTMLLabelElement, value: () => string, inputElement: () => HTMLInputElement}} input
  * @returns {void|null}
  */
 function createNewList(input) {
@@ -24,7 +24,10 @@ function createNewList(input) {
 
 		const listContainer = new ListController();
 		listContainer.createList(listName.trim());
+        input.inputElement().value = ""
 		closeDialog("listModal");
+        console.log(listContainer.getAllLists())
+        console.log(listContainer.getListNames())
 	} catch (error) {
 		console.error(error);
 		return null;
@@ -33,7 +36,7 @@ function createNewList(input) {
 
 /**
  * @param {HTMLButtonElement} createBtn
- * @param {{element: () => HTMLLabelElement, value: () => string}} input
+ * @param {{element: () => HTMLLabelElement, value: () => string, inputElement: () => HTMLInputElement}} input
  */
 function setUpCreateBtn(createBtn, input) {
 	const handleCreateNewList = () => createNewList(input);

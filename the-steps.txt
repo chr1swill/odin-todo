@@ -1,5 +1,6 @@
 The Steps 
 
+- find a way to make list persist just like you todo you dont want them to reset when the app resets
 - make page link buttons > RIGHT NOW YOU ARE RENDERING LISTS
 - make new nave bar title bar thing
 - make pages

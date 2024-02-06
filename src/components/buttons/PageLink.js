@@ -1,13 +1,14 @@
-import { ArrowComponent } from "../icons/Arrow";
+import { ListController } from "../../logic/list";
+import { toggleModalVisiblity } from "../modals/Dialog";
+import { AddButtonComponent } from "./AddButton";
 
 /**
  * // TODO: MAY NOT WORK AFTER REFACTOR
  *
- * Changes the inner HTML of the main content container.
- * @param { HTMLElement | Node } htmlContent - HTML content to display.
+ * @param {HTMLButtonElement} button
  * @returns { void | null }
  */
-function changePage(htmlContent) {
+function changePage(button) {
 	try {
 		const content = document.getElementById("main-content");
 		if (!content) {
@@ -19,8 +20,9 @@ function changePage(htmlContent) {
 		while (content.firstChild) {
 			content.removeChild(content.firstChild);
 		}
-
-		content.appendChild(htmlContent);
+		// render tile bar
+		// render todos in list
+		// render action bar
 	} catch (error) {
 		console.error(error);
 		return null;
@@ -29,10 +31,9 @@ function changePage(htmlContent) {
 
 /**
  * @param {HTMLButtonElement} button
- * @param {HTMLButtonElement | Node} page
  */
-function setUpButton(button, page) {
-	const goToNextPage = () => changePage(page);
+function setUpButton(button) {
+	const goToNextPage = () => changePage(button);
 	button.addEventListener("click", goToNextPage);
 
 	const observer = new MutationObserver((mutation) => {
@@ -49,26 +50,90 @@ function setUpButton(button, page) {
 	observer.observe(document.body, { childList: true, subtree: true });
 }
 
+/**@param {string} string */
+function convertToKebab(string) {
+	return string.trim().toLowerCase().replace(/\s+/g, "-");
+}
+
+/**@param {string} kebabCaseString */
+function convertKebabToTitleCase(kebabCaseString) {
+	const words = kebabCaseString.replace(/-/g, " ").split(" ");
+	const capitalizedWords = words.map(
+		(word) => word.charAt(0).toUpperCase() + word.slice(1),
+	);
+	return capitalizedWords.join(" ");
+}
+
 /**
  *
  * Creates a button that sends you to a different page
- * @param { string } title - text that will appear in the button
- * @param { HTMLElement | Node } page - the page you want it to send you to
+ * @param { string } listName - text that will appear in the button
  * @returns {HTMLButtonElement | null}
  */
-export function PageLinkComponent(title, page) {
+export function PageLinkComponent(listName) {
 	try {
 		const button = document.createElement("button");
 		button.className =
-			"flex flex-row place-items-center content-between border-text py-2 px-3 max-w-[100%]";
-		const h3 = document.createElement("h3");
-		h3.className = "text-text font-bold text-base";
-		h3.textContent = title;
-		button.append(h3, ArrowComponent());
+			"flex flex-row place-items-center content-between border-text py-2 px-3 max-w-[100%] text-text font-bold text-base";
+		button.textContent = convertKebabToTitleCase(listName);
+		button.setAttribute("data-page-target", listName);
 
-		setUpButton(button, page);
+		setUpButton(button);
 
 		return button;
+	} catch (error) {
+		console.error(error);
+		return null;
+	}
+}
+
+/**@param {HTMLButtonElement} addList */
+function setupAddListButton(addList) {
+	const handleButtonClick = () => toggleModalVisiblity("listModal");
+	addList?.addEventListener("click", handleButtonClick);
+
+	const observer = new MutationObserver((mutation) => {
+		let i = 0;
+		while (i < mutation.length) {
+			if (!document.body.contains(addList)) {
+				addList.removeEventListener("click", handleButtonClick);
+				observer.disconnect();
+				break;
+			}
+			i++;
+		}
+	});
+	observer.observe(document.body, { childList: true, subtree: true });
+}
+
+export function RenderNavBar() {
+	try {
+		const navBar = document.createElement("nav");
+		navBar.className = "flex flex-row justify-end gap-2 w-full";
+		const listController = new ListController();
+		const listNames = listController.getListNames();
+		if (listNames.length === 0) {
+			const addList = AddButtonComponent("Add List");
+			setupAddListButton(addList);
+			navBar.appendChild(addList);
+			return navBar;
+		}
+
+		const fragment = document.createDocumentFragment();
+		let i = 0;
+		while (i < listNames.length) {
+			const pageLink = PageLinkComponent(listNames[i]);
+			if (!pageLink) {
+				throw new ReferenceError(
+					"Could not create page link component, an attempt to reference element return a null value",
+				);
+			}
+			fragment.appendChild(pageLink);
+			i++;
+		}
+
+		navBar.appendChild(fragment);
+		return navBar;
 	} catch (error) {
 		console.error(error);
 		return null;
