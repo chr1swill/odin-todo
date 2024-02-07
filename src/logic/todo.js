@@ -23,9 +23,10 @@ const AllowedTypes = {
  * @property {boolean} complete
  */
 
-export class Todo {
+export class TodoController {
 	/** @type { string }*/
 	#id;
+    #allTodos = {}
 
 	constructor() {
 		this.#id = (Date.now() + Math.random()).toString();
