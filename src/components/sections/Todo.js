@@ -3,7 +3,7 @@ import { Priority } from "../../logic/todo";
 import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
 import { FakeTextInputComponent } from "../inputs/FakeTextInput";
 import { FakeTextTextareaComponent } from "../inputs/FakeTextTextarea";
-import { Todo } from "../../logic/todo";
+import { TodoController } from "../../logic/todo";
 import { ListController } from "../../logic/list";
 import { DefaultDropdownComponent } from "../inputs/DefaultDropdown";
 
@@ -38,9 +38,23 @@ function rerenderTodoList(container) {
 }
 
 /**
+ * @typedef {string} IDType
+ *
+ * @typedef {Object} TodoType
+ * @prop {IDType} id
+ * @prop {string} title
+ * @prop {string} note
+ * @prop {string} list
+ * @prop {boolean} complete
+ * @prop {Priority} priority
+ *
+ * @typedef {{ [key: IDType]: TodoType }} AllTodosType
+ */
+
+/**
  *
  * @param {Event} e
- * @param {Todo} todo
+ * @param {TodoType} todo
  * @param {{element: HTMLLabelElement, input: HTMLInputElement}} checkBox
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} title
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} note
@@ -106,6 +120,7 @@ function checkWhichElementEventWasOn(
  * @param {{element: HTMLLabelElement, textarea: HTMLTextAreaElement}} note
  * @param {{element: HTMLLabelElement, input: HTMLInputElement}} list
  * @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement, buttonElement: () => HTMLButtonElement}} priority
+ * @returns {void|null}
  */
 function handleChangeEventOnTodoContainer(
 	container,
@@ -116,38 +131,88 @@ function handleChangeEventOnTodoContainer(
 	list,
 	priority,
 ) {
-	const todoId = container.getAttribute("data-todo-id");
-	if (!todoId) {
-		throw new ReferenceError(
-			`There is no "data-todo-id" attribute on element: ${container}`,
-		);
-	}
-
-	if (todoId === "empty") {
-		const todoClass = new Todo();
-		checkWhichElementEventWasOn(e, todoClass, checkBox, title, note, list, priority)
-		const renderedTodoListWrapper = container?.parentElement;
-		if (!renderedTodoListWrapper) {
+	try {
+		const todoId = container.getAttribute("data-todo-id");
+		if (!todoId) {
 			throw new ReferenceError(
-				"Could not access parent element of the todo, an attempt to access it resulted in a null value",
+				`There is no "data-todo-id" attribute on element: ${container}`,
 			);
 		}
 
-		appendTodoFromStroageToElement(renderedTodoListWrapper);
-		return;
-	}
+		if (todoId === "empty") {
+			const tc = new TodoController();
+			const newTodoId = tc.createTodo();
+			if (!newTodoId) {
+				throw new Error(
+					`Could not create new todo an error in the process: ${newTodoId}`,
+				);
+			}
 
-	const todoMatchingId = Todo.getTodo(todoId);
-	if (!todoMatchingId) {
-		throw new ReferenceError(
-			`There are no object in local storage with the id: ${todoId}`,
+			const todo = tc.getTodo(newTodoId);
+			if (!todo) {
+				throw new ReferenceError(
+					"Could not access you newly created todo and error occur while attempt to get it value for localStorage",
+				);
+			}
+
+			checkWhichElementEventWasOn(
+				e,
+				todo,
+				checkBox,
+				title,
+				note,
+				list,
+				priority,
+			);
+
+			const saveTodo = tc.addTodo(todo);
+			if (!saveTodo) {
+				throw new Error(
+					"Could not save new todo an error occured in the process",
+				);
+			}
+
+			const renderedTodoListWrapper = container?.parentElement;
+			if (!renderedTodoListWrapper) {
+				throw new ReferenceError(
+					"Could not access parent element of the todo, an attempt to access it resulted in a null value",
+				);
+			}
+
+			appendTodoFromStroageToElement(renderedTodoListWrapper);
+			return;
+		}
+
+		const tc = new TodoController();
+		const todoMatchingId = tc.getTodo(todoId);
+		if (!todoMatchingId) {
+			throw new ReferenceError(
+				`There are no object in local storage with the id: ${todoId}`,
+			);
+		}
+
+		checkWhichElementEventWasOn(
+			e,
+			todoMatchingId,
+			checkBox,
+			title,
+			note,
+			list,
+			priority,
 		);
-	}
 
-	checkWhichElementEventWasOn(e, todoMatchingId, checkBox, title, note, list, priority);
-	localStorage.setItem(todoId, JSON.stringify(todoMatchingId));
-	if (e.target === checkBox.input) {
-		rerenderTodoList(container);
+		const saveTodo = tc.addTodo(todoMatchingId);
+		if (!saveTodo) {
+			throw new Error(
+				"Could not save new todo an error occured in the process",
+			);
+		}
+		if (e.target === checkBox.input) {
+			rerenderTodoList(container);
+		}
+	} catch (e) {
+		console.error(e);
+		return null;
 	}
 }
 
@@ -162,7 +227,15 @@ function handleChangeEventOnTodoContainer(
 function setupTodoContainer(container, checkBox, title, note, list, priority) {
 	/**@param {Event} e*/
 	const changeEventHandler = (e) =>
-		handleChangeEventOnTodoContainer(container, e, checkBox, title, note, list, priority);
+		handleChangeEventOnTodoContainer(
+			container,
+			e,
+			checkBox,
+			title,
+			note,
+			list,
+			priority,
+		);
 	container?.addEventListener("change", changeEventHandler);
 
 	const observer = new MutationObserver((mutation) => {
@@ -224,20 +297,20 @@ export function TodoComponent(
 			);
 		}
 
-        let priorityText
-        switch (todoPriority) {
-            case Priority.HIGH: 
-                priorityText = '!!!'
-                break
-            case Priority.MEDIUM:
-                priorityText = '!!'
-                break
-            case Priority.LOW: 
-                priorityText = '!'
-                break
-            default: 
-                priorityText = 'NONE'
-        }
+		let priorityText;
+		switch (todoPriority) {
+			case Priority.HIGH:
+				priorityText = "!!!";
+				break;
+			case Priority.MEDIUM:
+				priorityText = "!!";
+				break;
+			case Priority.LOW:
+				priorityText = "!";
+				break;
+			default:
+				priorityText = "NONE";
+		}
 		const priority = DefaultDropdownComponent(priorityText, [
 			"NONE",
 			"!",
@@ -291,27 +364,29 @@ export function TodoComponent(
 
 export function RenderTodosFromStorage() {
 	try {
-		const allTodos = Todo.allInstances;
-		if (!allTodos || allTodos.length === 0) {
+		const tc = new TodoController();
+		const allTodos = tc.getAllTodos();
+		if (!allTodos || Object.keys(allTodos).length === 0) {
 			return TodoComponent();
 		}
 
 		const fragment = document.createDocumentFragment();
-		for (let i = 0; i < allTodos.length; i++) {
+		const todosArray = Object.values(allTodos);
+		for (const currentTodo of todosArray) {
 			const todo = TodoComponent(
-				allTodos[i].id,
-				allTodos[i].title,
-				allTodos[i].note,
-				allTodos[i].priority,
-				allTodos[i].complete,
-				allTodos[i].list,
+				currentTodo.id,
+				currentTodo.title,
+				currentTodo.note,
+				currentTodo.priority,
+				currentTodo.complete,
+				currentTodo.list,
 			);
 			if (!todo) {
 				throw new Error(
-					`Todo Component could not be created for list of Todos, Failed on increment: ${i}`,
+					`Todo Component could not be created for list of Todos`,
 				);
 			}
-			if (allTodos[i].complete === false) {
+			if (currentTodo.complete === false) {
 				fragment.prepend(todo);
 			} else {
 				fragment.appendChild(todo);
@@ -378,5 +453,6 @@ export function appendTodoFromStroageToElement(elementId) {
 		listElement.appendChild(todosInLocalStorage);
 	} catch (error) {
 		console.error(error);
+		return null;
 	}
 }

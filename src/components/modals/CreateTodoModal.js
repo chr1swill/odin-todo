@@ -3,7 +3,7 @@ import { DefaultInputComponent } from "../inputs/DefaultInput";
 import { DefaultDropdownComponent } from "../inputs/DefaultDropdown";
 import { DefaultButtonComponent } from "../buttons/DefaultButton";
 import { DialogComponent, closeDialog } from "./Dialog";
-import { Todo, Priority } from "../../logic/todo";
+import { TodoLegacy, Priority } from "../../logic/todo";
 import { appendTodoFromStroageToElement } from "../sections/Todo";
 
 /**

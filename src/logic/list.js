@@ -1,4 +1,4 @@
-import { Todo } from "./todo";
+import { TodoController } from "./todo";
 
 export class ListController {
 	/**

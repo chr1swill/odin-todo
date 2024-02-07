@@ -6,261 +6,177 @@ export const Priority = {
 	HIGH: 3,
 };
 
-/** @enum { string } */
-const AllowedTypes = {
-	NUMBER: "number",
-	STRING: "string",
-	BOOLEAN: "boolean",
-};
-
-/**
- * @typedef {Object} TodoObject
- * @property {string} id
- * @property {string} title
- * @property {string} note
- * @property {string} list
- * @property {Priority} priority
- * @property {boolean} complete
- */
-
 export class TodoController {
-	/** @type { string }*/
-	#id;
-    #allTodos = {}
+	/**
+	 * @typedef {string} IDType
+	 *
+	 * @typedef {Object} TodoType
+	 * @prop {IDType} id
+	 * @prop {string} title
+	 * @prop {string} note
+	 * @prop {string} list
+	 * @prop {boolean} complete
+	 * @prop {Priority} priority
+	 *
+	 * @typedef {{ [key: IDType]: TodoType }} AllTodosType
+	 */
 
 	constructor() {
-		this.#id = (Date.now() + Math.random()).toString();
-		localStorage.setItem(
-			this.#id,
-			JSON.stringify({
-				id: this.#id,
+		try {
+			if (!localStorage.getItem("TODOS")) {
+				localStorage.setItem("TODOS", "{}");
+			}
+		} catch (error) {
+			console.error("Failed to initialize TODOS in localStorage", error);
+			// Handle the error appropriately (e.g., notifying the user, retrying, etc.)
+		}
+	}
+
+	/**
+	 * returns todo id as a string
+	 * @returns {IDType}
+	 */
+	#generateTodoId() {
+		/**@type {IDType} */
+		const id = (Date.now() + Math.random()).toString();
+		return id;
+	}
+
+	/**
+	 * returns an object of all the todos in localStorage or an empty object if it is empty
+	 * @returns {AllTodosType | null}
+	 */
+	getAllTodos() {
+		try {
+			let todosInStorage = localStorage.getItem("TODOS");
+			if (!todosInStorage) {
+				throw new ReferenceError(
+					"The class constructor failed to initialize the TODOS key in localStorage.",
+				);
+			}
+
+			/**@type {AllTodosType} */
+			const allTodo = JSON.parse(todosInStorage);
+			return allTodo;
+		} catch (e) {
+			console.error(e);
+			return null;
+		}
+	}
+
+	/**
+	 * @param {AllTodosType} allTodos
+	 * @returns {number| null}
+	 */
+	#setAllTodos(allTodos) {
+		try {
+			const string = JSON.stringify(allTodos);
+			localStorage.setItem("TODOS", string);
+			return 10;
+		} catch (e) {
+			console.error(e);
+			return null;
+		}
+	}
+
+	/**
+	 * @param {TodoType} todo
+	 * @returns {number|null}
+	 */
+	addTodo(todo) {
+		try {
+			const allTodos = this.getAllTodos();
+			if (!allTodos) {
+				throw new ReferenceError(
+					"Could not access all todos from localStorage.",
+				);
+			}
+
+			const keyOfTodo = todo.id;
+			allTodos[keyOfTodo] = todo;
+			const savedTodo = this.#setAllTodos(allTodos);
+			if (!savedTodo) {
+				throw new Error(
+					"Could not save new updated todo list an error occured in the process",
+				);
+			}
+			return 10;
+		} catch (e) {
+			console.error(e);
+			return null;
+		}
+	}
+
+	/**
+	 *
+	 * Creates an empty todo in local storage and return the id of the created todo
+	 * @returns {IDType | null}
+	 */
+	createTodo() {
+		try {
+			const todoId = this.#generateTodoId();
+
+			/**@type {TodoType} */
+			const todo = {
+				id: todoId,
 				title: "",
 				note: "",
 				list: "",
-				priority: Priority.NONE,
 				complete: false,
-			}),
-		);
-	}
+				priority: Priority.NONE,
+			};
 
-	/**
-	 * Returns an array of all Todo instances stored in localStorage.
-	 * @returns { TodoObject[] | null } An array of Todo objects.
-	 */
-	static get allInstances() {
-		try {
-			if (localStorage.length === 0) {
+			const allTodos = this.getAllTodos();
+			if (!allTodos) {
 				throw new ReferenceError(
-					"Not able to access elements inside localStorage: there are no element to return from localStroage.",
+					"Could not access all todos from localStorage.",
 				);
 			}
 
-			/** @type { TodoObject[] } */
-			const todos = [];
-
-			for (const todoId in localStorage) {
-				const todoString = localStorage.getItem(todoId);
-				if (todoString !== null) {
-					/** @type { TodoObject } */
-					const todo = JSON.parse(todoString);
-					todos.push(todo);
-				}
+			allTodos[todoId] = todo;
+			const setAllTodosToLocalStorage = this.#setAllTodos(allTodos);
+			if (!setAllTodosToLocalStorage) {
+				throw new Error(
+					"Could not set you newly created todo object to TODOS key in  localStorage",
+				);
 			}
 
-			return todos;
-		} catch (error) {
-			console.error(error);
+			return todoId;
+		} catch (e) {
+			console.error(e);
 			return null;
 		}
 	}
 
 	/**
-	 * @param { string } id - id of the todo you would like to get
-	 *
-	 * @returns { Todo | null }
-	 * */
-	static getTodo(id) {
+	 * @param {IDType} id
+	 * @returns {TodoType | null}
+	 */
+	getTodo(id) {
 		try {
 			if (typeof id !== "string") {
-				throw TypeError("Expect value of todo id to be a string");
-			}
-
-			const todoString = localStorage.getItem(id);
-			if (todoString === null) {
-				throw new ReferenceError(
-					`Could not access value not item of that id exist: ${id}`,
+				throw new TypeError(
+					`The type of id is invalid expected string but received type: ${typeof id}`,
 				);
 			}
 
-			return JSON.parse(todoString);
-		} catch (error) {
-			console.error(error);
-			return null;
-		}
-	}
-
-	/** @returns { string } todo unique id number as a string */
-	get id() {
-		return this.#id;
-	}
-
-	/**
-	 * handle getting item form local storage on todo properties
-	 *
-	 * @param { string } property - key you would like to access the value to on this todo object
-	 * @returns { Error | string | boolean | number }
-	 * */
-	#handleLocalStorageGet(property) {
-		const todoString = localStorage.getItem(this.#id);
-		if (todoString === null) {
-			throw new ReferenceError(
-				`Could not access value, key of ${this.#id} does not exist or has not been set`,
-			);
-		}
-
-		const todoObj = JSON.parse(todoString);
-		if (!todoObj[property]) {
-			throw new ReferenceError("Not able to access undefined property");
-		}
-		return todoObj[property];
-	}
-
-	/**
-	 * handle setting value of todo properies in local storage
-	 *
-	 * @param { string } property - key of the value to you would like to modify
-	 * @param { number | string | boolean } newValue - new value you would like to set the key
-	 * @param { AllowedTypes } newValueType - type of the newValue, need to be boolean, number, or string
-	 * @returns {void|null}
-	 * */
-	#handleLocalStorageSet(property, newValue, newValueType) {
-		try {
-			if (typeof newValue !== newValueType) {
-				throw new TypeError(`Value must be a ${newValueType}`);
-			}
-
-			if (property === "priority") {
-				if (
-					newValue !== Priority.NONE &&
-					newValue !== Priority.LOW &&
-					newValue !== Priority.MEDIUM &&
-					newValue !== Priority.HIGH
-				) {
-					throw new RangeError("Value provided for key priority is invalid");
-				}
-			}
-
-			const todoString = localStorage.getItem(this.#id);
-			if (todoString === null) {
+			const allTodos = this.getAllTodos();
+			if (!allTodos) {
 				throw new ReferenceError(
-					`Could not access value, key of ${this.#id} does not exist or has not been set`,
+					"Could not access all todos from localStorage.",
 				);
 			}
 
-			const todoObj = JSON.parse(todoString);
-			if (typeof property !== "string") {
-				throw new TypeError("Value must be string");
+			if (!(Object.keys(allTodos).includes(id.toString()))) {
+				throw new ReferenceError(
+					`Could not find a todo with the provided id in local storage id: ${id}`,
+				);
 			}
-			todoObj[property] = newValue;
-			localStorage.setItem(this.#id, JSON.stringify(todoObj));
-		} catch (error) {
-			console.error(error);
+
+			return allTodos[id];
+		} catch (e) {
+			console.error(e);
 			return null;
 		}
-	}
-
-	/**@returns { string | null }*/
-	get title() {
-		try {
-			const value = this.#handleLocalStorageGet("title").toString();
-			if (typeof value !== "string") {
-				throw TypeError("Value accessed was not a string");
-			}
-			return value;
-		} catch (error) {
-			console.error(error);
-			return null;
-		}
-	}
-
-	/**@param { string } title */
-	set title(title) {
-		this.#handleLocalStorageSet("title", title, AllowedTypes.STRING);
-	}
-
-	/**@returns { string | null }*/
-	get note() {
-		try {
-			const value = this.#handleLocalStorageGet("note").toString();
-			if (typeof value !== "string") {
-				throw TypeError("Value accessed was not a string");
-			}
-			return value;
-		} catch (error) {
-			console.error(error);
-			return null;
-		}
-	}
-
-	/**@param { string } note */
-	set note(note) {
-		this.#handleLocalStorageSet("note", note, AllowedTypes.STRING);
-	}
-
-	/**@returns { string | null }*/
-	get list() {
-		try {
-			const value = this.#handleLocalStorageGet("list").toString();
-			if (typeof value !== "string") {
-				throw TypeError("Value accessed was not a string");
-			}
-			return value;
-		} catch (error) {
-			console.error(error);
-			return null;
-		}
-	}
-
-	/**@param { string } list */
-	set list(list) {
-		this.#handleLocalStorageSet("list", list, AllowedTypes.STRING);
-	}
-
-	/**@returns { number | null}*/
-	get priority() {
-		try {
-			const value = Number(this.#handleLocalStorageGet("priority"));
-			if (typeof value !== "number") {
-				throw TypeError("Value accessed was not a number");
-			}
-			return value;
-		} catch (error) {
-			console.error(error);
-			return null;
-		}
-	}
-
-	/**@param { Priority } priority */
-	set priority(priority) {
-		this.#handleLocalStorageSet("priority", priority, AllowedTypes.NUMBER);
-	}
-
-	/**@returns { boolean | null }*/
-	get complete() {
-		try {
-			const value = this.#handleLocalStorageGet("complete");
-			if (typeof value !== "boolean") {
-				throw TypeError("Value accessed was not a boolean");
-			}
-			return value;
-		} catch (error) {
-			console.error(error);
-			return null;
-		}
-	}
-
-	/**@param { boolean } complete */
-	set complete(complete) {
-		this.#handleLocalStorageSet("complete", complete, AllowedTypes.BOOLEAN);
 	}
 }
