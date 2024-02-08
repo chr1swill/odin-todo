@@ -2,6 +2,7 @@ import { DefaultInputComponent } from "../inputs/DefaultInput";
 import { DefaultButtonComponent } from "../buttons/DefaultButton";
 import { DialogComponent, closeDialog } from "./Dialog";
 import { ListController } from "../../logic/list";
+import { rerenderPageLinks } from "../buttons/PageLink";
 
 /**
  * @param {{element: () => HTMLLabelElement, value: () => string, inputElement: () => HTMLInputElement}} input
@@ -26,9 +27,14 @@ function createNewList(input) {
 		lc.createList(listName.trim());
 		input.inputElement().value = "";
 		closeDialog("listModal");
+		const navBar = document.querySelector("[data-nav-bar]");
+		if (!navBar) {
+			throw new ReferenceError(
+				"Could not find a nav element with the with attribute: data-nav-bar",
+			);
+		}
 
-		console.log(lc.getAllList());
-		console.log(lc.getCurrentListNames());
+		rerenderPageLinks(navBar);
 	} catch (error) {
 		console.error(error);
 		return null;

@@ -3,14 +3,36 @@ import { DefaultInputComponent } from "../inputs/DefaultInput";
 import { DefaultDropdownComponent } from "../inputs/DefaultDropdown";
 import { DefaultButtonComponent } from "../buttons/DefaultButton";
 import { DialogComponent, closeDialog } from "./Dialog";
-import { TodoLegacy, Priority } from "../../logic/todo";
+import { TodoController, Priority } from "../../logic/todo";
 import { appendTodoFromStroageToElement } from "../sections/Todo";
+import { ArrowComponent } from "../icons/Arrow";
+
+/**
+ *  @param {{ element: () => HTMLLabelElement, value: () => string, inputElement: () => HTMLInputElement }} input
+ *  @param {{ element: () => HTMLLabelElement, value: () => string, inputElement: () => HTMLTextAreaElement }} textarea
+ *  @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement, buttonElement: () => HTMLButtonElement} | null} dropdown
+ *  @returns {string|null}
+ */
+function resetListModal(input, textarea, dropdown) {
+	try {
+		input.inputElement().value = "";
+		textarea.inputElement().value = "";
+		if (dropdown) {
+			dropdown.buttonElement().textContent = "Choose Priority";
+			dropdown.buttonElement().appendChild(ArrowComponent());
+		}
+		return "success";
+	} catch (e) {
+		console.error(e);
+		return null;
+	}
+}
 
 /**
  *  @param {{ element: () => HTMLLabelElement, value: () => string }} input
  *  @param {{ element: () => HTMLLabelElement, value: () => string }} textarea
- *  @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement } | null} dropdown
- *  @returns {null|void}
+ *  @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement, buttonElement: () => HTMLButtonElement} | null} dropdown
+ *  @returns {number|null}
  */
 function createTodoFromChosenValue(input, textarea, dropdown) {
 	try {
@@ -29,25 +51,40 @@ function createTodoFromChosenValue(input, textarea, dropdown) {
 			);
 		}
 
-		const todo = new Todo();
+		const tc = new TodoController();
+		const newTodoId = tc.createTodo();
+		if (!newTodoId) {
+			throw new Error("Could not create a new todo, something went wrong");
+		}
+		const todo = tc.getTodo(newTodoId);
+		if (!todo) {
+			throw new ReferenceError(
+				"Could not access you newly created todo, something went wrong",
+			);
+		}
 		todo.title = todoName;
 		todo.note = todoNote;
-		switch (todoPriority.toString().trim().toLowerCase()) {
-			case "none":
-				todo.priority = Priority.NONE;
-				break;
-			case "low":
+		switch (todoPriority.toString().trim()) {
+			case "LOW":
 				todo.priority = Priority.LOW;
 				break;
-			case "medium":
+			case "MEDIUM":
 				todo.priority = Priority.MEDIUM;
 				break;
-			case "high":
+			case "HIGH":
 				todo.priority = Priority.HIGH;
 				break;
 			default:
 				todo.priority = Priority.NONE;
 		}
+		const addTodoToStorage = tc.addTodo(todo);
+		if (!addTodoToStorage) {
+			throw new Error(
+				"Something went wrong while trying to add you todo to local storage.",
+			);
+		}
+
+		return 10;
 	} catch (error) {
 		console.error(error);
 		return null;
@@ -56,9 +93,9 @@ function createTodoFromChosenValue(input, textarea, dropdown) {
 
 /**
  *  @param {string} elementIdToAppendTo
- *  @param {{ element: () => HTMLLabelElement, value: () => string }} input
- *  @param {{ element: () => HTMLLabelElement, value: () => string }} textarea
- *  @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement } | null} dropdown
+ *  @param {{ element: () => HTMLLabelElement, value: () => string, inputElement: () => HTMLInputElement }} input
+ *  @param {{ element: () => HTMLLabelElement, value: () => string, inputElement: () => HTMLTextAreaElement }} textarea
+ *  @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement, buttonElement: () => HTMLButtonElement} | null} dropdown
  *  @returns {null|void}
  */
 function handleClickOnCreateBtn(
@@ -70,6 +107,7 @@ function handleClickOnCreateBtn(
 	try {
 		createTodoFromChosenValue(input, textarea, dropdown);
 		appendTodoFromStroageToElement(elementIdToAppendTo);
+		resetListModal(input, textarea, dropdown);
 		closeDialog("todoModal");
 	} catch (error) {
 		console.error(error);
@@ -80,9 +118,9 @@ function handleClickOnCreateBtn(
 /**
  *  @param {HTMLButtonElement} createBtn
  *  @param {string} elementIdToAppendTo
- *  @param {{ element: () => HTMLLabelElement, value: () => string }} input
- *  @param {{ element: () => HTMLLabelElement, value: () => string }} textarea
- *  @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement } | null} dropdown
+ *  @param {{ element: () => HTMLLabelElement, value: () => string, inputElement: () => HTMLInputElement }} input
+ *  @param {{ element: () => HTMLLabelElement, value: () => string, inputElement: () => HTMLTextAreaElement }} textarea
+ *  @param {{ element: () => HTMLDivElement, selectElement: () => HTMLSelectElement, buttonElement: () => HTMLButtonElement} | null} dropdown
  *  @returns {null|void}
  */
 function setUpCreateBtn(
