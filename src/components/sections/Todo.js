@@ -82,8 +82,8 @@ function checkWhichElementEventWasOn(
 			break;
 		case list.input:
 			try {
-				const List = new ListController();
-				const createdListOrErr = List.createList(list.input.value);
+				const lc = new ListController();
+				const createdListOrErr = lc.createList(list.input.value);
 				if (createdListOrErr === null) {
 					throw new Error(
 						`An Error occured while attempting to a created a list named: ${list.input.value}`,

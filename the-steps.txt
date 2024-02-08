@@ -1,10 +1,6 @@
 The Steps 
 
-- make todo and list stored in local storage
-- make list use regular arrays
-- find a way to make list persist just like you todo you dont want them to reset when the app resets
-- make page link buttons > RIGHT NOW YOU ARE RENDERING LISTS
-- make new nave bar title bar thing
+- make page link buttons > render  you list on the fly
 - make pages
 - test your code 
 - make it so that for every list of todo there is only one singlar event listener on it

@@ -68,7 +68,7 @@ export class TodoController {
 	 * @param {AllTodosType} allTodos
 	 * @returns {number| null}
 	 */
-	#setAllTodos(allTodos) {
+	setAllTodos(allTodos) {
 		try {
 			const string = JSON.stringify(allTodos);
 			localStorage.setItem("TODOS", string);
@@ -94,7 +94,7 @@ export class TodoController {
 
 			const keyOfTodo = todo.id;
 			allTodos[keyOfTodo] = todo;
-			const savedTodo = this.#setAllTodos(allTodos);
+			const savedTodo = this.setAllTodos(allTodos);
 			if (!savedTodo) {
 				throw new Error(
 					"Could not save new updated todo list an error occured in the process",
@@ -134,7 +134,7 @@ export class TodoController {
 			}
 
 			allTodos[todoId] = todo;
-			const setAllTodosToLocalStorage = this.#setAllTodos(allTodos);
+			const setAllTodosToLocalStorage = this.setAllTodos(allTodos);
 			if (!setAllTodosToLocalStorage) {
 				throw new Error(
 					"Could not set you newly created todo object to TODOS key in  localStorage",
@@ -167,7 +167,7 @@ export class TodoController {
 				);
 			}
 
-			if (!(Object.keys(allTodos).includes(id.toString()))) {
+			if (!Object.keys(allTodos).includes(id.toString())) {
 				throw new ReferenceError(
 					`Could not find a todo with the provided id in local storage id: ${id}`,
 				);

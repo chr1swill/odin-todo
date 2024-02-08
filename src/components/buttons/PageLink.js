@@ -110,8 +110,14 @@ export function RenderNavBar() {
 	try {
 		const navBar = document.createElement("nav");
 		navBar.className = "flex flex-row justify-end gap-2 w-full";
-		const listController = new ListController();
-		const listNames = listController.getListNames();
+		const lc = new ListController();
+		const listNames = lc.getCurrentListNames();
+		if (!listNames) {
+			throw new ReferenceError(
+				"An error occured while trying to access a list of all the list name",
+			);
+		}
+
 		if (listNames.length === 0) {
 			const addList = AddButtonComponent("Add List");
 			setupAddListButton(addList);
