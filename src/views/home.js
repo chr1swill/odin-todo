@@ -9,18 +9,22 @@ export function RenderHomePage() {
 		const fragment = document.createDocumentFragment();
 
 		const titleBar = TitleBar("All Todos");
-        if (!titleBar) {
-            throw new Error('Could not create a title for page, creation of element return a null')
-        }
+		if (!titleBar) {
+			throw new Error(
+				"Could not create a title for page, creation of element return a null",
+			);
+		}
 		fragment.appendChild(titleBar);
-        const todosInLocalStorage = RenderTodosFromStorage()
-        if (!todosInLocalStorage) {
-            throw new Error("Could not render Todo from storage, an error occurs in the process")
-        }
+		const todosInLocalStorage = RenderTodosFromStorage();
+		if (!todosInLocalStorage) {
+			throw new Error(
+				"Could not render Todo from storage, an error occurs in the process",
+			);
+		}
 
-        const todoContainer = document.createElement('div')
-        todoContainer.setAttribute('id', 'homePageTodoListContainer')
-        todoContainer.appendChild(todosInLocalStorage)
+		const todoContainer = document.createElement("div");
+		todoContainer.setAttribute("id", "homePageTodoListContainer");
+		todoContainer.appendChild(todosInLocalStorage);
 
 		fragment.appendChild(todoContainer);
 		// TODO: section to show my active list
