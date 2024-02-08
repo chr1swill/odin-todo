@@ -6,6 +6,7 @@ import { FakeTextTextareaComponent } from "../inputs/FakeTextTextarea";
 import { TodoController } from "../../logic/todo";
 import { ListController } from "../../logic/list";
 import { DefaultDropdownComponent } from "../inputs/DefaultDropdown";
+import { rerenderPageLinks } from "../buttons/PageLink";
 
 /**
  * @param {string} buttonTextContent
@@ -90,6 +91,15 @@ function checkWhichElementEventWasOn(
 					);
 				}
 				todo.list = list.input.value;
+
+				const navBar = document.querySelector("[data-nav-bar]");
+				if (!navBar) {
+					throw new ReferenceError(
+						"Could not find a nav element with the with attribute: data-nav-bar",
+					);
+				}
+
+				rerenderPageLinks(navBar);
 			} catch (error) {
 				console.error(error);
 				return null;
