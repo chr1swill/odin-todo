@@ -1,5 +1,6 @@
 The Steps 
 
+- make something to clean up list check if a list is no longer being used and delete the occurance
 - make page link buttons > render  you list on the fly
 - make pages
 - test your code 
