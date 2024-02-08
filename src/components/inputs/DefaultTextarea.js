@@ -3,7 +3,7 @@
  * Create a simple textarea
  * @param { string } placeholder - the text that will appear inside an none active textarea
  * @param { boolean } [required=false] - whether input is required or not
- * @returns {{ element: () => HTMLLabelElement, value: () => string }} An object containing a method to get the textarea container element and a method to get the value of the textarea
+ * @returns {{ element: () => HTMLLabelElement, value: () => string, inputElement: () => HTMLTextAreaElement }} An object containing a method to get the textarea container element and a method to get the value of the textarea
  *
  * */
 export function DefaultTextareaComponent(placeholder, required = false) {
@@ -34,5 +34,6 @@ export function DefaultTextareaComponent(placeholder, required = false) {
 	return {
 		element: () => label,
 		value: () => textarea.value,
+		inputElement: () => textarea,
 	};
 }
