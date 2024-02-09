@@ -55,7 +55,7 @@ export class ListController {
 	}
 
 	/**@param {AllListType} allList */
-	#setAllList(allList) {
+	setAllList(allList) {
 		try {
 			localStorage.setItem("LISTS", JSON.stringify(allList));
 			return "success";
@@ -83,13 +83,19 @@ export class ListController {
 
 			if (Object.keys(allList).includes(listName)) {
 				console.warn("The list name you provided is all ready an active list");
-				// add todo to the list you have already created with the same name
+
+				const cleanUp = this.matchListRefsToTodoRefs();
+				if (!cleanUp) {
+					throw new Error(
+						"Failed to clean up unneeded referenced to todos on list",
+					);
+				}
 				return listName;
 			}
 
 			allList[listName] = [];
 
-			const updateStorage = this.#setAllList(allList);
+			const updateStorage = this.setAllList(allList);
 			if (!updateStorage) {
 				throw new Error(
 					"Could not set the newly updated all list object to the key of LISTS in localStorage",
@@ -137,7 +143,7 @@ export class ListController {
 			}
 
 			allLists[listName].push(todoId);
-			const updateLists = this.#setAllList(allLists);
+			const updateLists = this.setAllList(allLists);
 			if (!updateLists) {
 				throw new Error(
 					"Could not update local storage with the changes to the lists, an error occured in the process",
@@ -173,5 +179,121 @@ export class ListController {
 			console.error(e);
 			return null;
 		}
+	}
+
+	/**
+	 *
+	 * removes todo from list that do not have a list property referencing them
+	 * this make sure that list will only store the todoId of todos that have
+	 * their name as property
+	 *
+	 */
+	matchListRefsToTodoRefs() {
+		try {
+			console.log("iam running");
+			const activeList = this.getAllList();
+			if (!activeList) {
+				throw new ReferenceError(
+					"Was not able to access the list in local storage, an error occured in the process",
+				);
+			}
+
+			const tc = new TodoController();
+			const activeListNames = Object.keys(activeList);
+
+			let i = 0;
+			const activeListNamesLen = activeListNames.length;
+			while (i < activeListNamesLen) {
+				const listName = activeListNames[i];
+				const list = activeList[listName];
+
+				let j = 0;
+				while (j < list.length) {
+					const todo = tc.getTodo(list[j]);
+					if (!todo) {
+						throw new ReferenceError(
+							`Failed to access todo with id ${list[j]} from localStorage`,
+						);
+					}
+
+					if (todo.list === "" || todo.list !== list[i]) {
+						//delted todo id form list
+						list.splice(j, 1);
+						continue;
+					}
+					j++;
+				}
+				i++;
+			}
+			// add all list back to storage
+			const updatedActiveList = this.setAllList(activeList);
+			if (!updatedActiveList) {
+				throw new Error(
+					"Failed to updated LISTS key in local storage with updated object of all list",
+				);
+			}
+
+			console.log("I Am finised");
+			return "success";
+		} catch (e) {
+			console.error(e);
+			return null;
+		}
+	}
+}
+
+/**
+ * @param {string} nameOfList
+ * @param {IDType} [todoId=undefined]
+ */
+export function processListCreation(nameOfList, todoId = undefined) {
+	try {
+		if (typeof nameOfList !== "string") {
+			throw new TypeError(
+				`Invalid type of todoId was provided, expected string but got type: ${typeof nameOfList}`,
+			);
+		}
+
+		const listName = nameOfList;
+		if (!listName) {
+			throw new ReferenceError(
+				"List was not created: list name received was undefined, please provide a string for the name of the list",
+			);
+		}
+
+		const trimedListName = listName.trim();
+		if (trimedListName === "") {
+			throw Error(
+				"Invalid list name was provided, an attempt was made to create an list named an empty string",
+			);
+		}
+
+		const lc = new ListController();
+		const createdList = lc.createList(trimedListName);
+		if (createdList === null) {
+			throw new Error(
+				`An Error occured while attempting to a created a list named: ${trimedListName}`,
+			);
+		}
+
+		if (todoId) {
+			if (typeof todoId !== "string") {
+				throw new TypeError(
+					`Invalid type of todoId was provided, expected string but got type: ${typeof todoId}`,
+				);
+			}
+
+			const addedTodoIdToList = lc.addTodoToList(todoId, createdList);
+			if (!addedTodoIdToList) {
+				throw new Error(
+					`Failed to add todoId ${todoId} to list named ${createdList}`,
+				);
+			}
+		}
+
+		return createdList;
+	} catch (e) {
+		console.error(e);
+		return null;
 	}
 }

@@ -1,7 +1,7 @@
 import { DefaultInputComponent } from "../inputs/DefaultInput";
 import { DefaultButtonComponent } from "../buttons/DefaultButton";
 import { DialogComponent, closeDialog } from "./Dialog";
-import { ListController } from "../../logic/list";
+import { ListController, processListCreation } from "../../logic/list";
 import { rerenderPageLinks } from "../buttons/PageLink";
 
 /**
@@ -10,27 +10,24 @@ import { rerenderPageLinks } from "../buttons/PageLink";
  */
 function createNewList(input) {
 	try {
-		const listName = input.value();
-		if (!listName) {
-			throw new ReferenceError(
-				"List was not created: Could not access access the value from inside the input",
-			);
+		const listCreated = processListCreation(input.value());
+		if (!listCreated) {
+			throw new Error("Failed to created list an error occured in the process");
 		}
 
-		if (listName.trim() === "") {
-			throw Error(
-				"Invalid list name was provided, an attempt was made to create an list named an empty string",
-			);
-		}
-
-		const lc = new ListController();
-		lc.createList(listName.trim());
 		input.inputElement().value = "";
 		closeDialog("listModal");
 		const navBar = document.querySelector("[data-nav-bar]");
 		if (!navBar) {
 			throw new ReferenceError(
 				"Could not find a nav element with the with attribute: data-nav-bar",
+			);
+		}
+		const lc = new ListController();
+		const cleanUp = lc.matchListRefsToTodoRefs();
+		if (!cleanUp) {
+			throw new Error(
+				"Failed to clean up referenced to todo that do not have list value match list name.",
 			);
 		}
 

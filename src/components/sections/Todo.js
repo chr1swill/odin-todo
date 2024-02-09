@@ -4,7 +4,7 @@ import { HorizontalDividerComponent } from "../icons/HorizontalDivider";
 import { FakeTextInputComponent } from "../inputs/FakeTextInput";
 import { FakeTextTextareaComponent } from "../inputs/FakeTextTextarea";
 import { TodoController } from "../../logic/todo";
-import { ListController } from "../../logic/list";
+import { ListController, processListCreation } from "../../logic/list";
 import { DefaultDropdownComponent } from "../inputs/DefaultDropdown";
 import { rerenderPageLinks } from "../buttons/PageLink";
 
@@ -83,11 +83,10 @@ function checkWhichElementEventWasOn(
 			break;
 		case list.input:
 			try {
-				const lc = new ListController();
-				const createdListOrErr = lc.createList(list.input.value);
-				if (createdListOrErr === null) {
+				const listCreated = processListCreation(list.input.value, todo.id);
+				if (!listCreated) {
 					throw new Error(
-						`An Error occured while attempting to a created a list named: ${list.input.value}`,
+						"Failed to created list an error occured in the process",
 					);
 				}
 				todo.list = list.input.value;
@@ -96,6 +95,13 @@ function checkWhichElementEventWasOn(
 				if (!navBar) {
 					throw new ReferenceError(
 						"Could not find a nav element with the with attribute: data-nav-bar",
+					);
+				}
+				const lc = new ListController();
+				const cleanUp = lc.matchListRefsToTodoRefs();
+				if (!cleanUp) {
+					throw new Error(
+						"Failed to clean up referenced to todo that do not have list value match list name.",
 					);
 				}
 
