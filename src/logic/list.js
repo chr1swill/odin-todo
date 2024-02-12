@@ -80,8 +80,12 @@ export class ListController {
 					"Could not create a new list an error occured while while trying to access all list in local storage",
 				);
 			}
+			const formatedListName = listName
+				.trim()
+				.toLowerCase()
+				.replace(/\s+/g, "-");
 
-			if (Object.keys(allList).includes(listName)) {
+			if (Object.keys(allList).includes(formatedListName)) {
 				console.warn("The list name you provided is all ready an active list");
 
 				const cleanUp = this.matchListRefsToTodoRefs();
@@ -90,10 +94,10 @@ export class ListController {
 						"Failed to clean up unneeded referenced to todos on list",
 					);
 				}
-				return listName;
+				return formatedListName;
 			}
 
-			allList[listName] = [];
+			allList[formatedListName] = [];
 
 			const updateStorage = this.setAllList(allList);
 			if (!updateStorage) {
@@ -102,7 +106,7 @@ export class ListController {
 				);
 			}
 
-			return listName;
+			return formatedListName;
 		} catch (e) {
 			console.error(e);
 			return null;
