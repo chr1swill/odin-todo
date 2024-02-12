@@ -190,7 +190,6 @@ export class ListController {
 	 */
 	matchListRefsToTodoRefs() {
 		try {
-			console.log("iam running");
 			const activeList = this.getAllList();
 			if (!activeList) {
 				throw new ReferenceError(
@@ -233,7 +232,6 @@ export class ListController {
 				);
 			}
 
-			console.log("I Am finised");
 			return "success";
 		} catch (e) {
 			console.error(e);
