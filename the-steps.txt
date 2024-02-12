@@ -1,9 +1,7 @@
 The Steps 
 
-- make something to clean up list check if a list is no longer being used and delete the occurance
-- make logic to delete list
-
 - make page link buttons > render  you list on the fly
+- make logic to delete list[can just me a button on the link page that is render]
 - make pages
 - test your code 
 - make it so that for every list of todo there is only one singlar event listener on it
