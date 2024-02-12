@@ -27,7 +27,6 @@ export function RenderHomePage() {
 		todoContainer.appendChild(todosInLocalStorage);
 
 		fragment.appendChild(todoContainer);
-		// TODO: section to show my active list
 		fragment.appendChild(ActionBarComponent());
 		fragment.appendChild(ListModalComponet());
 
