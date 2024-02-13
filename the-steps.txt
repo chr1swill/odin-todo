@@ -1,5 +1,8 @@
 The Steps 
 
+- figure out why todo is are not being added to list on change of todo
+- you fixing up the render list function thing
+
 - make page link buttons > render  you list on the fly
 - make logic to delete list[can just me a button on the link page that is render]
 - make pages
