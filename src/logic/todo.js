@@ -7,20 +7,6 @@ export const Priority = {
 };
 
 export class TodoController {
-	/**
-	 * @typedef {string} IDType
-	 *
-	 * @typedef {Object} TodoType
-	 * @prop {IDType} id
-	 * @prop {string} title
-	 * @prop {string} note
-	 * @prop {string} list
-	 * @prop {boolean} complete
-	 * @prop {Priority} priority
-	 *
-	 * @typedef {{ [key: IDType]: TodoType }} AllTodosType
-	 */
-
 	constructor() {
 		try {
 			if (!localStorage.getItem("TODOS")) {
@@ -34,17 +20,17 @@ export class TodoController {
 
 	/**
 	 * returns todo id as a string
-	 * @returns {IDType}
+	 * @returns {import('./logicTypes').IDType}
 	 */
 	#generateTodoId() {
-		/**@type {IDType} */
+		/**@type {import('./logicTypes').IDType} */
 		const id = (Date.now() + Math.random()).toString();
 		return id;
 	}
 
 	/**
 	 * returns an object of all the todos in localStorage or an empty object if it is empty
-	 * @returns {AllTodosType | null}
+	 * @returns {import('./logicTypes').AllTodosType | null}
 	 */
 	getAllTodos() {
 		try {
@@ -55,7 +41,7 @@ export class TodoController {
 				);
 			}
 
-			/**@type {AllTodosType} */
+			/**@type {import('./logicTypes').AllTodosType} */
 			const allTodo = JSON.parse(todosInStorage);
 			return allTodo;
 		} catch (e) {
@@ -65,7 +51,7 @@ export class TodoController {
 	}
 
 	/**
-	 * @param {AllTodosType} allTodos
+	 * @param {import('./logicTypes').AllTodosType} allTodos
 	 * @returns {number| null}
 	 */
 	setAllTodos(allTodos) {
@@ -80,7 +66,7 @@ export class TodoController {
 	}
 
 	/**
-	 * @param {TodoType} todo
+	 * @param {import('./logicTypes').TodoType} todo
 	 * @returns {number|null}
 	 */
 	addTodo(todo) {
@@ -110,13 +96,13 @@ export class TodoController {
 	/**
 	 *
 	 * Creates an empty todo in local storage and return the id of the created todo
-	 * @returns {IDType | null}
+	 * @returns {import('./logicTypes').IDType | null}
 	 */
 	createTodo() {
 		try {
 			const todoId = this.#generateTodoId();
 
-			/**@type {TodoType} */
+			/**@type {import('./logicTypes').TodoType} */
 			const todo = {
 				id: todoId,
 				title: "",
@@ -149,8 +135,8 @@ export class TodoController {
 	}
 
 	/**
-	 * @param {IDType} id
-	 * @returns {TodoType | null}
+	 * @param {import('./logicTypes').IDType} id
+	 * @returns {import('./logicTypes').TodoType | null}
 	 */
 	getTodo(id) {
 		try {

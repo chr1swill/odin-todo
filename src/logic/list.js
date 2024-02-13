@@ -1,28 +1,6 @@
-import { TodoController, Priority } from "./todo";
+import { TodoController } from "./todo";
 
 export class ListController {
-	/**
-	 * @typedef {string} IDType
-	 *
-	 * @typedef {Object} TodoType
-	 * @prop {IDType} id
-	 * @prop {string} title
-	 * @prop {string} note
-	 * @prop {string} list
-	 * @prop {boolean} complete
-	 * @prop {Priority} priority
-	 *
-	 * @typedef {{ [key: IDType]: TodoType }} AllTodosType
-	 *
-	 *
-	 * @typedef {string} ListNameType
-	 *
-	 * @typedef {IDType[]} ListType
-	 */
-	/**
-	 * @typedef {{ [key: ListNameType]: ListType }} AllListType
-	 */
-
 	constructor() {
 		try {
 			if (!localStorage.getItem("LISTS")) {
@@ -34,7 +12,7 @@ export class ListController {
 		}
 	}
 
-	/**@returns {AllListType | null}*/
+	/**@returns {import('./logicTypes').AllListType | null}*/
 	getAllList() {
 		try {
 			const listInStorage = localStorage.getItem("LISTS");
@@ -44,7 +22,7 @@ export class ListController {
 				);
 			}
 
-			/**@type {AllListType} */
+			/**@type {import('./logicTypes').AllListType} */
 			const parsedString = JSON.parse(listInStorage);
 
 			return parsedString;
@@ -54,7 +32,7 @@ export class ListController {
 		}
 	}
 
-	/**@param {AllListType} allList */
+	/**@param {import('./logicTypes').AllListType} allList */
 	setAllList(allList) {
 		try {
 			localStorage.setItem("LISTS", JSON.stringify(allList));
@@ -65,7 +43,7 @@ export class ListController {
 		}
 	}
 
-	/**@param {ListNameType} listName */
+	/**@param {import('./logicTypes').ListNameType} listName */
 	createList(listName) {
 		try {
 			if (typeof listName !== "string") {
@@ -114,8 +92,8 @@ export class ListController {
 	}
 
 	/**
-	 * @param {IDType} todoId
-	 * @param {ListNameType} listName
+	 * @param {import('./logicTypes').IDType} todoId
+	 * @param {import('./logicTypes').ListNameType} listName
 	 */
 	addTodoToList(todoId, listName) {
 		try {
@@ -129,14 +107,14 @@ export class ListController {
 			const allTodos = tc.getAllTodos();
 			if (!allTodos) {
 				throw new ReferenceError(
-					`Could not access all todo instances, the attempt to access them resulted in a null value`,
+					`Could not access all todo instances, the attempt to access them resuimport('./logicTypes').d in a null value`,
 				);
 			}
 
 			const allLists = this.getAllList();
 			if (!allLists) {
 				throw new ReferenceError(
-					`Could not access all list instances, the attempt to access them resulted in a null value`,
+					`Could not access all list instances, the attempt to access them resuimport('./logicTypes').d in a null value`,
 				);
 			}
 
@@ -174,7 +152,7 @@ export class ListController {
 			const allLists = this.getAllList();
 			if (!allLists) {
 				throw new ReferenceError(
-					`Could not access all todo instances, the attempt to access them resulted in a null value`,
+					`Could not access all todo instances, the attempt to access them resuimport('./logicTypes').d in a null value`,
 				);
 			}
 
@@ -195,6 +173,15 @@ export class ListController {
 	matchListRefsToTodoRefs() {
 		try {
 			const activeList = this.getAllList();
+			console.log("the list that are active", activeList);
+			console.log(
+				"the list that are active before parse",
+				JSON.parse(localStorage.LISTS),
+			);
+			console.log(
+				"the list that are active after parse",
+				JSON.parse(localStorage.LISTS),
+			);
 			if (!activeList) {
 				throw new ReferenceError(
 					"Was not able to access the list in local storage, an error occured in the process",
@@ -220,7 +207,7 @@ export class ListController {
 					}
 
 					if (todo.list === "" || todo.list !== list[i]) {
-						//delted todo id form list
+						//delete todo id form list
 						list.splice(j, 1);
 						continue;
 					}
@@ -242,11 +229,86 @@ export class ListController {
 			return null;
 		}
 	}
+
+	/**
+	 * @param {import('./logicTypes').ListNameType} listName - kebab case name of a list
+	 *
+	 * @returns {import('./logicTypes').ListType|null} an array of list or null if an error occured
+	 */
+	getList(listName) {
+		try {
+			const allLists = this.getAllList();
+			if (allLists === null) {
+				throw new Error("Failed to access all lists in storage");
+			}
+
+			if (!Object.keys(allLists).includes(listName)) {
+				throw new Error(
+					`Could not find ${listName} in localStorage the key does not exist`,
+				);
+			}
+
+			return allLists[listName];
+		} catch (e) {
+			console.error(e);
+			return null;
+		}
+	}
+
+	/**
+	 * Gives you the the todo object corrisponding to each todoid in the provided list
+	 *
+	 * @param {import('./logicTypes').ListNameType} listName - in kebab case
+	 */
+	getTodosFromList(listName) {
+		try {
+			const arrayOfTodoId = this.getList(listName);
+			if (arrayOfTodoId === null) {
+				throw new Error("Failed to access the request list");
+			}
+
+			/**@type {import('./logicTypes').TodoType[]}*/
+			const result = [];
+
+			const arrayLength = arrayOfTodoId.length;
+			if (arrayLength === 0) {
+				return result;
+			}
+
+			const tc = new TodoController();
+			for (let i = 0; i < arrayOfTodoId.length; i++) {
+				const todo = tc.getTodo(arrayOfTodoId[i]);
+				if (todo === null) {
+					throw new Error(
+						`Failed to access the todo object corrisponding to todo ID: ${arrayOfTodoId}`,
+					);
+				}
+				result.push(todo);
+			}
+
+			return result;
+		} catch (e) {
+			console.log(e);
+			return null;
+		}
+	}
+
+	/**@param {string} kebabCaseListName */
+	toTitleCase(kebabCaseListName) {
+		const words = kebabCaseListName.replace(/-/g, " ").split(" ");
+
+		for (let i = 0; i < words.length; i++) {
+			const word = words[i];
+			words[i] = word.charAt(0).toUpperCase() + word.slice(1);
+		}
+
+		return words.join(" ");
+	}
 }
 
 /**
  * @param {string} nameOfList
- * @param {IDType} [todoId=undefined]
+ * @param {import('./logicTypes').IDType} [todoId=undefined]
  */
 export function processListCreation(nameOfList, todoId = undefined) {
 	try {
