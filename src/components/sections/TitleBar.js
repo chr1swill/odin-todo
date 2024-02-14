@@ -34,7 +34,7 @@ export function TitleBar(title) {
 
 		return titleBarWrapper;
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		return null;
 	}
 }
