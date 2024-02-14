@@ -1,4 +1,5 @@
 import { ListController } from "../../logic/list";
+import { RenderListPage } from "../../views/listPage";
 import { toggleModalVisiblity } from "../modals/Dialog";
 import { AddButtonComponent } from "./AddButton";
 
@@ -6,7 +7,7 @@ import { AddButtonComponent } from "./AddButton";
  * // TODO: MAY NOT WORK AFTER REFACTOR
  *
  * @param {HTMLButtonElement} button
- * @returns { void | null }
+ * @returns { string | null }
  */
 function changePage(button) {
 	try {
@@ -17,12 +18,24 @@ function changePage(button) {
 			);
 		}
 
+		const buttonPageTarget = button?.getAttribute("data-page-target");
+		if (buttonPageTarget === null) {
+			throw new ReferenceError(
+				"The button does not contain an attribute named: data-page-target",
+			);
+		}
+
 		while (content.firstChild) {
 			content.removeChild(content.firstChild);
 		}
-		// render tile bar
-		// render todos in list
-		// render action bar
+
+		const listToRender = RenderListPage(buttonPageTarget);
+		if (listToRender === null) {
+			throw new Error("Failed to created list to change page");
+		}
+
+		content.appendChild(listToRender);
+		return "success";
 	} catch (error) {
 		console.error(error);
 		return null;
