@@ -8,3 +8,4 @@ The Steps
 - make pages
 - test your code 
 - make it so that for every list of todo there is only one singlar event listener on it
+- make a light mode look good like dark mode
