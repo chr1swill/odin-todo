@@ -67,7 +67,7 @@ export class TodoController {
 
 	/**
 	 * @param {import('./logicTypes').TodoType} todo
-	 * @returns {number|null}
+	 * @returns {string|null}
 	 */
 	addTodo(todo) {
 		try {
@@ -86,7 +86,7 @@ export class TodoController {
 					"Could not save new updated todo list an error occured in the process",
 				);
 			}
-			return 10;
+			return "success";
 		} catch (e) {
 			console.error(e);
 			return null;
