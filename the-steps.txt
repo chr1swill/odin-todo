@@ -1,9 +1,8 @@
 The Steps 
 
-- make page link buttons > render  you list on the fly
 - make it so changes in a list page will render the list out if the list is render and it does match the current list 
 - make logic to delete list[can just me a button on the link page that is render]
-- make pages
 - test your code 
+
 - make it so that for every list of todo there is only one singlar event listener on it
 - make a light mode look good like dark mode
