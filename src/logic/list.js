@@ -124,7 +124,14 @@ export class ListController {
 				);
 			}
 
-			allLists[listName].push(todoId);
+			if (!allLists[listName].includes(todoId)) {
+				allLists[listName].push(todoId);
+			} else {
+				console.warn(
+					`Todo id: ${todoId} is already a member in list: ${listName}, an occurance was not added`,
+				);
+			}
+
 			const updateLists = this.setAllList(allLists);
 			if (!updateLists) {
 				throw new Error(
@@ -173,15 +180,6 @@ export class ListController {
 	matchListRefsToTodoRefs() {
 		try {
 			const activeList = this.getAllList();
-			console.log("the list that are active", activeList);
-			console.log(
-				"the list that are active before parse",
-				JSON.parse(localStorage.LISTS),
-			);
-			console.log(
-				"the list that are active after parse",
-				JSON.parse(localStorage.LISTS),
-			);
 			if (!activeList) {
 				throw new ReferenceError(
 					"Was not able to access the list in local storage, an error occured in the process",
@@ -206,7 +204,7 @@ export class ListController {
 						);
 					}
 
-					if (todo.list === "" || todo.list !== list[i]) {
+					if (todo.list === "" || todo.id !== list[i]) {
 						//delete todo id form list
 						list.splice(j, 1);
 						continue;
@@ -220,6 +218,102 @@ export class ListController {
 			if (!updatedActiveList) {
 				throw new Error(
 					"Failed to updated LISTS key in local storage with updated object of all list",
+				);
+			}
+
+			return "success";
+		} catch (e) {
+			console.error(e);
+			return null;
+		}
+	}
+
+	/**
+	 * @param {import('./logicTypes').TodoType}  todo
+	 */
+	removeTodosIdFromListTheyShouldNotBeIn(todo) {
+		try {
+			/**
+			 * really i should be checking on the one todo
+			 *
+			 * what is the list value now
+			 * get the list that it refs
+			 * if no list matches it and the list value is not an empty string(it has no list) create a list under the name of the todo value
+			 *
+			 * if a list matches it great
+			 * look inside that list does it container to todo id
+			 * if not added to to it
+			 * * save that list back to local storage
+			 * if it does do nothing it is already there
+			 *
+			 * now since a todo can only belong to one list at a time you need to check the rest of the list to see if they have this todo id in them  bc they should not
+			 * get all of the
+			 */
+
+			const allList = this.getAllList();
+			if (allList === null) {
+				throw new Error("Failed to access all list in local storage");
+			}
+
+			const namesOfAllCurrentList = Object.keys(allList);
+
+			const todoCurrentListValue = todo.list.trim();
+			if (
+				todoCurrentListValue !== "" &&
+				!namesOfAllCurrentList.includes(todoCurrentListValue)
+			) {
+				for (let i = 0; i < namesOfAllCurrentList.length; i++) {
+					const listName = namesOfAllCurrentList[i];
+					const listArray = allList[listName];
+					for (let j = 0; j < listArray.length; j++) {
+						if (listArray[j] === todo.id) {
+							listArray.splice(j, 1);
+							continue;
+						}
+					}
+				}
+				// create new list for the newly entered list name hoooks async
+				allList[todoCurrentListValue] = [todo.id];
+				// make the only member of that new list he id of the current todoid
+			} else if (namesOfAllCurrentList.includes(todoCurrentListValue)) {
+				for (let i = 0; i < namesOfAllCurrentList.length; i++) {
+					const listName = namesOfAllCurrentList[i];
+					const listArray = allList[listName];
+					for (let j = 0; j < listArray.length; j++) {
+						if (listName === todoCurrentListValue) {
+							if (!listArray.includes(todo.id)) {
+								listArray.push(todo.id);
+								continue;
+							}
+						}
+
+						if (listName !== todoCurrentListValue) {
+							if (listArray[j] === todo.id) {
+								listArray.splice(j, 1);
+								continue;
+							}
+						}
+					}
+				}
+			} else {
+				// i am pretty sure the only other case here is if the value is an empty string, but handle that case
+				// double check to see if this is really what you want to do here bc i did not really check it
+				for (let i = 0; i < namesOfAllCurrentList.length; i++) {
+					const listName = namesOfAllCurrentList[i];
+					const listArray = allList[listName];
+					for (let j = 0; j < listArray.length; j++) {
+						if (listArray[j] === todo.id) {
+							listArray.splice(j, 1);
+							continue;
+						}
+					}
+				}
+			}
+
+			const savedLists = this.setAllList(allList);
+			if (savedLists === null) {
+				throw new Error(
+					"Could not save updates to LISTS back to local storage",
 				);
 			}
 
@@ -288,7 +382,7 @@ export class ListController {
 
 			return result;
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 			return null;
 		}
 	}

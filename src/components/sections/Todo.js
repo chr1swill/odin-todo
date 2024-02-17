@@ -89,6 +89,7 @@ function checkWhichElementEventWasOn(
 						"Failed to created list an error occured in the process",
 					);
 				}
+				// this is redant fuct aboave handles this
 				todo.list = list.input.value;
 
 				const navBar = document.querySelector("[data-nav-bar]");
@@ -97,8 +98,15 @@ function checkWhichElementEventWasOn(
 						"Could not find a nav element with the with attribute: data-nav-bar",
 					);
 				}
+
+				const tc = new TodoController();
+				const addedTodo = tc.addTodo(todo);
+				if (addedTodo === null) {
+					throw new Error("Failed to add todo an error occured");
+				}
+
 				const lc = new ListController();
-				const cleanUp = lc.matchListRefsToTodoRefs();
+				const cleanUp = lc.removeTodosIdFromListTheyShouldNotBeIn(todo);
 				if (!cleanUp) {
 					throw new Error(
 						"Failed to clean up referenced to todo that do not have list value match list name.",
