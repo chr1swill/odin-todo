@@ -89,20 +89,13 @@ function checkWhichElementEventWasOn(
 						"Failed to created list an error occured in the process",
 					);
 				}
-				// this is redant fuct aboave handles this
-				todo.list = list.input.value;
+				todo.list = listCreated;
 
 				const navBar = document.querySelector("[data-nav-bar]");
 				if (!navBar) {
 					throw new ReferenceError(
 						"Could not find a nav element with the with attribute: data-nav-bar",
 					);
-				}
-
-				const tc = new TodoController();
-				const addedTodo = tc.addTodo(todo);
-				if (addedTodo === null) {
-					throw new Error("Failed to add todo an error occured");
 				}
 
 				const lc = new ListController();
