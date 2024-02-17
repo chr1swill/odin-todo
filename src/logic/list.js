@@ -65,13 +65,6 @@ export class ListController {
 
 			if (Object.keys(allList).includes(formatedListName)) {
 				console.warn("The list name you provided is all ready an active list");
-
-				const cleanUp = this.matchListRefsToTodoRefs();
-				if (!cleanUp) {
-					throw new Error(
-						"Failed to clean up unneeded referenced to todos on list",
-					);
-				}
 				return formatedListName;
 			}
 
@@ -171,64 +164,6 @@ export class ListController {
 	}
 
 	/**
-	 *
-	 * removes todo from list that do not have a list property referencing them
-	 * this make sure that list will only store the todoId of todos that have
-	 * their name as property
-	 *
-	 */
-	matchListRefsToTodoRefs() {
-		try {
-			const activeList = this.getAllList();
-			if (!activeList) {
-				throw new ReferenceError(
-					"Was not able to access the list in local storage, an error occured in the process",
-				);
-			}
-
-			const tc = new TodoController();
-			const activeListNames = Object.keys(activeList);
-
-			let i = 0;
-			const activeListNamesLen = activeListNames.length;
-			while (i < activeListNamesLen) {
-				const listName = activeListNames[i];
-				const list = activeList[listName];
-
-				let j = 0;
-				while (j < list.length) {
-					const todo = tc.getTodo(list[j]);
-					if (!todo) {
-						throw new ReferenceError(
-							`Failed to access todo with id ${list[j]} from localStorage`,
-						);
-					}
-
-					if (todo.list === "" || todo.id !== list[i]) {
-						//delete todo id form list
-						list.splice(j, 1);
-						continue;
-					}
-					j++;
-				}
-				i++;
-			}
-			// add all list back to storage
-			const updatedActiveList = this.setAllList(activeList);
-			if (!updatedActiveList) {
-				throw new Error(
-					"Failed to updated LISTS key in local storage with updated object of all list",
-				);
-			}
-
-			return "success";
-		} catch (e) {
-			console.error(e);
-			return null;
-		}
-	}
-
-	/**
 	 * @param {import('./logicTypes').TodoType}  todo
 	 */
 	removeTodosIdFromListTheyShouldNotBeIn(todo) {
@@ -254,9 +189,11 @@ export class ListController {
 			if (allList === null) {
 				throw new Error("Failed to access all list in local storage");
 			}
+			console.log("This is all list is it what you expect it to be", allList);
 
 			const namesOfAllCurrentList = Object.keys(allList);
 
+			/**@type{import('./logicTypes').ListNameType}*/
 			const todoCurrentListValue = todo.list.trim();
 			if (
 				todoCurrentListValue !== "" &&

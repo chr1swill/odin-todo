@@ -1,9 +1,7 @@
 The Steps 
 
-- fix bug changing todo list values will not work if it is not the first todo in list
-// i think it may be replacing old list with new list instead of adding them which is not desireable
-
 - make page link buttons > render  you list on the fly
+- make it so changes in a list page will render the list out if the list is render and it does match the current list 
 - make logic to delete list[can just me a button on the link page that is render]
 - make pages
 - test your code 

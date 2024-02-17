@@ -23,13 +23,13 @@ function createNewList(input) {
 				"Could not find a nav element with the with attribute: data-nav-bar",
 			);
 		}
-		const lc = new ListController();
-		const cleanUp = lc.matchListRefsToTodoRefs();
-		if (!cleanUp) {
-			throw new Error(
-				"Failed to clean up referenced to todo that do not have list value match list name.",
-			);
-		}
+		//const lc = new ListController();
+		//const cleanUp = lc.matchListRefsToTodoRefs();
+		//if (!cleanUp) {
+		//throw new Error(
+		//"Failed to clean up referenced to todo that do not have list value match list name.",
+		//);
+		//}
 
 		rerenderPageLinks(navBar);
 	} catch (error) {
